@@ -4,4 +4,5 @@ data class HeureuxProperty(
     val name: String,
     val price: String,
     val location: String,
+    val description: String,
 )
