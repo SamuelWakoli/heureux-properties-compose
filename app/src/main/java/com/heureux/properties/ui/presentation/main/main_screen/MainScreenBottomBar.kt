@@ -1,6 +1,5 @@
 package com.heureux.properties.ui.presentation.main.main_screen
 
-import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Home
@@ -11,6 +10,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.More
 import androidx.compose.material.icons.outlined.ViewList
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -59,6 +59,7 @@ val mainBottomBarItems: List<MainBottomBarItem> = listOf(
 
     )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenBottomBar(bottomNavController: NavHostController) {
     BottomAppBar {
@@ -72,7 +73,6 @@ fun MainScreenBottomBar(bottomNavController: NavHostController) {
                 NavigationBarItem(
                     selected = selected,
                     onClick = {
-                        Log.d("BOTTOM BAR", "Current route: $currentRoute")
                         bottomNavController.navigate(homeBottomBarItem.route) {
                             launchSingleTop = true
                             popUpTo(route = Screens.HomeScreen.route) {
@@ -93,8 +93,11 @@ fun MainScreenBottomBar(bottomNavController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenBottomBarPreview() {
-    MaterialTheme { MainScreenBottomBar(bottomNavController = rememberNavController()) }
+    MaterialTheme { MainScreenBottomBar(
+        bottomNavController = rememberNavController(),
+    ) }
 }
