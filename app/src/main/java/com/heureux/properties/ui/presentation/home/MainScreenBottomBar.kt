@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.home
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.filled.Home
@@ -19,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.navigation.Screens
 
@@ -61,14 +63,23 @@ val mainBottomBarItems: List<MainBottomBarItem> = listOf(
 fun MainScreenBottomBar(bottomNavController: NavHostController) {
     BottomAppBar {
         NavigationBar {
-            mainBottomBarItems.forEachIndexed { index: Int, homeBottomBarItem: MainBottomBarItem ->
+            val backStackEntry = bottomNavController.currentBackStackEntryAsState()
 
-                val currentRoute = bottomNavController.currentDestination?.route ?: Screens.HomeScreen.route
+            mainBottomBarItems.forEach { homeBottomBarItem: MainBottomBarItem ->
+                val currentRoute = backStackEntry.value?.destination?.route;
                 val selected = currentRoute == homeBottomBarItem.route
 
                 NavigationBarItem(
                     selected = selected,
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        Log.d("BOTTOM BAR", "Current route: $currentRoute")
+                        bottomNavController.navigate(homeBottomBarItem.route) {
+                            launchSingleTop = true
+                            popUpTo(route = Screens.HomeScreen.route) {
+                                inclusive = false
+                            }
+                        }
+                    },
                     icon = {
                         Icon(
                             imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
