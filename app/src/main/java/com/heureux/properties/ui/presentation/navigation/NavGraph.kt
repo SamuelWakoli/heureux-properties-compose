@@ -6,7 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
-import com.heureux.properties.ui.presentation.home.MainScreen
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
 
 @Composable
 fun NavGraph(

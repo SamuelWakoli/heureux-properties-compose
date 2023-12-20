@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.home
+package com.heureux.properties.ui.presentation.main.main_screen
 
 import android.util.Log
 import androidx.compose.material.icons.Icons
