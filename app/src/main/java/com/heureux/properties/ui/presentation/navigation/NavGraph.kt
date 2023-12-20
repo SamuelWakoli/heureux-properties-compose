@@ -3,16 +3,28 @@ package com.heureux.properties.ui.presentation.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
+import com.heureux.properties.ui.presentation.authgate.SignInScreen
+import com.heureux.properties.ui.presentation.home.MainScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    currentUser: Boolean,
+    currentUserSignedIn: Boolean,
 ) {
     NavHost(
         navController = navController,
-        startDestination = if (currentUser) Screens.HomeScreen.route else Screens.SignInScreen.route
+        startDestination = if (currentUserSignedIn) Screens.MainScreen.route else Screens.SignInScreen.route
     ) {
-
+        composable(route = Screens.SignInScreen.route) {
+            SignInScreen()
+        }
+        composable(route = Screens.RegistrationScreen.route) {
+            RegistrationScreen()
+        }
+        composable(route = Screens.MainScreen.route) {
+            MainScreen()
+        }
     }
 }
