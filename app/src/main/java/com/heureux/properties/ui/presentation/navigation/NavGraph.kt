@@ -9,6 +9,7 @@ import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
 import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactUsScreen
+import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfileScreen
 import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
 import com.heureux.properties.ui.presentation.main.filter_results_screen.FilterResultsScreen
 import com.heureux.properties.ui.presentation.main.filter_screen.FilterScreen
@@ -16,6 +17,7 @@ import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
 import com.heureux.properties.ui.presentation.main.my_properties_screen.MyPropertiesScreen
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
+import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
@@ -55,6 +57,9 @@ fun NavGraph(
         composable(route = Screens.ProfileScreen.route) {
             ProfileScreen(mainNavController = navController)
         }
+        composable(route = Screens.EditProfileScreen.route) {
+            EditProfileScreen(mainNavController = navController)
+        }
         composable(route = Screens.AboutUsScreen.route) {
             AboutUsScreen(mainNavController = navController)
         }
@@ -75,6 +80,9 @@ fun NavGraph(
         }
         composable(route = Screens.PaymentHistoryScreen.route) {
             PaymentHistoryScreen(mainNavController = navController)
+        }
+        composable(route = Screens.SoldPropertiesScreen.route) {
+            SoldPropertiesScreen(mainNavController = navController)
         }
     }
 }

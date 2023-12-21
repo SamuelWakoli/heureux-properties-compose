@@ -16,6 +16,7 @@ import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.NoAccounts
 import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Store
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -114,6 +115,20 @@ fun ProfileScreen(
                 },
                 modifier = Modifier.clickable {
                     // TODO: Navigate to my properties screen
+                }
+            )
+            ListItem(
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Outlined.Store,
+                        contentDescription = null,
+                    )
+                },
+                headlineContent = {
+                    Text(text = "Sold properties")
+                },
+                modifier = Modifier.clickable {
+                    // TODO: Navigate to history screen
                 }
             )
             ListItem(
