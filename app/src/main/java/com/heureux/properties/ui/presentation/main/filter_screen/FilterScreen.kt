@@ -8,9 +8,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun FilterScreen() {
+fun FilterScreen(mainNavController: NavHostController) {
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -26,6 +28,6 @@ fun FilterScreen() {
 @Composable
 private fun FilterScreenPreview() {
     MaterialTheme {
-        FilterScreen()
+        FilterScreen(mainNavController = rememberNavController())
     }
 }

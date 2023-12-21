@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -55,7 +56,11 @@ fun MainScreenAppbar(
         scrollBehavior = scrollBehavior,
         navigationIcon = {
             // TODO: Insert user circle profile pic here
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = {
+                mainNavController.navigate(route = Screens.ProfileScreen.route) {
+                    launchSingleTop = true
+                }
+            }) {
                 Icon(
                     imageVector = Icons.Outlined.AccountCircle,
                     contentDescription = "Profile",
@@ -68,7 +73,9 @@ fun MainScreenAppbar(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .clickable {
-                        // TODO: Navigate to about screen
+                        mainNavController.navigate(route = Screens.AboutUsScreen.route) {
+                            launchSingleTop = true
+                        }
                     }
                     .padding(4.dp)
             ) {
@@ -99,7 +106,9 @@ fun MainScreenAppbar(
                                 text = { Text(text = "Filter") },
                                 onClick = {
                                     showDropdownMenu = false
-                                    /*TODO*/
+                                    mainNavController.navigate(Screens.FilterScreen.route) {
+                                        launchSingleTop = true
+                                    }
                                 },
                             )
                         }
@@ -112,12 +121,24 @@ fun MainScreenAppbar(
                             },
                             text = { Text(text = "Contact us") }, onClick = {
                                 showDropdownMenu = false
-                                /*TODO*/
+                                mainNavController.navigate(Screens.ContactUsScreen.route) {
+                                    launchSingleTop = true
+                                }
                             })
-                        DropdownMenuItem(text = { /*TODO*/ }, onClick = {
-                            showDropdownMenu = false
-                            /*TODO*/
-                        })
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.Feedback,
+                                    contentDescription = null
+                                )
+                            },
+                            text = { Text(text = "Feedback") }, onClick = {
+                                showDropdownMenu = false
+                                mainNavController.navigate(Screens.FeedbackScreen.route) {
+                                    launchSingleTop = true
+                                }
+                            })
+
                     },
                 )
             }

@@ -5,7 +5,7 @@ import com.heureux.properties.data.AppContainer
 import com.heureux.properties.data.HeureuxAppContainer
 
 class HeureuxApp : Application() {
-    private lateinit var container: AppContainer
+    lateinit var container: AppContainer
 
     override fun onCreate() {
         super.onCreate()
