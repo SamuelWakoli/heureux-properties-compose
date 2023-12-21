@@ -11,4 +11,11 @@ sealed class Screens(val route: String) {
     data object BookmarksScreen : Screens(route = "bookmarks")
     data object MyListingsScreen : Screens(route = "my_listings")
     data object MoreScreen : Screens(route = "more")
+
+    // Other Screens
+    data object ProfileScreen : Screens(route = "profile_screen")
+    data object AboutUsScreen : Screens(route = "about_us_screen")
+    data object ContactUsScreen : Screens(route = "contact_us_screen")
+    data object FilterScreen : Screens(route = "filter_screen")
+    data object FilterResultsScreen : Screens(route = "filter_results_screen")
 }
