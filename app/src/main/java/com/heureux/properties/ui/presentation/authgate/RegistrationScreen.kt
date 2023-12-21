@@ -46,12 +46,17 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RegistrationScreen() {
+fun RegistrationScreen(
+//    viewModel: AuthViewModel,
+    mainNavController: NavController,
+) {
 
 
     val coroutineScope = rememberCoroutineScope()
@@ -260,5 +265,13 @@ fun RegistrationScreen() {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun RegistrationScreenPreview() {
-    MaterialTheme { Surface { RegistrationScreen() } }
+    MaterialTheme {
+        Surface {
+            val mainNavController = rememberNavController()
+            RegistrationScreen(
+//                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                mainNavController = mainNavController,
+            )
+        }
+    }
 }
