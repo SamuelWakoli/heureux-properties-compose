@@ -8,6 +8,7 @@ import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
 import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactUsScreen
+import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
 import com.heureux.properties.ui.presentation.main.filter_results_screen.FilterResultsScreen
 import com.heureux.properties.ui.presentation.main.filter_screen.FilterScreen
 import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
@@ -45,10 +46,13 @@ fun NavGraph(
             ContactUsScreen(mainNavController = navController)
         }
         composable(route = Screens.FilterScreen.route) {
-            FilterScreen()
+            FilterScreen(mainNavController = navController)
         }
         composable(route = Screens.FilterResultsScreen.route) {
-            FilterResultsScreen()
+            FilterResultsScreen(mainNavController = navController)
+        }
+        composable(route = Screens.FeedbackScreen.route) {
+            FeedbackScreen(mainNavController = navController)
         }
     }
 }

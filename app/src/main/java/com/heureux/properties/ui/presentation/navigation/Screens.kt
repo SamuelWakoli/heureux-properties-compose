@@ -18,4 +18,5 @@ sealed class Screens(val route: String) {
     data object ContactUsScreen : Screens(route = "contact_us_screen")
     data object FilterScreen : Screens(route = "filter_screen")
     data object FilterResultsScreen : Screens(route = "filter_results_screen")
+    data object FeedbackScreen : Screens(route = "feedback_screen")
 }
