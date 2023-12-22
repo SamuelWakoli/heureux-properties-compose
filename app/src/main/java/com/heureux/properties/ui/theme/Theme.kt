@@ -15,7 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-private val LightColorScheme = darkColorScheme(
+private val LightColorScheme = lightColorScheme(
     primary = primaryColorLight,
     onPrimary = onPrimaryColorLight,
     primaryContainer = primaryContainerColorLight,
@@ -30,7 +30,7 @@ private val LightColorScheme = darkColorScheme(
     onTertiaryContainer = onTertiaryContainerColorLight
 )
 
-private val DarkColorScheme = lightColorScheme(
+private val DarkColorScheme = darkColorScheme(
     primary = primaryColorDark,
     onPrimary = onPrimaryColorDark,
     primaryContainer = primaryContainerColorDark,
@@ -49,8 +49,8 @@ private val DarkColorScheme = lightColorScheme(
 fun HeureuxPropertiesTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
-    content: @Composable () -> Unit
+    dynamicColor: Boolean = false,
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {

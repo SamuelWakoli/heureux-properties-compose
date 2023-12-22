@@ -33,7 +33,7 @@ fun SoldPropertiesScreen(
                 }
             },
             title = {
-                Text(text = "Payment history")
+                Text(text = "Sold Properties")
             },
         )
     }) { paddingValues ->

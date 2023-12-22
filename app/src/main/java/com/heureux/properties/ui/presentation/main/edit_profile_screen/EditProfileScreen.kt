@@ -33,7 +33,7 @@ fun EditProfileScreen(
                 }
             },
             title = {
-                Text(text = "Payment history")
+                Text(text = "Edit Profile")
             },
         )
     }) { paddingValues ->
