@@ -72,6 +72,9 @@ dependencies {
     // Coil Image Loader
     implementation(libs.coil.compose)
 
+    // Google Play Services Auth
+    implementation(libs.play.services.auth)
+
     // Firebase
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
