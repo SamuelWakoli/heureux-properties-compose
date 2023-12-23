@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.authgate
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -22,6 +24,7 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,14 +33,14 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -47,40 +50,41 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
 import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
 import com.heureux.properties.ui.presentation.navigation.Screens
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
+import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SignInScreen(
-//    viewModel: AuthViewModel,
+    viewModel: AuthViewModel,
     mainNavController: NavController,
     onSignInWithGoogle: () -> Unit,
 ) {
 
+    val uiState = viewModel.uiState.collectAsState().value
 
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(key1 = uiState.isSignInSuccess, block = {
+        if (uiState.isSignInSuccess) {
+            Toast.makeText(
+                context,
+                "Signed in successfully", Toast.LENGTH_LONG
+            ).show()
 
-    var email by rememberSaveable {
-        mutableStateOf("")
-    }
-    var emailError by rememberSaveable {
-        mutableStateOf(false)
-    }
+            mainNavController.navigate(Screens.HomeScreen.route) {
+                launchSingleTop = true
+                mainNavController.popBackStack()
+            }
+        }
+    })
 
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-    var passwordError by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var passwordVisibility by rememberSaveable {
-        mutableStateOf(false)
-    }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -150,17 +154,17 @@ fun SignInScreen(
                 }
                 Spacer(modifier = Modifier.size(8.dp))
                 OutlinedTextField(
-                    value = email,
-                    onValueChange = { newEmail -> email = newEmail },
+                    value = uiState.email,
+                    onValueChange = { newEmail -> viewModel.updateEmail(newEmail) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Email") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
                     },
                     supportingText = {
-                        if (emailError) Text(text = "Email cannot be empty")
+                        if (uiState.showEmailError) Text(text = "Email cannot be empty")
                     },
-                    isError = emailError,
+                    isError = uiState.showEmailError,
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Email,
@@ -170,30 +174,30 @@ fun SignInScreen(
                     shape = MaterialTheme.shapes.medium,
                 )
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { newPassword -> password = newPassword },
+                    value = uiState.password,
+                    onValueChange = { newPassword -> viewModel.updatePassword(newPassword) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Password") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
                     },
                     trailingIcon = {
-                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        IconButton(onClick = { viewModel.hideOrShowPassword() }) {
                             Icon(
                                 imageVector =
-                                if (passwordVisibility) Icons.Outlined.VisibilityOff
+                                if (uiState.showPassword) Icons.Outlined.VisibilityOff
                                 else Icons.Outlined.Visibility,
                                 contentDescription =
-                                if (passwordVisibility) "Hide password"
+                                if (uiState.showPassword) "Hide password"
                                 else "Show password"
                             )
                         }
                     },
                     supportingText = {
-                        if (passwordError) Text(text = "Password cannot be empty")
+                        if (uiState.showPasswordError) Text(text = "Password cannot be empty")
                     },
-                    isError = passwordError,
-                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = uiState.showPasswordError,
+                    visualTransformation = if (uiState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Password,
@@ -201,45 +205,32 @@ fun SignInScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            if (email.isEmpty()) {
-                                emailError = true
-                                coroutineScope.launch {
-                                    delay(5000L)
-                                    emailError = false
-                                }
-                            } else if (password.isEmpty()) {
-                                passwordError = true
-                                coroutineScope.launch {
-                                    delay(5000L)
-                                    passwordError = false
-                                }
-                            } else {
-                                // TODO: Sign in user with email and password
-                            }
+                            // first hide keyboard
+                            keyboardController?.hide()
+                            // then sign in
+                            viewModel.signInWithEmailPwd()
                         }
                     ),
                     singleLine = true,
                     shape = MaterialTheme.shapes.medium,
                 )
-                Spacer(modifier = Modifier.size(8.dp))
+                Text(
+                    text = "Forgot password?",
+                    modifier = Modifier
+                        .clickable { }
+                        .padding(8.dp)
+                        .align(Alignment.End),
 
-                OutlinedButton(onClick = {
-                    if (email.isEmpty()) {
-                        emailError = true
-                        coroutineScope.launch {
-                            delay(5000L)
-                            emailError = false
-                        }
-                    } else if (password.isEmpty()) {
-                        passwordError = true
-                        coroutineScope.launch {
-                            delay(5000L)
-                            passwordError = false
-                        }
-                    } else {
-                        // TODO: Sign in user with email and password
-                    }
-                }, modifier = Modifier.fillMaxWidth()) {
+                    )
+                if (uiState.errorMessage != null) Text(
+                    text = uiState.errorMessage, color = MaterialTheme.colorScheme.error,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+                OutlinedButton(
+                    onClick = {
+                        viewModel.signInWithEmailPwd()
+                    }, modifier = Modifier.fillMaxWidth()
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth(),
@@ -250,13 +241,22 @@ fun SignInScreen(
                             modifier = Modifier.weight(9f),
                             textAlign = TextAlign.Center,
                         )
-                        Icon(
-                            imageVector = Icons.Default.ArrowForward,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .weight(1f)
-                        )
+                        if (uiState.isSignInButtonLoading) {
+                            Spacer(modifier = Modifier.width(12.dp))
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                                strokeWidth = 2.dp,
+                            )
+                        } else {
+                            Icon(
+                                imageVector = Icons.Default.ArrowForward,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .weight(1f)
+                            )
+                        }
                     }
                 }
                 Spacer(modifier = Modifier.size(8.dp))
@@ -276,7 +276,7 @@ private fun SignInScreenPreview() {
         Surface {
             val mainNavController = rememberNavController()
             SignInScreen(
-//                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
             ) {}
         }

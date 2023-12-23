@@ -36,7 +36,7 @@ fun NavGraph(
         composable(route = Screens.SignInScreen.route) {
             SignInScreen(
                 mainNavController = navController,
-//                viewModel = authViewModel,
+                viewModel = authViewModel,
                 onSignInWithGoogle = { onSignInWithGoogle() }
             )
         }

@@ -69,6 +69,7 @@ class MainActivity : ComponentActivity() {
                         authViewModel = authViewModel,
                         mainScreenViewModel = mainScreenViewModel,
                     ) {
+                        // now Sign in with Google
                         lifecycleScope.launch {
                             val signInIntentSender = googleAuthUiClient.signIn()
                             launcher.launch(
