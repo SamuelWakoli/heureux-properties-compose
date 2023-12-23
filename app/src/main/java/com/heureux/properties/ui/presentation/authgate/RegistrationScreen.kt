@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -91,7 +92,9 @@ fun RegistrationScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = "Registration") },
                 navigationIcon = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        mainNavController.navigateUp()
+                    }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Navigate back"
@@ -102,160 +105,166 @@ fun RegistrationScreen(
         }
     ) { scaffoldPaddingValues ->
 
-        // TODO: Add some graphics here where necessary
         Column(
             modifier = Modifier
-                .verticalScroll(state = rememberScrollState())
-                .fillMaxHeight()
-                .widthIn(min = 400.dp, max = 600.dp)
-                .padding(horizontal = 16.dp)
-                .padding(scaffoldPaddingValues)
+                .fillMaxSize()
+                .verticalScroll(state = rememberScrollState()),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            OutlinedTextField(
-                value = name,
-                onValueChange = { newName -> name = newName },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Name") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null)
-                },
-                supportingText = {
-                    if (nameError) Text(text = "Name cannot be empty")
-                },
-                isError = nameError,
-                keyboardOptions = KeyboardOptions(
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium,
-            )
-            OutlinedTextField(
-                value = email,
-                onValueChange = { newEmail -> email = newEmail },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Email") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
-                },
-                supportingText = {
-                    if (emailError) Text(text = "Email cannot be empty")
-                },
-                isError = emailError,
-                keyboardOptions = KeyboardOptions(
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium,
-            )
-            OutlinedTextField(
-                value = password,
-                onValueChange = { newPassword -> password = newPassword },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(text = "Password") },
-                leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
-                },
-                trailingIcon = {
-                    IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .widthIn(min = 400.dp, max = 600.dp)
+                    .padding(horizontal = 16.dp)
+                    .padding(scaffoldPaddingValues)
+            ) {
+                OutlinedTextField(
+                    value = name,
+                    onValueChange = { newName -> name = newName },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = "Name") },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null)
+                    },
+                    supportingText = {
+                        if (nameError) Text(text = "Name cannot be empty")
+                    },
+                    isError = nameError,
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
+                    ),
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                )
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = { newEmail -> email = newEmail },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = "Email") },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
+                    },
+                    supportingText = {
+                        if (emailError) Text(text = "Email cannot be empty")
+                    },
+                    isError = emailError,
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
+                    ),
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                )
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = { newPassword -> password = newPassword },
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = "Password") },
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                            Icon(
+                                imageVector =
+                                if (passwordVisibility) Icons.Outlined.VisibilityOff
+                                else Icons.Outlined.Visibility,
+                                contentDescription =
+                                if (passwordVisibility) "Hide password"
+                                else "Show password"
+                            )
+                        }
+                    },
+                    supportingText = {
+                        if (passwordError) Text(text = "Password cannot be empty")
+                    },
+                    isError = passwordError,
+                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(
+                        autoCorrect = false,
+                        keyboardType = KeyboardType.Password,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (name.isEmpty()) {
+                                nameError = true
+                                coroutineScope.launch {
+                                    delay(5000L)
+                                    nameError = false
+                                }
+                            } else if (email.isEmpty()) {
+                                emailError = true
+                                coroutineScope.launch {
+                                    delay(5000L)
+                                    emailError = false
+                                }
+                            } else if (password.isEmpty()) {
+                                passwordError = true
+                                coroutineScope.launch {
+                                    delay(5000L)
+                                    passwordError = false
+                                }
+                            } else {
+                                // TODO: Register user with email and password
+                            }
+                        }
+                    ),
+                    singleLine = true,
+                    shape = MaterialTheme.shapes.medium,
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+
+                OutlinedButton(onClick = {
+                    if (name.isEmpty()) {
+                        nameError = true
+                        coroutineScope.launch {
+                            delay(5000L)
+                            nameError = false
+                        }
+                    } else if (email.isEmpty()) {
+                        emailError = true
+                        coroutineScope.launch {
+                            delay(5000L)
+                            emailError = false
+                        }
+                    } else if (password.isEmpty()) {
+                        passwordError = true
+                        coroutineScope.launch {
+                            delay(5000L)
+                            passwordError = false
+                        }
+                    } else {
+                        // TODO: Register user with email and password
+                    }
+                }, modifier = Modifier.fillMaxWidth()) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = "Register",
+                            style = MaterialTheme.typography.titleMedium,
+                            modifier = Modifier.weight(9f),
+                            textAlign = TextAlign.Center,
+                        )
                         Icon(
-                            imageVector =
-                            if (passwordVisibility) Icons.Outlined.VisibilityOff
-                            else Icons.Outlined.Visibility,
-                            contentDescription =
-                            if (passwordVisibility) "Hide password"
-                            else "Show password"
+                            imageVector = Icons.Default.AppRegistration,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .weight(1f)
                         )
                     }
-                },
-                supportingText = {
-                    if (passwordError) Text(text = "Password cannot be empty")
-                },
-                isError = passwordError,
-                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
-                keyboardOptions = KeyboardOptions(
-                    autoCorrect = false,
-                    keyboardType = KeyboardType.Password,
-                    imeAction = ImeAction.Done,
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = {
-                        if (name.isEmpty()) {
-                            nameError = true
-                            coroutineScope.launch {
-                                delay(5000L)
-                                nameError = false
-                            }
-                        } else if (email.isEmpty()) {
-                            emailError = true
-                            coroutineScope.launch {
-                                delay(5000L)
-                                emailError = false
-                            }
-                        } else if (password.isEmpty()) {
-                            passwordError = true
-                            coroutineScope.launch {
-                                delay(5000L)
-                                passwordError = false
-                            }
-                        } else {
-                            // TODO: Register user with email and password
-                        }
-                    }
-                ),
-                singleLine = true,
-                shape = MaterialTheme.shapes.medium,
-            )
-            Spacer(modifier = Modifier.size(8.dp))
-
-            OutlinedButton(onClick = {
-                if (name.isEmpty()) {
-                    nameError = true
-                    coroutineScope.launch {
-                        delay(5000L)
-                        nameError = false
-                    }
-                } else if (email.isEmpty()) {
-                    emailError = true
-                    coroutineScope.launch {
-                        delay(5000L)
-                        emailError = false
-                    }
-                } else if (password.isEmpty()) {
-                    passwordError = true
-                    coroutineScope.launch {
-                        delay(5000L)
-                        passwordError = false
-                    }
-                } else {
-                    // TODO: Register user with email and password
                 }
-            }, modifier = Modifier.fillMaxWidth()) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = "Register",
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.weight(9f),
-                        textAlign = TextAlign.Center,
-                    )
-                    Icon(
-                        imageVector = Icons.Default.AppRegistration,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(18.dp)
-                            .weight(1f)
-                    )
+                Spacer(modifier = Modifier.size(8.dp))
+                GoogleSignInButton(modifier = Modifier.fillMaxWidth()) {
+                    onSignInWithGoogle()
                 }
-            }
-            Spacer(modifier = Modifier.size(8.dp))
-            GoogleSignInButton(modifier = Modifier.fillMaxWidth()) {
-                onSignInWithGoogle()
+                Spacer(modifier = Modifier.size(24.dp))
             }
         }
     }
@@ -270,7 +279,7 @@ private fun RegistrationScreenPreview() {
             RegistrationScreen(
 //                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
-            ){}
+            ) {}
         }
     }
 }
