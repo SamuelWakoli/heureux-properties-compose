@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.authgate
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -46,7 +49,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.R
 import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
+import com.heureux.properties.ui.presentation.navigation.Screens
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -78,9 +83,16 @@ fun SignInScreen(
     }
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
-        // TODO: Add some graphics here where necessary
+        Image(
+            painter = painterResource(id = R.drawable.heureux_background_image),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+            alpha = 0.1f,
+        )
         Column(
             modifier = Modifier
                 .verticalScroll(state = rememberScrollState())
@@ -88,13 +100,32 @@ fun SignInScreen(
                 .widthIn(min = 400.dp, max = 600.dp)
                 .padding(16.dp)
         ) {
-            Text(
-                text = "Heureux\nProperties",
-                style = MaterialTheme.typography.displayMedium,
-                color = MaterialTheme.colorScheme.primary,
-            )
-            Text(text = "Bringing a smile in every investor")
-            Spacer(modifier = Modifier.size(128.dp))
+            Spacer(modifier = Modifier.size(24.dp))
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 24.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_launcher_round),
+                    contentDescription = null,
+                    modifier = Modifier.size(128.dp)
+                )
+                Text(
+                    text = "Heureux\nProperties",
+                    style = MaterialTheme.typography.displayMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+                Text(
+                    text = "Bringing a smile in every investor",
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+            Spacer(modifier = Modifier.size(64.dp))
             Column {
                 Text(
                     text = "Sign In",
@@ -107,7 +138,11 @@ fun SignInScreen(
                     Text(
                         text = "Register",
                         modifier = Modifier
-                            .clickable { }
+                            .clickable {
+                                mainNavController.navigate(route = Screens.RegistrationScreen.route) {
+                                    launchSingleTop = true
+                                }
+                            }
                             .padding(6.dp),
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
@@ -228,9 +263,8 @@ fun SignInScreen(
                 GoogleSignInButton(modifier = Modifier.fillMaxWidth()) {
                     onSignInWithGoogle()
                 }
-
+                Spacer(modifier = Modifier.size(24.dp))
             }
-
         }
     }
 }
