@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 fun SignInScreen(
 //    viewModel: AuthViewModel,
     mainNavController: NavController,
+    onSignInWithGoogle: () -> Unit,
 ) {
 
 
@@ -245,7 +246,7 @@ private fun SignInScreenPreview() {
             SignInScreen(
 //                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
-            )
+            ){}
         }
     }
 }

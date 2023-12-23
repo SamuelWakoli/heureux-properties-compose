@@ -56,6 +56,7 @@ import kotlinx.coroutines.launch
 fun RegistrationScreen(
 //    viewModel: AuthViewModel,
     mainNavController: NavController,
+    onSignInWithGoogle: () -> Unit,
 ) {
 
 
@@ -271,7 +272,7 @@ private fun RegistrationScreenPreview() {
             RegistrationScreen(
 //                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
-            )
+            ){}
         }
     }
 }
