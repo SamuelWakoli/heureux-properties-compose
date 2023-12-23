@@ -1,7 +1,6 @@
 package com.heureux.properties.ui.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,7 +17,6 @@ import com.heureux.properties.ui.presentation.main.my_properties_screen.MyProper
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 
@@ -26,10 +24,10 @@ import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 fun NavGraph(
     navController: NavHostController,
     currentUserSignedIn: Boolean,
+    authViewModel: AuthViewModel,
+    mainScreenViewModel: MainScreenViewModel,
+    onSignInWithGoogle: () -> Unit,
 ) {
-
-    val authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
-    val mainScreenViewModel: MainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
     NavHost(
         navController = navController,
@@ -39,12 +37,14 @@ fun NavGraph(
             SignInScreen(
                 mainNavController = navController,
 //                viewModel = authViewModel,
+                onSignInWithGoogle = { onSignInWithGoogle() }
             )
         }
         composable(route = Screens.RegistrationScreen.route) {
             RegistrationScreen(
                 mainNavController = navController,
 //                viewModel = authViewModel,
+                onSignInWithGoogle = {onSignInWithGoogle()}
             )
         }
         composable(route = Screens.MainScreen.route) {
