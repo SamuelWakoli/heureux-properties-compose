@@ -21,7 +21,6 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +46,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -225,10 +225,8 @@ fun SignInScreen(
                     }
                 }
                 Spacer(modifier = Modifier.size(8.dp))
-                ElevatedButton(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
-                    Row {
-                        Text(text = "Sign in with Google")
-                    }
+                GoogleSignInButton(modifier = Modifier.fillMaxWidth()) {
+                    onSignInWithGoogle()
                 }
 
             }
@@ -246,7 +244,7 @@ private fun SignInScreenPreview() {
             SignInScreen(
 //                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
-            ){}
+            ) {}
         }
     }
 }
