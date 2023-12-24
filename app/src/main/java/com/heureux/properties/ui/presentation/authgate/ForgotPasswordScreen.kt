@@ -2,6 +2,7 @@ package com.heureux.properties.ui.presentation.authgate
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Send
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -35,6 +38,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -45,7 +49,7 @@ import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 @Composable
 fun ForgotPasswordScreen(
     mainNavController: NavController,
-    viewModel: AuthViewModel
+    viewModel: AuthViewModel,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
@@ -65,7 +69,7 @@ fun ForgotPasswordScreen(
         },
     ) { padding ->
 
-        Column (
+        Column(
             Modifier
                 .padding(
                     padding
@@ -127,7 +131,10 @@ fun ForgotPasswordScreen(
                 )
 
                 if (uiState.showDialogPwdResetEmailSent) {
-                    // TODO:
+                    PasswordResetEmailDialog {
+                        viewModel.hidePasswordResetDialog()
+                        mainNavController.navigateUp()
+                    }
                 }
             }
         }
@@ -141,5 +148,43 @@ fun ForgotPasswordScreenPreview() {
     ForgotPasswordScreen(
         mainNavController = rememberNavController(),
         viewModel = viewModel<AuthViewModel>(factory = AppViewModelProvider.Factory),
+    )
+}
+
+
+@Composable
+fun PasswordResetEmailDialog(
+    onDismiss: () -> Unit,
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Card {
+            Column(
+                modifier = Modifier.padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = "Password reset email sent",
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(8.dp),
+                )
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                ) {
+                    TextButton(onClick = { onDismiss() }) {
+                        Text(text = "OK")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PasswordResetEmailDialogPreview() {
+    PasswordResetEmailDialog(
+        onDismiss = {}
     )
 }

@@ -205,4 +205,12 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
         }
 
     }
+
+    fun hidePasswordResetDialog() {
+        _uiState.update {
+            it.copy(
+                showDialogPwdResetEmailSent = false,
+            )
+        }
+    }
 }
