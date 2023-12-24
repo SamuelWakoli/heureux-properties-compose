@@ -2,7 +2,6 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
-    id("com.google.devtools.ksp") version "1.9.20-1.0.14"
     id("com.google.gms.google-services")
 }
 
@@ -62,12 +61,6 @@ dependencies {
     implementation(libs.androidx.material.icons.extended.android)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.lifecycle.viewmodel.compose)
-
-    //Room Database
-    implementation(libs.androidx.room.runtime)
-
-    ksp(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
 
     // Coil Image Loader
     implementation(libs.coil.compose)
