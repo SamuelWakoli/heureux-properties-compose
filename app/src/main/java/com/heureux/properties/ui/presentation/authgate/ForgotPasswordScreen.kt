@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -30,9 +31,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -45,13 +51,20 @@ import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ForgotPasswordScreen(
     mainNavController: NavController,
     viewModel: AuthViewModel,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
+    val focusRequester = FocusRequester()
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
+
 
     Scaffold(
         topBar = {
@@ -94,7 +107,8 @@ fun ForgotPasswordScreen(
                     onValueChange = { viewModel.updateEmail(it) },
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .focusRequester(focusRequester),
                     singleLine = true,
                     isError = uiState.showEmailError,
                     supportingText = { if (uiState.showEmailError) Text(text = "Email cannot be empty") },
@@ -109,7 +123,10 @@ fun ForgotPasswordScreen(
                             strokeWidth = 2.dp,
                             modifier = Modifier.size(20.dp),
                         )
-                        else IconButton(onClick = { viewModel.sendPasswordResetEmail() }) {
+                        else IconButton(onClick = {
+                            keyboardController?.hide()
+                            viewModel.sendPasswordResetEmail()
+                        }) {
                             Icon(
                                 imageVector = Icons.Outlined.Send,
                                 contentDescription = "Send"
@@ -118,12 +135,16 @@ fun ForgotPasswordScreen(
                     },
                     shape = MaterialTheme.shapes.medium,
                     keyboardOptions = KeyboardOptions().copy(
-                        imeAction = ImeAction.Next,
+                        imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Email,
                         autoCorrect = false,
                         capitalization = KeyboardCapitalization.None,
                     ),
-                )
+                    keyboardActions = KeyboardActions(onDone = {
+                        keyboardController?.hide()
+                        viewModel.sendPasswordResetEmail()
+                    }),
+                    )
                 if (!uiState.errorMessage.isNullOrEmpty()) Text(
                     text = uiState.errorMessage,
                     color = MaterialTheme.colorScheme.error,
