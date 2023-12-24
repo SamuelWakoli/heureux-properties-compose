@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.authgate
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +23,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,13 +34,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -46,46 +48,39 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
+import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun RegistrationScreen(
-//    viewModel: AuthViewModel,
+    viewModel: AuthViewModel,
     mainNavController: NavController,
     onSignInWithGoogle: () -> Unit,
 ) {
 
+    val uiState = viewModel.uiState.collectAsState().value
 
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(key1 = uiState.isSignInSuccess, block = {
+        if (uiState.isSignInSuccess) {
+            Toast.makeText(
+                context,
+                "Profile created", Toast.LENGTH_LONG
+            ).show()
 
-    var name by rememberSaveable {
-        mutableStateOf("")
-    }
-    var nameError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var email by rememberSaveable {
-        mutableStateOf("")
-    }
-    var emailError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var password by rememberSaveable {
-        mutableStateOf("")
-    }
-    var passwordError by rememberSaveable {
-        mutableStateOf(false)
-    }
-    var passwordVisibility by rememberSaveable {
-        mutableStateOf(false)
-    }
+            mainNavController.navigate(Screens.MainScreen.route) {
+                launchSingleTop = true
+                mainNavController.popBackStack()
+            }
+        }
+    })
 
     Scaffold(
         topBar = {
@@ -119,17 +114,17 @@ fun RegistrationScreen(
                     .padding(scaffoldPaddingValues)
             ) {
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { newName -> name = newName },
+                    value = uiState.name,
+                    onValueChange = { newName -> viewModel.updateName(newName) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Name") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null)
                     },
                     supportingText = {
-                        if (nameError) Text(text = "Name cannot be empty")
+                        if (uiState.showNameError) Text(text = "Name cannot be empty")
                     },
-                    isError = nameError,
+                    isError = uiState.showNameError,
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Email,
@@ -139,17 +134,17 @@ fun RegistrationScreen(
                     shape = MaterialTheme.shapes.medium,
                 )
                 OutlinedTextField(
-                    value = email,
-                    onValueChange = { newEmail -> email = newEmail },
+                    value = uiState.email,
+                    onValueChange = { newEmail -> viewModel.updateEmail(newEmail) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Email") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
                     },
                     supportingText = {
-                        if (emailError) Text(text = "Email cannot be empty")
+                        if (uiState.showEmailError) Text(text = "Email cannot be empty")
                     },
-                    isError = emailError,
+                    isError = uiState.showEmailError,
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Email,
@@ -159,30 +154,30 @@ fun RegistrationScreen(
                     shape = MaterialTheme.shapes.medium,
                 )
                 OutlinedTextField(
-                    value = password,
-                    onValueChange = { newPassword -> password = newPassword },
+                    value = uiState.password,
+                    onValueChange = { newPassword -> viewModel.updatePassword(newPassword) },
                     modifier = Modifier.fillMaxWidth(),
                     label = { Text(text = "Password") },
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
                     },
                     trailingIcon = {
-                        IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
+                        IconButton(onClick = { viewModel.hideOrShowPassword() }) {
                             Icon(
                                 imageVector =
-                                if (passwordVisibility) Icons.Outlined.VisibilityOff
+                                if (uiState.showPassword) Icons.Outlined.VisibilityOff
                                 else Icons.Outlined.Visibility,
                                 contentDescription =
-                                if (passwordVisibility) "Hide password"
+                                if (uiState.showPassword) "Hide password"
                                 else "Show password"
                             )
                         }
                     },
                     supportingText = {
-                        if (passwordError) Text(text = "Password cannot be empty")
+                        if (uiState.showPasswordError) Text(text = "Password cannot be empty")
                     },
-                    isError = passwordError,
-                    visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                    isError = uiState.showPasswordError,
+                    visualTransformation = if (uiState.showPassword) VisualTransformation.None else PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(
                         autoCorrect = false,
                         keyboardType = KeyboardType.Password,
@@ -190,57 +185,26 @@ fun RegistrationScreen(
                     ),
                     keyboardActions = KeyboardActions(
                         onDone = {
-                            if (name.isEmpty()) {
-                                nameError = true
-                                coroutineScope.launch {
-                                    delay(5000L)
-                                    nameError = false
-                                }
-                            } else if (email.isEmpty()) {
-                                emailError = true
-                                coroutineScope.launch {
-                                    delay(5000L)
-                                    emailError = false
-                                }
-                            } else if (password.isEmpty()) {
-                                passwordError = true
-                                coroutineScope.launch {
-                                    delay(5000L)
-                                    passwordError = false
-                                }
-                            } else {
-                                // TODO: Register user with email and password
-                            }
+                            // first hide keyboard
+                            keyboardController?.hide()
+                            // then sign in
+                            viewModel.registerWithEmailPwd()
                         }
                     ),
                     singleLine = true,
                     shape = MaterialTheme.shapes.medium,
                 )
                 Spacer(modifier = Modifier.size(8.dp))
+                if (uiState.errorMessage != null) Text(
+                    text = uiState.errorMessage, color = MaterialTheme.colorScheme.error
+                )
 
-                OutlinedButton(onClick = {
-                    if (name.isEmpty()) {
-                        nameError = true
-                        coroutineScope.launch {
-                            delay(5000L)
-                            nameError = false
-                        }
-                    } else if (email.isEmpty()) {
-                        emailError = true
-                        coroutineScope.launch {
-                            delay(5000L)
-                            emailError = false
-                        }
-                    } else if (password.isEmpty()) {
-                        passwordError = true
-                        coroutineScope.launch {
-                            delay(5000L)
-                            passwordError = false
-                        }
-                    } else {
-                        // TODO: Register user with email and password
-                    }
-                }, modifier = Modifier.fillMaxWidth()) {
+                OutlinedButton(
+                    onClick = {
+                        keyboardController?.hide()
+                        viewModel.registerWithEmailPwd()
+                    }, modifier = Modifier.fillMaxWidth()
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth(),
@@ -251,13 +215,20 @@ fun RegistrationScreen(
                             modifier = Modifier.weight(9f),
                             textAlign = TextAlign.Center,
                         )
-                        Icon(
-                            imageVector = Icons.Default.AppRegistration,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .weight(1f)
-                        )
+                        if (uiState.isCreateAccountButtonLoading)
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(20.dp),
+                                color = MaterialTheme.colorScheme.primary,
+                                strokeWidth = 2.dp,
+                            )
+                        else
+                            Icon(
+                                imageVector = Icons.Default.AppRegistration,
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .weight(1f)
+                            )
                     }
                 }
                 Spacer(modifier = Modifier.size(8.dp))
@@ -277,7 +248,7 @@ private fun RegistrationScreenPreview() {
         Surface {
             val mainNavController = rememberNavController()
             RegistrationScreen(
-//                viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 mainNavController = mainNavController,
             ) {}
         }

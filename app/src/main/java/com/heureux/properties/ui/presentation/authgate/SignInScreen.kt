@@ -78,7 +78,7 @@ fun SignInScreen(
                 "Signed in successfully", Toast.LENGTH_LONG
             ).show()
 
-            mainNavController.navigate(Screens.HomeScreen.route) {
+            mainNavController.navigate(Screens.MainScreen.route) {
                 launchSingleTop = true
                 mainNavController.popBackStack()
             }
