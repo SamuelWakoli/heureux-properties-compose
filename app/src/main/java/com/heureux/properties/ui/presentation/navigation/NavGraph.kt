@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.heureux.properties.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
@@ -45,6 +46,12 @@ fun NavGraph(
                 mainNavController = navController,
 //                viewModel = authViewModel,
                 onSignInWithGoogle = {onSignInWithGoogle()}
+            )
+        }
+        composable(route = Screens.ForgotPasswordScreen.route) {
+            ForgotPasswordScreen(
+                mainNavController = navController,
+                viewModel = authViewModel,
             )
         }
         composable(route = Screens.MainScreen.route) {

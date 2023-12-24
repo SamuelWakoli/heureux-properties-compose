@@ -217,7 +217,11 @@ fun SignInScreen(
                 Text(
                     text = "Forgot password?",
                     modifier = Modifier
-                        .clickable { }
+                        .clickable {
+                            mainNavController.navigate(route = Screens.ForgotPasswordScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }
                         .padding(8.dp)
                         .align(Alignment.End),
 
