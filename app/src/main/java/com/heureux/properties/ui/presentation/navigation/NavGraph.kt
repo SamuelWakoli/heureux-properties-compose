@@ -45,7 +45,7 @@ fun NavGraph(
             RegistrationScreen(
                 mainNavController = navController,
                 viewModel = authViewModel,
-                onSignInWithGoogle = {onSignInWithGoogle()}
+                onSignInWithGoogle = { onSignInWithGoogle() }
             )
         }
         composable(route = Screens.ForgotPasswordScreen.route) {
@@ -63,7 +63,10 @@ fun NavGraph(
 
         // other screens
         composable(route = Screens.ProfileScreen.route) {
-            ProfileScreen(mainNavController = navController)
+            ProfileScreen(
+                mainNavController = navController,
+                mainScreenViewModel = mainScreenViewModel,
+            )
         }
         composable(route = Screens.EditProfileScreen.route) {
             EditProfileScreen(mainNavController = navController)

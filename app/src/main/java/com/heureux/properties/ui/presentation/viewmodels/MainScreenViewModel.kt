@@ -2,6 +2,7 @@ package com.heureux.properties.ui.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.FirestoreRepository
@@ -16,20 +17,24 @@ class MainScreenViewModel(heureuxFirestoreRepository: FirestoreRepository) : Vie
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    private val currentUser = Firebase.auth.currentUser!!
+    private val currentUser: FirebaseUser by lazy {
+        Firebase.auth.currentUser!!
+    }
 
-    val userData: StateFlow<HeureuxUser?> = heureuxFirestoreRepository.getHeureuxUserData(
-        user = currentUser,
-        onSuccess = {
+    // by lazy so as to buy time for current user to be fetched / configured
+    // after authentication
+    val userData: StateFlow<HeureuxUser?> by lazy {
+        heureuxFirestoreRepository.getHeureuxUserData(
+            user = currentUser,
+            onSuccess = {
 
-        },
-        onFailure = { exception: Exception -> }
-    ).stateIn(
+            },
+            onFailure = { exception: Exception -> }
+        ).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
         )
-
-
+    }
 
 }

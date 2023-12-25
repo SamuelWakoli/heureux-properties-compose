@@ -29,6 +29,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,15 +38,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
+import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     mainNavController: NavController,
+    mainScreenViewModel: MainScreenViewModel,
 ) {
+    val userData = mainScreenViewModel.userData.collectAsState().value
 
     var showSignOutDialog by rememberSaveable {
         mutableStateOf(false)
@@ -96,10 +102,10 @@ fun ProfileScreen(
                         )
                     },
                     headlineContent = {
-                        Text(text = "username")
+                        Text(text = userData?.name ?: "")
                     },
                     supportingContent = {
-                        Text(text = "username@gmail.com")
+                        Text(text = userData?.email!!)
                     },
                 )
                 ListItem(
@@ -245,6 +251,7 @@ fun ProfileScreen(
 @Composable
 private fun ProfileScreenPreview() {
     ProfileScreen(
-        mainNavController = rememberNavController()
+        mainNavController = rememberNavController(),
+        mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }
