@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Error
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,12 +23,17 @@ import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
 
 @Composable
-fun CoilImage() {
+fun CoilImage(
+    modifier: Modifier = Modifier,
+    imageUrl: String = "https://picsum.photos/200",
+    errorContent: @Composable (() -> Unit)?,
+    loadingContent: @Composable (() -> Unit)?,
+    emptyContent: @Composable (() -> Unit)?,
+) {
     Box(
-        modifier = Modifier.size(200.dp),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
-        val imageUrl = "https://picsum.photos/200"
 
         val painter = rememberAsyncImagePainter(
             model = ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
@@ -34,31 +41,47 @@ fun CoilImage() {
         )
 
         if (painter.state is AsyncImagePainter.State.Loading) {
-            CircularProgressIndicator(
-                strokeWidth = 2.dp,
-                color = MaterialTheme.colorScheme.primary,
-            )
+            if (loadingContent == null) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+            } else {
+                loadingContent()
+            }
         }
 
 
         if (painter.state is AsyncImagePainter.State.Empty) {
-            // Do something if image url is empty
+            if (emptyContent == null) {
+                // TODO: Handle empty
+            } else {
+                emptyContent()
+            }
         }
 
         if (painter.state is AsyncImagePainter.State.Error) {
-            // Do something if image url has error
+            if (errorContent == null) {
+                Icon(
+                    imageVector = Icons.Outlined.Error,
+                    contentDescription = "Image URL has error",
+                    modifier = modifier
+                )
+            } else {
+                errorContent()
+            }
+
         }
 
         if (painter.state is AsyncImagePainter.State.Success) {
-            // This will be executed during the first composition if the image is in the memory cache.
+            Image(
+                painter = painter,
+                contentDescription = "Avatar image",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize()
+            )
         }
 
-        Image(
-            painter = painter,
-            contentDescription = "Avatar image",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier.fillMaxSize()
-        )
     }
 }
 
@@ -70,6 +93,11 @@ fun CoilImagePreview() {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.fillMaxSize()
     ) {
-        CoilImage()
+        CoilImage(
+            imageUrl = "https://picsum.photos/200",
+            errorContent = null,
+            loadingContent = null,
+            emptyContent = null,
+        )
     }
 }
