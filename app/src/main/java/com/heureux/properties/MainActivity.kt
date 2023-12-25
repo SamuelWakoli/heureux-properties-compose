@@ -33,13 +33,16 @@ class MainActivity : ComponentActivity() {
         )
     }
 
+    private lateinit var authViewModel: AuthViewModel
+    private lateinit var mainScreenViewModel: MainScreenViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             val currentUser = Firebase.auth.currentUser
-            val authViewModel: AuthViewModel = viewModel(factory = AppViewModelProvider.Factory)
-            val mainScreenViewModel: MainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+             authViewModel = viewModel(factory = AppViewModelProvider.Factory)
+             mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
 
             val launcher = rememberLauncherForActivityResult(

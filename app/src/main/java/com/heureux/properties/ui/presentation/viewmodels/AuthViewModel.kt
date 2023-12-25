@@ -1,8 +1,8 @@
 package com.heureux.properties.ui.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.FirestoreRepository
 import com.heureux.properties.ui.presentation.authgate.GoogleSignInResult
@@ -28,7 +28,7 @@ data class SignInUiState(
     val showEmailError: Boolean = false,
     val showPasswordError: Boolean = false,
 
-    val showDialogPwdResetEmailSent: Boolean = false
+    val showDialogPwdResetEmailSent: Boolean = false,
 )
 
 class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel() {
@@ -144,10 +144,12 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
                 .addOnCompleteListener { authResultTask ->
                     if (authResultTask.isSuccessful) {
                         // since user registration is successful, update display name
-                        val profileUpdate = userProfileChangeRequest {
-                            displayName = name
-                        }
-                        Firebase.auth.currentUser?.updateProfile(profileUpdate)
+                        Firebase.auth.currentUser?.updateProfile(
+                            UserProfileChangeRequest.Builder()
+                                .setDisplayName(name)
+                                .build()
+                        )
+
 
                         _uiState.update {
                             it.copy(
