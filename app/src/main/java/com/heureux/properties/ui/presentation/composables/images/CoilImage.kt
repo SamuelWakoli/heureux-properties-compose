@@ -26,9 +26,10 @@ import coil.transform.CircleCropTransformation
 fun CoilImage(
     modifier: Modifier = Modifier,
     imageUrl: String = "https://picsum.photos/200",
-    errorContent: @Composable (() -> Unit)?,
-    loadingContent: @Composable (() -> Unit)?,
-    emptyContent: @Composable (() -> Unit)?,
+    applyCircleShape: Boolean = false,
+    errorContent: @Composable (() -> Unit)? = null,
+    loadingContent: @Composable (() -> Unit)? = null,
+    emptyContent: @Composable (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier,
@@ -36,8 +37,13 @@ fun CoilImage(
     ) {
 
         val painter = rememberAsyncImagePainter(
-            model = ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
-                .transformations(CircleCropTransformation()).build()
+            model = if (applyCircleShape) {
+                ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
+                    .transformations(CircleCropTransformation()).build()
+            } else {
+                ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
+                    .build()
+            }
         )
 
         if (painter.state is AsyncImagePainter.State.Loading) {
@@ -95,9 +101,7 @@ fun CoilImagePreview() {
     ) {
         CoilImage(
             imageUrl = "https://picsum.photos/200",
-            errorContent = null,
-            loadingContent = null,
-            emptyContent = null,
+            applyCircleShape = true,
         )
     }
 }

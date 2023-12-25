@@ -68,9 +68,7 @@ fun MainScreenAppbar(
                     CoilImage(
                         modifier = Modifier.size(36.dp),
                         imageUrl = userData.photoUrl,
-                        errorContent = null,
-                        loadingContent = null,
-                        emptyContent = null,
+                        applyCircleShape = true,
                     )
                 } else {
                     Icon(
