@@ -7,11 +7,22 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.FirestoreRepository
 import com.heureux.properties.data.HeureuxUser
+import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreenUiState
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import okhttp3.internal.wait
 
-class MainScreenViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel() {
+class MainScreenViewModel(private val heureuxFirestoreRepository: FirestoreRepository) :
+    ViewModel() {
+
+    private var _profileScreenUiState: MutableStateFlow<ProfileScreenUiState> =
+        MutableStateFlow(ProfileScreenUiState())
+    val profileScreenUiState: StateFlow<ProfileScreenUiState> = _profileScreenUiState.asStateFlow()
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
@@ -27,7 +38,11 @@ class MainScreenViewModel(heureuxFirestoreRepository: FirestoreRepository) : Vie
         heureuxFirestoreRepository.getHeureuxUserData(
             user = currentUser,
             onSuccess = {
-
+                _profileScreenUiState.update {
+                    it.copy(
+                        currentUser = currentUser
+                    )
+                }
             },
             onFailure = { exception: Exception -> }
         ).stateIn(
@@ -37,4 +52,41 @@ class MainScreenViewModel(heureuxFirestoreRepository: FirestoreRepository) : Vie
         )
     }
 
+
+    suspend fun signOut() {
+        Firebase.auth.signOut().wait()
+        _profileScreenUiState.update {
+            it.copy(
+                currentUser = null
+            )
+        }
+    }
+
+    suspend fun deleteUserAndData() {
+        heureuxFirestoreRepository.deleteUserAndData(
+            userId = currentUser.email!!,
+            onSuccess = {
+                viewModelScope.launch {
+                    signOut()
+                }
+            },
+            onFailure = {},
+        ).wait()
+    }
+
+    fun showOrHideSignOutDialog(value: Boolean) {
+        _profileScreenUiState.update {
+            it.copy(
+                showSignOutDialog = value
+            )
+        }
+    }
+
+    fun showOrHideDeleteUserDataDialog(value: Boolean) {
+        _profileScreenUiState.update {
+            it.copy(
+                showDeleteProfileDialog = value
+            )
+        }
+    }
 }

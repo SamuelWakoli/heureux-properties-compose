@@ -6,6 +6,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
@@ -25,11 +27,17 @@ interface FirestoreRepository {
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ): Flow<HeureuxUser?>
+
+    suspend fun deleteUserAndData(
+        userId: String, onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
 }
 
 
 class HeureuxFirestoreRepository(context: Context) : FirestoreRepository {
     private val firestore: FirebaseFirestore = Firebase.firestore
+    private val storageReference: StorageReference = Firebase.storage.reference
     private val usersCollection = "users"
 
     companion object {
@@ -121,4 +129,19 @@ class HeureuxFirestoreRepository(context: Context) : FirestoreRepository {
         awaitClose { snapshotListener.remove() }
     }
 
+    override suspend fun deleteUserAndData(
+        userId: String,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        firestore.collection(usersCollection).document(userId).delete()
+            .addOnSuccessListener {
+                storageReference.child("$usersCollection/$userId").delete()
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener {exception -> onFailure(exception) }
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 }
