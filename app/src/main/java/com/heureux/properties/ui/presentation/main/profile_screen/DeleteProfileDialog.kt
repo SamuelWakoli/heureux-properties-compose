@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeleteProfileDialog(
+    onConfirmation: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(onDismissRequest = { onDismissRequest() }) {
@@ -61,14 +62,14 @@ fun DeleteProfileDialog(
                 ) {
                     TextButton(onClick = {
                         onDismissRequest()
-                        /*TODO*/
                     }) {
                         Text(text = "No")
                     }
                     Spacer(modifier = Modifier.size(8.dp))
                     TextButton(onClick = {
+                        onConfirmation()
+// TODO: handle error when sign out fails
                         onDismissRequest()
-                        /*TODO*/
                     }) {
                         Text(text = "Yes")
                     }
@@ -87,6 +88,7 @@ private fun DeleteProfileDialogPreview() {
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         DeleteProfileDialog(
+            onConfirmation = {},
             onDismissRequest = {}
         )
     }

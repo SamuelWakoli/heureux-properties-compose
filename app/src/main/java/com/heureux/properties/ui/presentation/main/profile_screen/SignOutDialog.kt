@@ -25,9 +25,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignOutDialog(
+    onConfirmation: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     AlertDialog(onDismissRequest = { onDismissRequest() }) {
@@ -61,14 +63,14 @@ fun SignOutDialog(
                 ) {
                     TextButton(onClick = {
                         onDismissRequest()
-                        /*TODO*/
                     }) {
                         Text(text = "Cancel")
                     }
                     Spacer(modifier = Modifier.size(8.dp))
                     TextButton(onClick = {
+                        onConfirmation()
+// TODO: handle error when sign out fails
                         onDismissRequest()
-                        /*TODO*/
                     }) {
                         Text(text = "Okay")
                     }
@@ -87,6 +89,7 @@ private fun SignOutDialogPreview() {
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
         SignOutDialog(
+            onConfirmation = {},
             onDismissRequest = {}
         )
     }
