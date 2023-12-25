@@ -7,8 +7,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,17 +21,25 @@ import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.HomeS
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MoreScreen
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MyListingsScreen
 import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
+import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(mainNavController: NavController) {
+fun MainScreen(
+    mainNavController: NavController,
+    viewModel: MainScreenViewModel,
+) {
     val bottomNavController: NavHostController = rememberNavController()
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
+    val userData = viewModel.userData.collectAsState().value
+
     Scaffold(
         topBar = {
             MainScreenAppbar(
+                userData = userData,
                 scrollBehavior = scrollBehavior,
                 bottomNavController = bottomNavController,
                 mainNavController = mainNavController,
@@ -70,7 +80,8 @@ fun MainScreen(mainNavController: NavController) {
 private fun MainScreenPreview() {
     MaterialTheme {
         MainScreen(
-            mainNavController = rememberNavController()
+            mainNavController = rememberNavController(),
+            viewModel = viewModel(factory = AppViewModelProvider.Factory)
         )
     }
 }

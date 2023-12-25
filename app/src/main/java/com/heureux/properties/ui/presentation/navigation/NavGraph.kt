@@ -56,7 +56,8 @@ fun NavGraph(
         }
         composable(route = Screens.MainScreen.route) {
             MainScreen(
-                mainNavController = navController
+                mainNavController = navController,
+                viewModel = mainScreenViewModel,
             )
         }
 

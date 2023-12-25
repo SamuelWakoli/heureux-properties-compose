@@ -36,6 +36,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
+import com.heureux.properties.data.HeureuxUser
+import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,6 +46,7 @@ fun MainScreenAppbar(
     bottomNavController: NavController,
     mainNavController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
+    userData: HeureuxUser?,
 ) {
     val bottomNavBackStackEntry = bottomNavController.currentBackStackEntryAsState()
     val currentRoute = bottomNavBackStackEntry.value?.destination?.route
@@ -61,11 +64,21 @@ fun MainScreenAppbar(
                     launchSingleTop = true
                 }
             }) {
-                Icon(
-                    imageVector = Icons.Outlined.AccountCircle,
-                    contentDescription = "Profile",
-                    modifier = Modifier.size(36.dp)
-                )
+                if (userData?.photoUrl != null && userData.photoUrl != "null") {
+                    CoilImage(
+                        modifier = Modifier.size(36.dp),
+                        imageUrl = userData.photoUrl,
+                        errorContent = null,
+                        loadingContent = null,
+                        emptyContent = null,
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
             }
         },
         title = {
@@ -153,9 +166,18 @@ private fun MainScreenAppbarPreview() {
     MaterialTheme {
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
         MainScreenAppbar(
-            scrollBehavior = scrollBehavior,
             bottomNavController = rememberNavController(),
             mainNavController = rememberNavController(),
+            scrollBehavior = scrollBehavior,
+            userData = HeureuxUser(
+                photoUrl = null,
+                name = "Sam",
+                email = "swwakoli@gmail.com",
+                phone = "0797228948",
+                bookmarks = null,
+                propertiesOwned = null,
+                listings = null,
+            ),
         )
     }
 }
