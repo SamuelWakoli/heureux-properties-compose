@@ -154,8 +154,13 @@ fun ProfileScreen(
                         Text(text = "Phone")
                     },
                     supportingContent = {
-                        Text(text = userData?.phone ?: "Click \"Edit profile\" to add phone number")
+                        Text(text = userData?.phone ?: "Click to add phone number")
                     },
+                    modifier = Modifier.clickable {
+                        mainNavController.navigate(route = Screens.EditProfileScreen.route) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
                 Divider(
                     modifier = Modifier.padding(horizontal = 16.dp)
