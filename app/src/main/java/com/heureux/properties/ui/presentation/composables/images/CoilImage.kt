@@ -46,10 +46,10 @@ fun CoilImage(
                 ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
                     .transformations(
                         RoundedCornersTransformation(
-                            topLeft = 36f,
-                            topRight = 36f,
-                            bottomLeft = 36f,
-                            bottomRight = 36f
+                            topLeft = 26f,
+                            topRight = 26f,
+                            bottomLeft = 26f,
+                            bottomRight = 26f
                         )
                     )
                     .build()

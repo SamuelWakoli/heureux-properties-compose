@@ -16,15 +16,12 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -46,76 +43,76 @@ fun PropertyListItem() {
                         min = 160.dp, max = 220.dp
                     )
             )
-            ListItem(
-                colors = ListItemDefaults.colors(
-                    containerColor = Color.Transparent
-                ),
-                overlineContent = {
-                    Text(text = "Price: Ksh. 2,000,000")
-                },
-                headlineContent = {
-                    Text(text = "Property Name")
-                },
-                supportingContent = {
-                    Column {
-                        Text(
-                            text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = "Price: Ksh. 2,000,000",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = "Property Name",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Text(
+                    text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Outlined.BookmarkAdd,
+                            contentDescription = "Bookmark",
+                            modifier = Modifier.size(26.dp),
                         )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            IconButton(onClick = { /*TODO*/ }) {
-                                Icon(
-                                    imageVector = Icons.Outlined.BookmarkAdd,
-                                    contentDescription = "Bookmark",
-                                    modifier = Modifier.size(26.dp),
-                                    tint = MaterialTheme.colorScheme.secondary
-                                )
-                            }
+                    }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically,
+                    )
+                    {
+                        TextButton(onClick = { /*TODO*/ }) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End,
+                                horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
-                            )
-                            {
-                                TextButton(onClick = { /*TODO*/ }) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically,
 
-                                        ) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Info,
-                                            contentDescription = null
-                                        )
-                                        Spacer(modifier = Modifier.size(8.dp))
-                                        Text(text = "Details")
-                                    }
-                                }
-                                Spacer(modifier = Modifier.size(16.dp))
-                                TextButton(onClick = { /*TODO*/ }) {
-                                    Row(
-                                        horizontalArrangement = Arrangement.Center,
-                                        verticalAlignment = Alignment.CenterVertically,
+                                ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Info,
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Text(text = "Details")
+                            }
+                        }
+                        Spacer(modifier = Modifier.size(16.dp))
+                        TextButton(onClick = { /*TODO*/ }) {
+                            Row(
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically,
 
-                                        ) {
-                                        Icon(
-                                            imageVector = Icons.Outlined.Cases,
-                                            contentDescription = null
-                                        )
-                                        Spacer(modifier = Modifier.size(8.dp))
-                                        Text(text = "Inquire")
-                                    }
-                                }
+                                ) {
+                                Icon(
+                                    imageVector = Icons.Outlined.Cases,
+                                    contentDescription = null
+                                )
+                                Spacer(modifier = Modifier.size(8.dp))
+                                Text(text = "Inquire")
                             }
                         }
                     }
                 }
-            )
+            }
 
         }
 
