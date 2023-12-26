@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Payments
+import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -131,6 +132,13 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Contact us")
+                })
+            ListItem(
+                leadingContent = {
+                    Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null)
+                },
+                headlineContent = {
+                    Text(text = "Rate us")
                 })
             Divider()
             ListItem(

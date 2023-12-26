@@ -58,7 +58,6 @@ fun MainScreenAppbar(
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
         navigationIcon = {
-            // TODO: Insert user circle profile pic here
             IconButton(onClick = {
                 mainNavController.navigate(route = Screens.ProfileScreen.route) {
                     launchSingleTop = true
@@ -69,6 +68,13 @@ fun MainScreenAppbar(
                         modifier = Modifier.size(36.dp),
                         imageUrl = userData.photoUrl,
                         applyCircleShape = true,
+                        errorContent = {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "Profile",
+                                modifier = Modifier.size(36.dp)
+                            )
+                        },
                     )
                 } else {
                     Icon(

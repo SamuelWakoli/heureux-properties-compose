@@ -129,7 +129,14 @@ fun ProfileScreen(
                             CoilImage(
                                 modifier = Modifier.size(64.dp),
                                 imageUrl = userData.photoUrl,
-                                applyCircleShape = true
+                                applyCircleShape = true,
+                                errorContent = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.AccountCircle,
+                                        contentDescription = "Profile",
+                                        modifier = Modifier.size(64.dp)
+                                    )
+                                },
                             )
                         } else {
                             Icon(
