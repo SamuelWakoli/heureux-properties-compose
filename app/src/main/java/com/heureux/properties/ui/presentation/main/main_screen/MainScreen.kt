@@ -68,7 +68,11 @@ fun MainScreen(
                 MyListingsScreen(scrollBehavior = scrollBehavior)
             }
             composable(route = Screens.MoreScreen.route) {
-                MoreScreen(scrollBehavior = scrollBehavior)
+                MoreScreen(
+                    scrollBehavior = scrollBehavior,
+                    mainScreenViewModel = viewModel,
+                    mainNavController = mainNavController,
+                )
             }
 
         }
