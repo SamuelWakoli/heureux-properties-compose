@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.BookmarkAdd
-import androidx.compose.material.icons.outlined.Cases
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -28,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 
 @Composable
-fun PropertyListItem() {
+fun UserListingItem() {
     Card(
         modifier = Modifier
             .padding(
@@ -70,9 +70,10 @@ fun PropertyListItem() {
                 ) {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
-                            imageVector = Icons.Outlined.BookmarkAdd,
-                            contentDescription = "Bookmark",
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Delete",
                             modifier = Modifier.size(26.dp),
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                     Row(
@@ -103,11 +104,11 @@ fun PropertyListItem() {
 
                                 ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.Cases,
+                                    imageVector = Icons.Outlined.EditNote,
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Inquire")
+                                Text(text = "Edit")
                             }
                         }
                     }
@@ -122,6 +123,6 @@ fun PropertyListItem() {
 
 @Preview
 @Composable
-private fun PropertyListItemPreview() {
-    PropertyListItem()
+private fun UserListingItemPreview() {
+    UserListingItem()
 }
