@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -21,6 +22,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
 
 @Composable
 fun CoilImage(
@@ -42,6 +44,14 @@ fun CoilImage(
                     .transformations(CircleCropTransformation()).build()
             } else {
                 ImageRequest.Builder(LocalContext.current).data(imageUrl).crossfade(true)
+                    .transformations(
+                        RoundedCornersTransformation(
+                            topLeft = 36f,
+                            topRight = 36f,
+                            bottomLeft = 36f,
+                            bottomRight = 36f
+                        )
+                    )
                     .build()
             }
         )
@@ -71,7 +81,9 @@ fun CoilImage(
                 Icon(
                     imageVector = Icons.Outlined.Error,
                     contentDescription = "Image URL has error",
-                    modifier = modifier
+                    modifier = Modifier
+                        .alpha(0.5f)
+                        .then(modifier),
                 )
             } else {
                 errorContent()
@@ -79,14 +91,21 @@ fun CoilImage(
 
         }
 
-        if (painter.state is AsyncImagePainter.State.Success) {
-            Image(
-                painter = painter,
-                contentDescription = "Avatar image",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+//        if (painter.state is AsyncImagePainter.State.Success) {
+//            Image(
+//                painter = painter,
+//                contentDescription = "Avatar image",
+//                contentScale = ContentScale.Fit,
+//                modifier = Modifier.fillMaxSize()
+//            )
+//        }
+
+        Image(
+            painter = painter,
+            contentDescription = "Avatar image",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
 
     }
 }
