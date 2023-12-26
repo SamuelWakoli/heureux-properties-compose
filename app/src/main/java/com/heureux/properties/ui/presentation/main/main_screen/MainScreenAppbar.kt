@@ -96,7 +96,10 @@ fun MainScreenAppbar(
                     modifier = Modifier.size(36.dp),
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "Heureux Properties")
+                Text(
+                    text = "Heureux Properties",
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
             }
         },
         actions = {

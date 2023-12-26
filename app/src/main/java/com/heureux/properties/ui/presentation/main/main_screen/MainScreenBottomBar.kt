@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -80,6 +81,11 @@ fun MainScreenBottomBar(bottomNavController: NavHostController) {
                             }
                         }
                     },
+                    colors = NavigationBarItemDefaults.colors(
+                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                        unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    ),
                     icon = {
                         Icon(
                             imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
@@ -97,7 +103,9 @@ fun MainScreenBottomBar(bottomNavController: NavHostController) {
 @Preview(showBackground = true)
 @Composable
 private fun HomeScreenBottomBarPreview() {
-    MaterialTheme { MainScreenBottomBar(
-        bottomNavController = rememberNavController(),
-    ) }
+    MaterialTheme {
+        MainScreenBottomBar(
+            bottomNavController = rememberNavController(),
+        )
+    }
 }
