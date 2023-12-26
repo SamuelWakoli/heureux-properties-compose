@@ -99,6 +99,9 @@ fun ProfileScreen(
                         Text(text = "Profile")
                     }
                 },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                )
             )
         }
     ) { paddingValues ->
