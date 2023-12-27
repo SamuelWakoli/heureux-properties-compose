@@ -69,7 +69,10 @@ fun NavGraph(
             )
         }
         composable(route = Screens.EditProfileScreen.route) {
-            EditProfileScreen(mainNavController = navController)
+            EditProfileScreen(
+                mainNavController = navController,
+                mainScreenViewModel = mainScreenViewModel,
+            )
         }
         composable(route = Screens.AboutUsScreen.route) {
             AboutUsScreen(mainNavController = navController)
