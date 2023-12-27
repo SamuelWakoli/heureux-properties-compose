@@ -1,4 +1,4 @@
-package com.heureux.properties.data
+package com.heureux.properties.data.types
 
 data class HeureuxProperty(
     val name: String,

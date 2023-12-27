@@ -1,4 +1,4 @@
-package com.heureux.properties.data
+package com.heureux.properties.data.repositories
 
 import android.content.Context
 import android.util.Log
@@ -8,6 +8,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.heureux.properties.data.types.HeureuxUser
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
