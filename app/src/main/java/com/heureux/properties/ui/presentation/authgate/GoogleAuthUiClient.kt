@@ -3,7 +3,6 @@ package com.heureux.properties.ui.presentation.authgate
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender
-import android.net.Uri
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.BeginSignInRequest.GoogleIdTokenRequestOptions
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -11,19 +10,13 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.R
+import com.heureux.properties.data.types.UserProfileData
 import kotlinx.coroutines.tasks.await
 import java.util.concurrent.CancellationException
 
 data class GoogleSignInResult(
-    val data: UserData?,
+    val data: UserProfileData?,
     val errorMessage: String?,
-)
-
-data class UserData(
-    val userID: String,
-    val displayName: String?,
-    val photoURL: Uri?,
-    val userEmail: String?,
 )
 
 class GoogleAuthUiClient(
@@ -64,7 +57,7 @@ class GoogleAuthUiClient(
             val user = auth.signInWithCredential(googleCredentials).await().user
             GoogleSignInResult(
                 data = user?.run {
-                    UserData(
+                    UserProfileData(
                         userID = uid,
                         displayName = displayName,
                         photoURL = photoUrl,

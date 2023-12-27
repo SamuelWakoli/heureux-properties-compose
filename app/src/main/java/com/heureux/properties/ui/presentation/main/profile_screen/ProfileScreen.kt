@@ -150,7 +150,7 @@ fun ProfileScreen(
                         Text(text = userData?.name ?: "")
                     },
                     supportingContent = {
-                        Text(text = userData?.email!!)
+                        Text(text = userData?.email ?: "")
                     },
                 )
                 ListItem(

@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.heureux.properties.data.FirestoreRepository
-import com.heureux.properties.data.HeureuxUser
+import com.heureux.properties.data.repositories.FirestoreRepository
+import com.heureux.properties.data.types.HeureuxUser
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreenUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

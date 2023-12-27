@@ -36,7 +36,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
-import com.heureux.properties.data.HeureuxUser
+import com.heureux.properties.data.types.HeureuxUser
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
