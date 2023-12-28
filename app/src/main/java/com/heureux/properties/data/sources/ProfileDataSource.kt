@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProfileDataSource {
     val auth: FirebaseAuth
     val firestore: FirebaseFirestore
-    val userStorageReference: StorageReference
+    val storageReference: StorageReference
 
     suspend fun registerUser(
         name: String,
@@ -35,18 +35,28 @@ interface ProfileDataSource {
         onFailure: (exception: Exception) -> Unit,
     ): Flow<UserProfileData?>
 
-    fun updateUserProfile(
+    suspend fun sendPasswordResetEmail(
         userProfileDate: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )
 
-    suspend fun signOut(
-        onSuccessListener: () -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
+    suspend fun updateUserProfile(
+        userProfileDate: UserProfileData,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
     )
 
+    suspend fun createUserFirestoreData(
+        user: FirebaseUser,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
+
+    suspend fun signOut()
+
     suspend fun deleteUserAndData(
+        userProfileDate: UserProfileData,
         onSuccessListener: () -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     )
