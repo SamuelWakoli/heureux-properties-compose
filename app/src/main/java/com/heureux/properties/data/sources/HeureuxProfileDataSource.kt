@@ -57,7 +57,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onErrorListener: (exception: Exception) -> Unit,
     ) {
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { authResultTask ->
+            .addOnSuccessListener { authResultTask ->
                 // since user registration is successful, update display name
                 Firebase.auth.currentUser?.updateProfile(
                     UserProfileChangeRequest.Builder()
@@ -65,7 +65,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
                         .build()
                 )
 
-                val user = authResultTask.result.user
+                val user = authResultTask.user
 
                 coroutineScope.launch {
                     createUserFirestoreData(
@@ -94,7 +94,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onErrorListener: (exception: Exception) -> Unit,
     ) {
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { authResultTask ->
+            .addOnSuccessListener { authResultTask ->
                 onSuccessListener()
 
             }.addOnFailureListener { exception ->
