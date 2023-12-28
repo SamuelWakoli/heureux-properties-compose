@@ -18,6 +18,9 @@ object AppViewModelProvider {
         initializer {
             ProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
+        initializer {
+            MoreScreenViewModel(userPreferencesRepository = heureuxApp().userPreferencesRepository)
+        }
     }
 }
 
