@@ -10,10 +10,13 @@ import com.heureux.properties.HeureuxApp
 object AppViewModelProvider {
     val Factory: ViewModelProvider.Factory = viewModelFactory {
         initializer {
-            AuthViewModel(heureuxFirestoreRepository = heureuxApp().container.heureuxFirestoreRepository)
+            AuthViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
         initializer {
             MainScreenViewModel(heureuxFirestoreRepository = heureuxApp().container.heureuxFirestoreRepository)
+        }
+        initializer {
+            ProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
     }
 }
