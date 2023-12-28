@@ -14,7 +14,6 @@ interface ProfileRepository {
     )
 
     suspend fun signIn(
-        name: String,
         email: String,
         password: String,
         onSuccessListener: () -> Unit,

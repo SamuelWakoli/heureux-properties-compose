@@ -88,7 +88,6 @@ class HeureuxProfileDataSource : ProfileDataSource {
     }
 
     override suspend fun signIn(
-        name: String,
         email: String,
         password: String,
         onSuccessListener: () -> Unit,

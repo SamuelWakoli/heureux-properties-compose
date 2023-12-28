@@ -23,14 +23,12 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     }
 
     override suspend fun signIn(
-        name: String,
         email: String,
         password: String,
         onSuccessListener: () -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     ) {
         dataSource.signIn(
-            name = name,
             email = email,
             password = password,
             onSuccessListener = onSuccessListener,

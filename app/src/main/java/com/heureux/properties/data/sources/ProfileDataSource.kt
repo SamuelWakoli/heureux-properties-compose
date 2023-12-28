@@ -22,7 +22,6 @@ interface ProfileDataSource {
     )
 
     suspend fun signIn(
-        name: String,
         email: String,
         password: String,
         onSuccessListener: () -> Unit,
