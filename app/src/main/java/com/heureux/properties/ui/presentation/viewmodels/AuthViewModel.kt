@@ -1,15 +1,14 @@
 package com.heureux.properties.ui.presentation.viewmodels
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.heureux.properties.data.repositories.FirestoreRepository
+import androidx.lifecycle.viewModelScope
+import com.heureux.properties.data.repositories.ProfileRepository
 import com.heureux.properties.ui.presentation.authgate.GoogleSignInResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class SignInUiState(
     // userData
@@ -31,7 +30,7 @@ data class SignInUiState(
     val showDialogPwdResetEmailSent: Boolean = false,
 )
 
-class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel() {
+class AuthViewModel(val profileRepository: ProfileRepository) : ViewModel() {
     private var _uiState: MutableStateFlow<SignInUiState> = MutableStateFlow(SignInUiState())
     val uiState: StateFlow<SignInUiState> = _uiState.asStateFlow()
 
@@ -80,6 +79,14 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
         _uiState.update { it.copy(showPassword = !(it.showPassword)) }
     }
 
+    fun hidePasswordResetDialog() {
+        _uiState.update {
+            it.copy(
+                showDialogPwdResetEmailSent = false,
+            )
+        }
+    }
+
     fun signInWithEmailPwd() {
         val email = uiState.value.email
         val password = uiState.value.password
@@ -94,31 +101,27 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
                 )
             }
 
-            Firebase.auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener { authResultTask ->
-                    if (authResultTask.isSuccessful) {
+            viewModelScope.launch {
+                profileRepository.signIn(
+                    email = email,
+                    password = password,
+                    onSuccessListener = {
                         _uiState.update {
                             it.copy(
                                 isSignInSuccess = true,
                             )
                         }
-                    }
-                    if (authResultTask.isCanceled) {
+                    },
+                    onErrorListener =  {exception ->
                         _uiState.update {
                             it.copy(
                                 isSignInButtonLoading = false,
-                                errorMessage = "Sign in canceled"
+                                errorMessage = exception.message
                             )
                         }
                     }
-                }.addOnFailureListener { exception ->
-                    _uiState.update {
-                        it.copy(
-                            isSignInButtonLoading = false,
-                            errorMessage = exception.message
-                        )
-                    }
-                }
+                )
+            }
         }
     }
 
@@ -140,39 +143,28 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
                 )
             }
 
-            Firebase.auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { authResultTask ->
-                    if (authResultTask.isSuccessful) {
-                        // since user registration is successful, update display name
-                        Firebase.auth.currentUser?.updateProfile(
-                            UserProfileChangeRequest.Builder()
-                                .setDisplayName(name)
-                                .build()
-                        )
-
-
+            viewModelScope.launch {
+                profileRepository.registerUser(
+                    name = name,
+                    email = email,
+                    password = password,
+                    onSuccessListener = {
                         _uiState.update {
                             it.copy(
                                 isSignInSuccess = true,
                             )
                         }
-                    }
-                    if (authResultTask.isCanceled) {
+                    },
+                    onErrorListener = {exception ->
                         _uiState.update {
                             it.copy(
                                 isCreateAccountButtonLoading = false,
-                                errorMessage = "Registration canceled",
+                                errorMessage = exception.message
                             )
                         }
                     }
-                }.addOnFailureListener { exception ->
-                    _uiState.update {
-                        it.copy(
-                            isCreateAccountButtonLoading = false,
-                            errorMessage = exception.message
-                        )
-                    }
-                }
+                )
+            }
 
         }
     }
@@ -189,29 +181,27 @@ class AuthViewModel(heureuxFirestoreRepository: FirestoreRepository) : ViewModel
             }
         }
 
-        Firebase.auth.sendPasswordResetEmail(email).addOnSuccessListener {
-            _uiState.update {
-                it.copy(
-                    isSignInButtonLoading = !it.isSignInButtonLoading,
-                    showDialogPwdResetEmailSent = !it.showDialogPwdResetEmailSent,
-                )
-            }
-        }.addOnFailureListener { error ->
-            _uiState.update {
-                it.copy(
-                    isSignInButtonLoading = false,
-                    showDialogPwdResetEmailSent = !it.showDialogPwdResetEmailSent,
-                    errorMessage = error.message
-                )
-            }
-        }
+        viewModelScope.launch {
+            profileRepository.sendPasswordResetEmail(
+                email = email,
+                onSuccess = {
+                    _uiState.update {
+                        it.copy(
+                            isSignInButtonLoading = !it.isSignInButtonLoading,
+                            showDialogPwdResetEmailSent = !it.showDialogPwdResetEmailSent,
+                        )
+                    }
+                },
+                onFailure = {exception: Exception ->
+                    _uiState.update {
+                        it.copy(
+                            isSignInButtonLoading = false,
+                            showDialogPwdResetEmailSent = !it.showDialogPwdResetEmailSent,
+                            errorMessage = exception.message
+                        )
+                    }
+                }
 
-    }
-
-    fun hidePasswordResetDialog() {
-        _uiState.update {
-            it.copy(
-                showDialogPwdResetEmailSent = false,
             )
         }
     }
