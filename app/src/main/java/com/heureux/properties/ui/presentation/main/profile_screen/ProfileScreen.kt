@@ -44,6 +44,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.presentation.composables.dialogs.DeleteProfileDialog
+import com.heureux.properties.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider

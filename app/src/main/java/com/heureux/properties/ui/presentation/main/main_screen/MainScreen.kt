@@ -70,7 +70,7 @@ fun MainScreen(
             composable(route = Screens.MoreScreen.route) {
                 MoreScreen(
                     scrollBehavior = scrollBehavior,
-                    mainScreenViewModel = viewModel,
+                    moreScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
                     mainNavController = mainNavController,
                 )
             }

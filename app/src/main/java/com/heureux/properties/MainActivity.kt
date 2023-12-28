@@ -6,9 +6,11 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -16,6 +18,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.heureux.properties.data.repositories.UserPreferencesRepository
 import com.heureux.properties.ui.presentation.authgate.GoogleAuthUiClient
 import com.heureux.properties.ui.presentation.navigation.NavGraph
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
@@ -25,6 +28,8 @@ import com.heureux.properties.ui.theme.HeureuxPropertiesTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    val userDataStore = UserPreferencesRepository(dataStore = user_dataStore)
+
 
     private val googleAuthUiClient by lazy {
         GoogleAuthUiClient(
@@ -41,8 +46,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val currentUser = Firebase.auth.currentUser
-             authViewModel = viewModel(factory = AppViewModelProvider.Factory)
-             mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            authViewModel = viewModel(factory = AppViewModelProvider.Factory)
+            mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
 
 
             val launcher = rememberLauncherForActivityResult(
@@ -59,7 +64,16 @@ class MainActivity : ComponentActivity() {
                 }
             )
 
-            HeureuxPropertiesTheme {
+            val themeData = userDataStore.getThemeData.collectAsState(initial = "Light").value
+            val dynamicColor = userDataStore.getDynamicColor.collectAsState(initial = false).value
+            HeureuxPropertiesTheme(
+                darkTheme = when (themeData) {
+                    "Light" -> false
+                    "Dark" -> true
+                    else -> isSystemInDarkTheme()
+                },
+                dynamicColor = dynamicColor,
+            ) {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),

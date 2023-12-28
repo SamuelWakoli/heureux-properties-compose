@@ -14,10 +14,10 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cases
 import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.DynamicForm
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.RateReview
@@ -29,9 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -40,37 +38,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.presentation.composables.dialogs.SignOutDialog
-import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.composables.bottom_sheet.DynamicThemeBottomSheet
+import com.heureux.properties.ui.presentation.composables.dialogs.ThemeSelectionDialog
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
-import kotlinx.coroutines.launch
+import com.heureux.properties.ui.presentation.viewmodels.MoreScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreScreen(
     scrollBehavior: TopAppBarScrollBehavior,
-    mainScreenViewModel: MainScreenViewModel,
+    moreScreenViewModel: MoreScreenViewModel,
     mainNavController: NavController,
 ) {
 
+    val uiState = moreScreenViewModel.uiState.collectAsState().value
 
-    val uiState = mainScreenViewModel.profileScreenUiState.collectAsState().value
-    val userData = mainScreenViewModel.userData.collectAsState().value
-
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = uiState.currentUser) {
-        if (uiState.currentUser == null) {
-            mainNavController.navigate(route = Screens.SignInScreen.route) {
-                launchSingleTop = true
-                popUpTo(route = Screens.HomeScreen.route) {
-                    inclusive = true
-                }
-            }
-        }
-    }
-
+    val currentThemeData =
+        moreScreenViewModel.currentThemeData.collectAsState(initial = "Light").value
+    val dynamicColorState =
+        moreScreenViewModel.currentDynamicColorState.collectAsState(initial = false).value
 
     val scrollState = rememberScrollState()
     Column(
@@ -92,19 +78,6 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Profile")
-                })
-            ListItem(
-                leadingContent = {
-                    Icon(
-                        imageVector =
-                        if (isSystemInDarkTheme())
-                            Icons.Outlined.LightMode
-                        else Icons.Outlined.DarkMode,
-                        contentDescription = null
-                    )
-                },
-                headlineContent = {
-                    Text(text = "Theme")
                 })
             ListItem(
                 leadingContent = {
@@ -158,29 +131,61 @@ fun MoreScreen(
                 })
             Divider()
             ListItem(
+                modifier = Modifier.clickable {
+                    moreScreenViewModel.hideOrShowThemeDialog()
+                },
                 leadingContent = {
                     Icon(
-                        imageVector = Icons.Outlined.Logout,
-                        contentDescription = null,
+                        imageVector =
+                        if (isSystemInDarkTheme())
+                            Icons.Outlined.LightMode
+                        else Icons.Outlined.DarkMode,
+                        contentDescription = null
                     )
                 },
                 headlineContent = {
-                    Text(text = "Sign out")
+                    Text(text = "Theme")
                 },
+                supportingContent = {
+                    Text(text = currentThemeData)
+                }
+            )
+            ListItem(
                 modifier = Modifier.clickable {
-                    mainScreenViewModel.showOrHideSignOutDialog(true)
+                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
+                },
+                leadingContent = {
+                    Icon(
+                        imageVector =
+                        Icons.Outlined.DynamicForm,
+                        contentDescription = null
+                    )
+                },
+                headlineContent = {
+                    Text(text = "App dynamic theme")
+                },
+                supportingContent = {
+                    Text(text = if (dynamicColorState) "Enabled" else "Disabled")
                 }
             )
         }
-        if (uiState.showSignOutDialog) SignOutDialog(
-            onConfirmation = {
-                coroutineScope.launch {
-                    mainScreenViewModel.signOut()
+
+        if (uiState.showThemeDialog)
+            ThemeSelectionDialog(
+                currentTheme = currentThemeData,
+                onDismissRequest = { newThemeData ->
+                    moreScreenViewModel.hideOrShowThemeDialog()
+                    moreScreenViewModel.updateThemeData(newThemeData)
+                })
+
+        if (uiState.showDynamicThemeBottomSheet)
+            DynamicThemeBottomSheet(
+                currentState = dynamicColorState,
+                onDismissRequest = { boolean ->
+                    moreScreenViewModel.updateDynamicTheme(boolean)
+                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
                 }
-            }, onDismissRequest = {
-                mainScreenViewModel.showOrHideSignOutDialog(false)
-            }
-        )
+            )
     }
 }
 
@@ -191,7 +196,7 @@ private fun MoreScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     MoreScreen(
         scrollBehavior = scrollBehavior,
-        mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        moreScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
         mainNavController = rememberNavController()
     )
 }
