@@ -49,12 +49,12 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     }
 
     override suspend fun sendPasswordResetEmail(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
         dataSource.sendPasswordResetEmail(
-            userProfileDate = userProfileDate,
+            email = email,
             onSuccess = onSuccess,
             onFailure = onFailure
         )

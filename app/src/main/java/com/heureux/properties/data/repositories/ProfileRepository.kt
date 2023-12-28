@@ -27,7 +27,7 @@ interface ProfileRepository {
     ): Flow<UserProfileData?>
 
     suspend fun sendPasswordResetEmail(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )

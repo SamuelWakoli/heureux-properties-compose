@@ -147,11 +147,11 @@ class HeureuxProfileDataSource : ProfileDataSource {
     }
 
     override suspend fun sendPasswordResetEmail(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        auth.sendPasswordResetEmail(userProfileDate.userEmail!!)
+        auth.sendPasswordResetEmail(email)
             .addOnSuccessListener {
                 onSuccess()
             }.addOnFailureListener { exception ->
