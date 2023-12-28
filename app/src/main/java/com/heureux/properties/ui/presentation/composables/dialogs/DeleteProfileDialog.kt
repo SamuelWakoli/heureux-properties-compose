@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.main.profile_screen
+package com.heureux.properties.ui.presentation.composables.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Logout
+import androidx.compose.material.icons.outlined.NoAccounts
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -25,10 +25,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignOutDialog(
+fun DeleteProfileDialog(
     onConfirmation: () -> Unit,
     onDismissRequest: () -> Unit,
 ) {
@@ -43,7 +42,7 @@ fun SignOutDialog(
                 modifier = Modifier.padding(16.dp)
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.Logout,
+                    imageVector = Icons.Outlined.NoAccounts,
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -51,11 +50,11 @@ fun SignOutDialog(
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Text(
-                    text = "Sign out",
+                    text = "Delete profile & data",
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "You are about to sign out from the app. Your personal information and app data will remain stored in the cloud.")
+                Text(text = "You are about to delete your profile and data. Your personal information and app data will be lost. This action cannot be undone. Do you want to continue?")
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
@@ -64,7 +63,7 @@ fun SignOutDialog(
                     TextButton(onClick = {
                         onDismissRequest()
                     }) {
-                        Text(text = "Cancel")
+                        Text(text = "No")
                     }
                     Spacer(modifier = Modifier.size(8.dp))
                     TextButton(onClick = {
@@ -72,7 +71,7 @@ fun SignOutDialog(
 // TODO: handle error when sign out fails
                         onDismissRequest()
                     }) {
-                        Text(text = "Okay")
+                        Text(text = "Yes")
                     }
                 }
             }
@@ -80,17 +79,18 @@ fun SignOutDialog(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-private fun SignOutDialogPreview() {
+private fun DeleteProfileDialogPreview() {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.surface)
     ) {
-        SignOutDialog(
+        DeleteProfileDialog(
             onConfirmation = {},
             onDismissRequest = {}
         )
     }
+
 }

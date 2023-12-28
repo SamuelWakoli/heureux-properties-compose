@@ -1,6 +1,7 @@
 package com.heureux.properties.ui.presentation.main.bottom_bar_destinations
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,7 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cases
 import androidx.compose.material.icons.outlined.ContactSupport
+import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material.icons.outlined.Notifications
@@ -37,7 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.presentation.main.profile_screen.SignOutDialog
+import com.heureux.properties.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
@@ -89,6 +92,19 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Profile")
+                })
+            ListItem(
+                leadingContent = {
+                    Icon(
+                        imageVector =
+                        if (isSystemInDarkTheme())
+                            Icons.Outlined.LightMode
+                        else Icons.Outlined.DarkMode,
+                        contentDescription = null
+                    )
+                },
+                headlineContent = {
+                    Text(text = "Theme")
                 })
             ListItem(
                 leadingContent = {
