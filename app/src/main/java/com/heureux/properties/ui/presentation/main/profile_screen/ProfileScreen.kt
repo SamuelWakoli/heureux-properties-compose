@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.main.profile_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,12 +34,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,32 +50,22 @@ import com.heureux.properties.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
+import com.heureux.properties.ui.presentation.viewmodels.ProfileScreenViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     mainNavController: NavController,
-    mainScreenViewModel: MainScreenViewModel,
+    profileScreenViewModel: ProfileScreenViewModel,
 ) {
 
-    val uiState = mainScreenViewModel.profileScreenUiState.collectAsState().value
-    val userData = mainScreenViewModel.userData.collectAsState().value
+    val uiState = profileScreenViewModel.uiState.collectAsState().value
+    val userData = profileScreenViewModel.userProfileData.collectAsState().value
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = uiState.currentUser) {
-        if (uiState.currentUser == null) {
-            mainNavController.navigate(route = Screens.SignInScreen.route) {
-                launchSingleTop = true
-                popUpTo(route = Screens.HomeScreen.route) {
-                    inclusive = true
-                }
-            }
-        }
-    }
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -127,10 +118,10 @@ fun ProfileScreen(
                 )
                 ListItem(
                     leadingContent = {
-                        if (userData?.photoUrl != null && userData.photoUrl != "null") {
+                        if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
                             CoilImage(
                                 modifier = Modifier.size(64.dp),
-                                imageUrl = userData.photoUrl,
+                                imageUrl = userData.photoURL.toString(),
                                 applyCircleShape = true,
                                 errorContent = {
                                     Icon(
@@ -149,10 +140,10 @@ fun ProfileScreen(
                         }
                     },
                     headlineContent = {
-                        Text(text = userData?.name ?: "")
+                        Text(text = userData?.displayName ?: "")
                     },
                     supportingContent = {
-                        Text(text = userData?.email ?: "")
+                        Text(text = userData?.userEmail ?: "")
                     },
                 )
                 ListItem(
@@ -269,7 +260,7 @@ fun ProfileScreen(
                         Text(text = "Sign out")
                     },
                     modifier = Modifier.clickable {
-                        mainScreenViewModel.showOrHideSignOutDialog(true)
+                        profileScreenViewModel.hideOrShowSignOutDialog()
                     }
                 )
                 ListItem(
@@ -283,27 +274,59 @@ fun ProfileScreen(
                         Text(text = "Delete profile & data")
                     },
                     modifier = Modifier.clickable {
-                        mainScreenViewModel.showOrHideDeleteUserDataDialog(true)
+                        profileScreenViewModel.hideOrShowDeleteProfileDialog()
                     }
                 )
 
                 if (uiState.showSignOutDialog) SignOutDialog(
                     onConfirmation = {
                         coroutineScope.launch {
-                            mainScreenViewModel.signOut()
+                            profileScreenViewModel.signOut(
+                                onSuccess = {
+                                    mainNavController.navigate(route = Screens.SignInScreen.route) {
+                                        popUpTo(Screens.HomeScreen.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                },
+                                onFailure = {
+                                    profileScreenViewModel.hideOrShowSignOutDialog()
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to sign out, Please try again later",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
                         }
                     }, onDismissRequest = {
-                        mainScreenViewModel.showOrHideSignOutDialog(false)
+                        profileScreenViewModel.hideOrShowSignOutDialog()
                     }
                 )
 
                 if (uiState.showDeleteProfileDialog) DeleteProfileDialog(
                     onConfirmation = {
                         coroutineScope.launch {
-                            mainScreenViewModel.deleteUserAndData()
+                            profileScreenViewModel.deleteProfileAndData(
+                                onSuccess = {
+                                    mainNavController.navigate(route = Screens.SignInScreen.route) {
+                                        popUpTo(Screens.HomeScreen.route) {
+                                            inclusive = true
+                                        }
+                                    }
+                                },
+                                onFailure = { exception: Exception ->
+                                    profileScreenViewModel.hideOrShowDeleteProfileDialog()
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to delete profile and data: ${exception.message}",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
                         }
                     }, onDismissRequest = {
-                        mainScreenViewModel.showOrHideDeleteUserDataDialog(false)
+                        profileScreenViewModel.hideOrShowDeleteProfileDialog()
                     }
                 )
             }
@@ -316,6 +339,6 @@ fun ProfileScreen(
 private fun ProfileScreenPreview() {
     ProfileScreen(
         mainNavController = rememberNavController(),
-        mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+        profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }
