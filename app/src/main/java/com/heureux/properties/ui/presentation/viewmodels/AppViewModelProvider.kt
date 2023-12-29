@@ -13,10 +13,13 @@ object AppViewModelProvider {
             AuthViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
         initializer {
-            MainScreenViewModel(heureuxFirestoreRepository = heureuxApp().container.heureuxFirestoreRepository)
+            MainScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
         initializer {
             ProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
+        }
+        initializer {
+            EditProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
         initializer {
             MoreScreenViewModel(userPreferencesRepository = heureuxApp().userPreferencesRepository)

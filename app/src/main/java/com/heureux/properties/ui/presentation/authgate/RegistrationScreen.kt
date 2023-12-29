@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -55,6 +56,8 @@ import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInBu
 import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -66,6 +69,7 @@ fun RegistrationScreen(
 
     val uiState = viewModel.uiState.collectAsState().value
 
+    val coroutineScope = viewModel.viewModelScope
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
     LaunchedEffect(key1 = uiState.isSignInSuccess, block = {
@@ -75,9 +79,15 @@ fun RegistrationScreen(
                 "Profile created", Toast.LENGTH_LONG
             ).show()
 
-            mainNavController.navigate(Screens.MainScreen.route) {
-                launchSingleTop = true
-                mainNavController.popBackStack()
+            coroutineScope.launch {
+                // Buy time for current user to initialise
+                delay(2_000L)
+
+            }.invokeOnCompletion {
+                mainNavController.navigate(Screens.MainScreen.route) {
+                    launchSingleTop = true
+                    mainNavController.popBackStack()
+                }
             }
         }
     })
