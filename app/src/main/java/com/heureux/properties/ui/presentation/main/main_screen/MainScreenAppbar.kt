@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.main.main_screen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -36,7 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
-import com.heureux.properties.data.types.HeureuxUser
+import com.heureux.properties.data.types.UserProfileData
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
@@ -46,7 +47,7 @@ fun MainScreenAppbar(
     bottomNavController: NavController,
     mainNavController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
-    userData: HeureuxUser?,
+    userData: UserProfileData?,
 ) {
     val bottomNavBackStackEntry = bottomNavController.currentBackStackEntryAsState()
     val currentRoute = bottomNavBackStackEntry.value?.destination?.route
@@ -63,10 +64,10 @@ fun MainScreenAppbar(
                     launchSingleTop = true
                 }
             }) {
-                if (userData?.photoUrl != null && userData.photoUrl != "null") {
+                if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
                     CoilImage(
                         modifier = Modifier.size(36.dp),
-                        imageUrl = userData.photoUrl,
+                        imageUrl = userData.photoURL.toString(),
                         applyCircleShape = true,
                         errorContent = {
                             Icon(
@@ -176,14 +177,12 @@ private fun MainScreenAppbarPreview() {
             bottomNavController = rememberNavController(),
             mainNavController = rememberNavController(),
             scrollBehavior = scrollBehavior,
-            userData = HeureuxUser(
-                photoUrl = null,
-                name = "Sam",
-                email = "swwakoli@gmail.com",
-                phone = "0797228948",
-                bookmarks = null,
-                propertiesOwned = null,
-                listings = null,
+            userData = UserProfileData(
+                userID = "test@gmail.com",
+                displayName = "Test",
+                photoURL = Uri.parse(""),
+                userEmail = "test@gmail.com",
+                phone = "1234567890",
             ),
         )
     }

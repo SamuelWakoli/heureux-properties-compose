@@ -34,7 +34,7 @@ fun MainScreen(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val userData = viewModel.userData.collectAsState().value
+    val userData = viewModel.userProfileData.collectAsState().value
 
     Scaffold(
         topBar = {

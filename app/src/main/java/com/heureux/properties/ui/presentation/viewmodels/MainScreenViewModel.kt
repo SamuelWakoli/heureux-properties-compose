@@ -5,88 +5,54 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.heureux.properties.data.repositories.FirestoreRepository
-import com.heureux.properties.data.types.HeureuxUser
-import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreenUiState
+import com.heureux.properties.data.repositories.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import okhttp3.internal.wait
 
-class MainScreenViewModel(private val heureuxFirestoreRepository: FirestoreRepository) :
+data class HomeScreenUiState(
+    val currentUser: FirebaseUser? = null,
+)
+
+class MainScreenViewModel(private val profileRepository: ProfileRepository) :
     ViewModel() {
 
-    private var _profileScreenUiState: MutableStateFlow<ProfileScreenUiState> =
-        MutableStateFlow(ProfileScreenUiState())
-    val profileScreenUiState: StateFlow<ProfileScreenUiState> = _profileScreenUiState.asStateFlow()
+    // by lazy so as to buy time for current user to be fetched / configured
+    // after authentication
+    private val currentUser: FirebaseUser? by lazy {
+        Firebase.auth.currentUser
+    }
+
+
+    private val _homeScreenUiState by lazy {
+        MutableStateFlow(
+            HomeScreenUiState(
+                currentUser = currentUser
+            )
+        )
+    }
+
+    val homeScreenUiState: StateFlow<HomeScreenUiState> = _homeScreenUiState.asStateFlow()
 
     companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    private val currentUser: FirebaseUser by lazy {
-        Firebase.auth.currentUser!!
-    }
-
     // by lazy so as to buy time for current user to be fetched / configured
     // after authentication
-    val userData: StateFlow<HeureuxUser?> by lazy {
-        heureuxFirestoreRepository.getHeureuxUserData(
-            user = currentUser,
-            onSuccess = {
-                _profileScreenUiState.update {
-                    it.copy(
-                        currentUser = currentUser
-                    )
-                }
-            },
-            onFailure = { exception: Exception -> }
+
+    val userProfileData by lazy {
+        // by lazy {} buys time for the current user to initialize after authentication or app startup
+        profileRepository.getUserProfileData(
+            onSuccess = {},
+            onFailure = {}
         ).stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = null
         )
     }
 
-
-    suspend fun signOut() {
-        Firebase.auth.signOut().wait()
-        _profileScreenUiState.update {
-            it.copy(
-                currentUser = null
-            )
-        }
-    }
-
-    suspend fun deleteUserAndData() {
-        heureuxFirestoreRepository.deleteUserAndData(
-            userId = currentUser.email!!,
-            onSuccess = {
-                viewModelScope.launch {
-                    signOut()
-                }
-            },
-            onFailure = {},
-        ).wait()
-    }
-
-    fun showOrHideSignOutDialog(value: Boolean) {
-        _profileScreenUiState.update {
-            it.copy(
-                showSignOutDialog = value
-            )
-        }
-    }
-
-    fun showOrHideDeleteUserDataDialog(value: Boolean) {
-        _profileScreenUiState.update {
-            it.copy(
-                showDeleteProfileDialog = value
-            )
-        }
-    }
 }
