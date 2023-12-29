@@ -13,6 +13,15 @@ interface ProfileDataSource {
     val firestore: FirebaseFirestore
     val storageReference: StorageReference
 
+    suspend fun uploadImage(
+        imageUri: String,
+        email: String,
+        onSuccessListener: (imageUrl: String) -> Unit,
+        onErrorListener: (exception: Exception) -> Unit,
+    )
+
+    suspend fun getCurrentUser() : Flow<FirebaseUser?>
+
     suspend fun registerUser(
         name: String,
         email: String,
@@ -29,7 +38,6 @@ interface ProfileDataSource {
     )
 
     fun getUserProfileData(
-        user: FirebaseUser,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ): Flow<UserProfileData?>
@@ -47,7 +55,7 @@ interface ProfileDataSource {
     )
 
     suspend fun createUserFirestoreData(
-        user: FirebaseUser,
+        user: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )
@@ -55,7 +63,7 @@ interface ProfileDataSource {
     suspend fun signOut()
 
     suspend fun deleteUserAndData(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccessListener: () -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     )

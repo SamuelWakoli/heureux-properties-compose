@@ -33,7 +33,7 @@ fun DynamicThemeBottomSheet(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "This feature is only available on devices running on Android 12+.",
+                text = "This feature is only available on devices running on Android 12+",
                 style = MaterialTheme.typography.bodyLarge
             )
             TextButton(

@@ -13,6 +13,15 @@ interface ProfileRepository {
         onErrorListener: (exception: Exception) -> Unit,
     )
 
+    suspend fun uploadImage(
+        imageUri: String,
+        email: String,
+        onSuccessListener: (imageUrl: String) -> Unit,
+        onErrorListener: (exception: Exception) -> Unit,
+    )
+
+    suspend fun getCurrentUser() : Flow<FirebaseUser?>
+
     suspend fun signIn(
         email: String,
         password: String,
@@ -21,7 +30,6 @@ interface ProfileRepository {
     )
 
     fun getUserProfileData(
-        user: FirebaseUser,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ): Flow<UserProfileData?>
@@ -33,13 +41,13 @@ interface ProfileRepository {
     )
 
     suspend fun updateUserProfile(
-        userProfileDate: UserProfileData,
+        userProfileData: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )
 
     suspend fun createUserFirestoreData(
-        user: FirebaseUser,
+        user: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )
@@ -47,7 +55,7 @@ interface ProfileRepository {
     suspend fun signOut()
 
     suspend fun deleteUserAndData(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccessListener: () -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     )
