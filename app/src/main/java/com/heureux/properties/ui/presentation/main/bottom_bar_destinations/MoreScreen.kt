@@ -11,10 +11,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cases
 import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.DynamicForm
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Lock
@@ -157,12 +157,12 @@ fun MoreScreen(
                 leadingContent = {
                     Icon(
                         imageVector =
-                        Icons.Outlined.DynamicForm,
+                        Icons.Outlined.AutoAwesome,
                         contentDescription = null
                     )
                 },
                 headlineContent = {
-                    Text(text = "App dynamic theme")
+                    Text(text = "Dynamic theme")
                 },
                 supportingContent = {
                     Text(text = if (dynamicColorState) "Enabled" else "Disabled")

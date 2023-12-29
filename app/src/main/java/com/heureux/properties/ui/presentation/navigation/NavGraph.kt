@@ -65,7 +65,7 @@ fun NavGraph(
         composable(route = Screens.ProfileScreen.route) {
             ProfileScreen(
                 mainNavController = navController,
-                mainScreenViewModel = mainScreenViewModel,
+                profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
             )
         }
         composable(route = Screens.EditProfileScreen.route) {
