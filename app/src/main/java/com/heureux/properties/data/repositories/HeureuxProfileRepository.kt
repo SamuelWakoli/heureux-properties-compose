@@ -37,12 +37,10 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     }
 
     override fun getUserProfileData(
-        user: FirebaseUser,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ): Flow<UserProfileData?> {
         return dataSource.getUserProfileData(
-            user = user,
             onSuccess = onSuccess,
             onFailure = onFailure
         )
@@ -61,19 +59,19 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     }
 
     override suspend fun updateUserProfile(
-        userProfileDate: UserProfileData,
+        userProfileData: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
         dataSource.updateUserProfile(
-            userProfileDate = userProfileDate,
+            userProfileDate = userProfileData,
             onSuccess = onSuccess,
             onFailure = onFailure
         )
     }
 
     override suspend fun createUserFirestoreData(
-        user: FirebaseUser,
+        user: UserProfileData,
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
@@ -89,14 +87,32 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     }
 
     override suspend fun deleteUserAndData(
-        userProfileDate: UserProfileData,
+        email: String,
         onSuccessListener: () -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     ) {
         dataSource.deleteUserAndData(
-            userProfileDate = userProfileDate,
+            email = email,
             onSuccessListener = onSuccessListener,
             onErrorListener = onErrorListener
         )
     }
+
+    override suspend fun uploadImage(
+        imageUri: String,
+        email: String,
+        onSuccessListener: (imageUrl: String) -> Unit,
+        onErrorListener: (exception: Exception) -> Unit,
+    ) {
+        dataSource.uploadImage(
+            imageUri = imageUri,
+            email = email,
+            onSuccessListener = onSuccessListener,
+            onErrorListener = onErrorListener
+        )
+    }
+
+    override suspend fun getCurrentUser(): Flow<FirebaseUser?> =
+        dataSource.getCurrentUser()
+
 }
