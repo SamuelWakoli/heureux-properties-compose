@@ -1,6 +1,7 @@
 package com.heureux.properties.ui.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,6 +19,7 @@ import com.heureux.properties.ui.presentation.main.my_properties_screen.MyProper
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
+import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 
@@ -71,7 +73,7 @@ fun NavGraph(
         composable(route = Screens.EditProfileScreen.route) {
             EditProfileScreen(
                 mainNavController = navController,
-                mainScreenViewModel = mainScreenViewModel,
+                editProfileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
             )
         }
         composable(route = Screens.AboutUsScreen.route) {

@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.main.edit_profile_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,9 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Camera
 import androidx.compose.material.icons.outlined.Edit
@@ -33,16 +36,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -50,42 +52,20 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
+import com.heureux.properties.ui.presentation.viewmodels.EditProfileScreenViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun EditProfileScreen(
     mainNavController: NavController,
-    mainScreenViewModel: MainScreenViewModel,
+    editProfileScreenViewModel: EditProfileScreenViewModel,
 ) {
 
-    val uiState = mainScreenViewModel.profileScreenUiState.collectAsState().value
-    val userData = mainScreenViewModel.userData.collectAsState().value
+    val uiState = editProfileScreenViewModel.uiState.collectAsState().value
+    val userData = editProfileScreenViewModel.userProfileData.collectAsState().value
+    val context = LocalContext.current
 
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val coroutineScope = rememberCoroutineScope()
-
-    var userName by rememberSaveable {
-        mutableStateOf(userData?.name ?: "")
-    }
-    var userNameError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var phoneNumber by rememberSaveable {
-        mutableStateOf(userData?.phone ?: "")
-    }
-    var phoneNumberError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var showBottomSheet by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var isSaving by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(navigationIcon = {
@@ -125,28 +105,28 @@ fun EditProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
-                    if (userData?.photoUrl != null && userData.photoUrl != "null") {
-                        CoilImage(
-                            modifier = Modifier.size(64.dp),
-                            imageUrl = userData.photoUrl,
-                            applyCircleShape = true,
-                            errorContent = {
-                                Icon(
-                                    imageVector = Icons.Outlined.AccountCircle,
-                                    contentDescription = "Profile",
-                                    modifier = Modifier.size(256.dp)
-                                )
-                            },
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
-                            contentDescription = "Profile image",
-                            modifier = Modifier.size(256.dp),
-                        )
-                    }
+                if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
+                    CoilImage(
+                        modifier = Modifier.size(64.dp),
+                        imageUrl = userData.photoURL.toString(),
+                        applyCircleShape = true,
+                        errorContent = {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "Profile",
+                                modifier = Modifier.size(256.dp)
+                            )
+                        },
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = "Profile image",
+                        modifier = Modifier.size(256.dp),
+                    )
+                }
                 TextButton(onClick = { /*TODO*/
-                    showBottomSheet = true
+                    editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
                 }) {
                     Text(text = "Select Image")
                 }
@@ -157,9 +137,9 @@ fun EditProfileScreen(
 
 
             OutlinedTextField(
-                value = userName,
+                value = uiState.userName,
                 onValueChange = { newName ->
-                    userName = newName
+                    editProfileScreenViewModel.updateUserName(newName)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -174,9 +154,9 @@ fun EditProfileScreen(
                     )
                 },
                 supportingText = {
-                    if (userNameError) Text(text = "Name cannot be empty")
+                    if (uiState.userNameError) Text(text = "Name cannot be empty")
                 },
-                isError = userNameError,
+                isError = uiState.userNameError,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                     autoCorrect = false,
@@ -184,12 +164,13 @@ fun EditProfileScreen(
                     imeAction = ImeAction.Next,
                 ),
                 singleLine = true,
+                shape = MaterialTheme.shapes.medium,
             )
             Spacer(modifier = Modifier.size(8.dp))
             OutlinedTextField(
-                value = phoneNumber,
+                value = uiState.phoneNumber,
                 onValueChange = { newPhoneNumber ->
-                    phoneNumber = newPhoneNumber
+                    editProfileScreenViewModel.updatePhoneNumber(newPhoneNumber)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -204,9 +185,9 @@ fun EditProfileScreen(
                     )
                 },
                 supportingText = {
-                    if (phoneNumberError) Text(text = "Phone cannot be empty")
+                    if (uiState.phoneNumberError) Text(text = "Phone cannot be empty")
                 },
-                isError = phoneNumberError,
+                isError = uiState.phoneNumberError,
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                     autoCorrect = false,
@@ -214,6 +195,7 @@ fun EditProfileScreen(
                     imeAction = ImeAction.Done,
                 ),
                 singleLine = true,
+                shape = MaterialTheme.shapes.medium,
             )
 
 
@@ -221,24 +203,54 @@ fun EditProfileScreen(
 
 
             ElevatedButton(
-                onClick = { /*TODO*/
-                    isSaving = true
+                onClick = {
+                    keyboardController?.hide()
+                    editProfileScreenViewModel.updateProfile(
+                        onSuccess = {
+                            Toast.makeText(
+                                context,
+                                "Profile updated successfully",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            mainNavController.navigateUp()
+                        },
+                        onFailure = {
+                            Toast.makeText(
+                                context,
+                                "Failed to update profile",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                    )
                 }, modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 8.dp)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
 
-                        Text(text = "Save")
+                    Text(
+                        text = "Save", style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.weight(9f),
+                        textAlign = TextAlign.Center,
+                    )
 
-                    if (isSaving) {
+                    if (uiState.isSaving) {
+                        Spacer(modifier = Modifier.width(12.dp))
                         CircularProgressIndicator(
                             modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp
+                            color = MaterialTheme.colorScheme.primary,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Default.DoneAll,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(18.dp)
+                                .weight(1f)
                         )
                     }
                 }
@@ -249,8 +261,8 @@ fun EditProfileScreen(
 
 
 
-        if (showBottomSheet) ModalBottomSheet(onDismissRequest = { /*TODO*/
-            showBottomSheet = false
+        if (uiState.showBottomSheet) ModalBottomSheet(onDismissRequest = { /*TODO*/
+            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
         }) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -263,7 +275,7 @@ fun EditProfileScreen(
                     Card(
                         onClick = {
                             // TODO:
-                            showBottomSheet = false
+                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
                         }, shape = MaterialTheme.shapes.large, colors = CardDefaults.cardColors(
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
@@ -285,7 +297,7 @@ fun EditProfileScreen(
                     Card(
                         onClick = {
                             // TODO:
-                            showBottomSheet = false
+                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
                         }, shape = MaterialTheme.shapes.large, colors = CardDefaults.cardColors(
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
@@ -315,6 +327,6 @@ fun EditProfileScreen(
 private fun EditProfileScreenPreview() {
     EditProfileScreen(
         mainNavController = rememberNavController(),
-        mainScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        editProfileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     )
 }
