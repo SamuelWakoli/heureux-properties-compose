@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InquireScreen() {
+fun InquiryScreen() {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -59,6 +59,6 @@ fun InquireScreen() {
 
 @Preview
 @Composable
-private fun InquireScreenPreview() {
-    InquireScreen()
+private fun InquiryScreenPreview() {
+    InquiryScreen()
 }
