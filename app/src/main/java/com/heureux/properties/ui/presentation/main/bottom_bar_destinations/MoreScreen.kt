@@ -1,6 +1,5 @@
 package com.heureux.properties.ui.presentation.main.bottom_bar_destinations
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,7 +23,6 @@ import androidx.compose.material.icons.outlined.RateReview
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -40,6 +38,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.bottom_sheet.DynamicThemeBottomSheet
 import com.heureux.properties.ui.presentation.composables.dialogs.ThemeSelectionDialog
+import com.heureux.properties.ui.presentation.composables.more_screen_list_item.MoreScreenListItem
+import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.MoreScreenViewModel
 
@@ -72,74 +72,82 @@ fun MoreScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            ListItem(
-                leadingContent = {
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.AccountCircle, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Profile")
-                })
-            ListItem(
-                leadingContent = {
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.ProfileScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Notifications")
-                })
-            ListItem(
-                leadingContent = {
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Cases, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "My inquiries")
-                })
-            ListItem(
-                leadingContent = {
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Payments, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Payment history")
-                })
+                }
+            )
             Divider()
-            ListItem(
-                leadingContent = {
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Info, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "About us")
-                })
-            ListItem(
-                leadingContent = {
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Privacy policy")
-                })
-            ListItem(
-                leadingContent = {
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.ContactSupport, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Contact us")
-                })
-            ListItem(
-                leadingContent = {
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(imageVector = Icons.Outlined.RateReview, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Rate us")
-                })
+                }
+            )
             Divider()
-            ListItem(
-                modifier = Modifier.clickable {
-                    moreScreenViewModel.hideOrShowThemeDialog()
-                },
-                leadingContent = {
+            MoreScreenListItem(
+                leadingIcon = {
                     Icon(
                         imageVector =
-                        if (isSystemInDarkTheme())
-                            Icons.Outlined.LightMode
-                        else Icons.Outlined.DarkMode,
+                        if (isSystemInDarkTheme()) Icons.Outlined.LightMode else Icons.Outlined.DarkMode,
                         contentDescription = null
                     )
                 },
@@ -148,24 +156,23 @@ fun MoreScreen(
                 },
                 supportingContent = {
                     Text(text = currentThemeData)
+                },
+                onClick = {
+                    moreScreenViewModel.hideOrShowThemeDialog()
                 }
             )
-            ListItem(
-                modifier = Modifier.clickable {
-                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
-                },
-                leadingContent = {
-                    Icon(
-                        imageVector =
-                        Icons.Outlined.AutoAwesome,
-                        contentDescription = null
-                    )
+            MoreScreenListItem(
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.AutoAwesome, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Dynamic theme")
                 },
                 supportingContent = {
                     Text(text = if (dynamicColorState) "Enabled" else "Disabled")
+                },
+                onClick = {
+                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
                 }
             )
         }

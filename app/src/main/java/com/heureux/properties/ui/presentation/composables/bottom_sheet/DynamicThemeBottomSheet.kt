@@ -33,7 +33,8 @@ fun DynamicThemeBottomSheet(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = "This feature is only available on devices running on Android 12+",
+                text = "Tired of static theme? This app allows you to use your wallpaper colors, like magic! ✨\n" +
+                        "This feature is only available on devices running on Android 12+",
                 style = MaterialTheme.typography.bodyLarge
             )
             TextButton(
@@ -55,7 +56,7 @@ fun DynamicThemeBottomSheet(
                 onClick = { onDismissRequest(currentState) }) {
                 Text(text = "Cancel")
             }
-            Spacer(modifier = Modifier.size(256.dp))
+            Spacer(modifier = Modifier.size(64.dp))
         }
     }
 }
