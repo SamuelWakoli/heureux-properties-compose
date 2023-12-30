@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class EditProfileScreenUiState(
+    val isLoadingUserData: Boolean = true,
     val userName: String = "",
     val userNameError: Boolean = false,
     val phoneNumber: String = "",
@@ -38,20 +39,26 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
     }
 
     private val _uiState: MutableStateFlow<EditProfileScreenUiState> by lazy {
-        MutableStateFlow(EditProfileScreenUiState(userName = "", phoneNumber = ""))
+        MutableStateFlow(
+            EditProfileScreenUiState(
+                userName = "",
+                phoneNumber = "",
+            )
+        )
     }
 
     init {
-        /** after 3.2 seconds (estimated time), the [userProfileData] should have been updated
+        /** after 4 seconds (estimated time), the [userProfileData] should have been updated
          * so we get to update the [_uiState] with latest data
          */
         viewModelScope.launch {
-            delay(3_200L)
+            delay(4_000L)
         }.invokeOnCompletion {
             _uiState.update {
                 it.copy(
                     userName = userProfileData.value?.displayName ?: "",
-                    phoneNumber = userProfileData.value?.phone ?: ""
+                    phoneNumber = userProfileData.value?.phone ?: "",
+                    isLoadingUserData = false,
                 )
             }
         }
