@@ -12,7 +12,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Cases
-import androidx.compose.material.icons.outlined.ContactSupport
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.LightMode
@@ -20,6 +19,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.RateReview
+import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -91,6 +91,11 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Notifications")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.NotificationsScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(
@@ -99,6 +104,11 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "My inquires")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.MyInquiresScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(
@@ -107,6 +117,11 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Payment history")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.PaymentHistoryScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             Divider()
@@ -116,6 +131,11 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "About us")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.AboutUsScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(
@@ -128,10 +148,15 @@ fun MoreScreen(
             )
             MoreScreenListItem(
                 leadingIcon = {
-                    Icon(imageVector = Icons.Outlined.ContactSupport, contentDescription = null)
+                    Icon(imageVector = Icons.Outlined.SupportAgent, contentDescription = null)
                 },
                 headlineContent = {
                     Text(text = "Contact us")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.ContactUsScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(
