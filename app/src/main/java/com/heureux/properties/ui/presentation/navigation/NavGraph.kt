@@ -15,7 +15,9 @@ import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScree
 import com.heureux.properties.ui.presentation.main.filter_results_screen.FilterResultsScreen
 import com.heureux.properties.ui.presentation.main.filter_screen.FilterScreen
 import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
+import com.heureux.properties.ui.presentation.main.my_inquires_screen.MyInquiresScreen
 import com.heureux.properties.ui.presentation.main.my_properties_screen.MyPropertiesScreen
+import com.heureux.properties.ui.presentation.main.notifications_screen.NotificationsScreen
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.AddPropertyScreen
@@ -115,6 +117,12 @@ fun NavGraph(
         }
         composable(route = Screens.InquiryScreen.route) {
             InquiryScreen()
+        }
+        composable(route = Screens.MyInquiresScreen.route) {
+            MyInquiresScreen()
+        }
+        composable(route = Screens.NotificationsScreen.route) {
+            NotificationsScreen()
         }
     }
 }
