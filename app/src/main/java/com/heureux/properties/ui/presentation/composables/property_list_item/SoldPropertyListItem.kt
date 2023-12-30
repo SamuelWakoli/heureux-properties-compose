@@ -22,10 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
+import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
-fun SoldPropertyListItem() {
+fun SoldPropertyListItem(
+    navController: NavController,
+) {
     Card(
         modifier = Modifier
             .padding(
@@ -35,14 +40,12 @@ fun SoldPropertyListItem() {
     ) {
         Column {
             CoilImage(
-                modifier = Modifier
-                    .heightIn(
+                modifier = Modifier.heightIn(
                         min = 160.dp, max = 220.dp
                     )
             )
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
                     text = "Price: Ksh. 2,000,000",
@@ -64,17 +67,20 @@ fun SoldPropertyListItem() {
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
-                )
-                {
-                    TextButton(onClick = { /*TODO*/ }) {
+                ) {
+                    TextButton(onClick = {
+                        /*TODO*/
+                        navController.navigate(Screens.PropertyDetailsScreen.route) {
+                            launchSingleTop = true
+                        }
+                    }) {
                         Row(
                             horizontalArrangement = Arrangement.Center,
                             verticalAlignment = Alignment.CenterVertically,
 
                             ) {
                             Icon(
-                                imageVector = Icons.Outlined.Info,
-                                contentDescription = null
+                                imageVector = Icons.Outlined.Info, contentDescription = null
                             )
                             Spacer(modifier = Modifier.size(8.dp))
                             Text(text = "Details")
@@ -85,13 +91,13 @@ fun SoldPropertyListItem() {
             }
 
         }
-
-
     }
 }
 
 @Preview
 @Composable
 private fun SoldPropertyListItemPreview() {
-    SoldPropertyListItem()
+    SoldPropertyListItem(
+        navController = rememberNavController()
+    )
 }

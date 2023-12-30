@@ -98,7 +98,7 @@ fun MoreScreen(
                     Icon(imageVector = Icons.Outlined.Cases, contentDescription = null)
                 },
                 headlineContent = {
-                    Text(text = "My inquiries")
+                    Text(text = "My inquires")
                 }
             )
             MoreScreenListItem(

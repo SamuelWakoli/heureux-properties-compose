@@ -67,7 +67,8 @@ fun SoldPropertiesScreen(
     }) { paddingValues ->
         Column(
             modifier = Modifier
-                .fillMaxSize().padding(paddingValues)
+                .fillMaxSize()
+                .padding(paddingValues)
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -78,7 +79,9 @@ fun SoldPropertiesScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(20) {
-                    SoldPropertyListItem()
+                    SoldPropertyListItem(
+                        navController = mainNavController
+                    )
                 }
             }
         }

@@ -25,10 +25,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
+import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
-fun PropertyListItem() {
+fun PropertyListItem(navController: NavController) {
     Card(
         modifier = Modifier
             .padding(
@@ -81,7 +84,12 @@ fun PropertyListItem() {
                         verticalAlignment = Alignment.CenterVertically,
                     )
                     {
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = {
+                            // TODO:
+                            navController.navigate(Screens.PropertyDetailsScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
@@ -96,7 +104,11 @@ fun PropertyListItem() {
                             }
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = { /*TODO*/
+                            navController.navigate(Screens.InquiryScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
@@ -114,6 +126,7 @@ fun PropertyListItem() {
                 }
             }
 
+
         }
 
 
@@ -123,5 +136,7 @@ fun PropertyListItem() {
 @Preview
 @Composable
 private fun PropertyListItemPreview() {
-    PropertyListItem()
+    PropertyListItem(
+        navController = rememberNavController()
+    )
 }

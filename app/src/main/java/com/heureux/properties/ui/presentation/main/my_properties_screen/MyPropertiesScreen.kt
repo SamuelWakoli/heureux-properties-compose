@@ -81,7 +81,9 @@ fun MyPropertiesScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(20) {
-                    SoldPropertyListItem()
+                    SoldPropertyListItem(
+                        navController = mainNavController,
+                    )
                 }
             }
         }

@@ -25,10 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
+import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
-fun UserListingItem() {
+fun UserListingItem(
+    navController: NavController,
+) {
     Card(
         modifier = Modifier
             .padding(
@@ -38,14 +43,12 @@ fun UserListingItem() {
     ) {
         Column {
             CoilImage(
-                modifier = Modifier
-                    .heightIn(
+                modifier = Modifier.heightIn(
                         min = 160.dp, max = 220.dp
                     )
             )
             Column(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
                     text = "Price: Ksh. 2,000,000",
@@ -64,8 +67,7 @@ fun UserListingItem() {
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(onClick = { /*TODO*/ }) {
@@ -80,32 +82,39 @@ fun UserListingItem() {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
-                    )
-                    {
-                        TextButton(onClick = { /*TODO*/ }) {
+                    ) {
+                        TextButton(onClick = {
+                            /*TODO*/
+                            navController.navigate(Screens.PropertyDetailsScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
 
                                 ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.Info,
-                                    contentDescription = null
+                                    imageVector = Icons.Outlined.Info, contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(text = "Details")
                             }
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = { /*TODO*/ }) {
+                        TextButton(onClick = {
+                            /*TODO*/
+                            navController.navigate(Screens.EditPropertyScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,
                                 verticalAlignment = Alignment.CenterVertically,
 
                                 ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.EditNote,
-                                    contentDescription = null
+                                    imageVector = Icons.Outlined.EditNote, contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(text = "Edit")
@@ -124,5 +133,7 @@ fun UserListingItem() {
 @Preview
 @Composable
 private fun UserListingItemPreview() {
-    UserListingItem()
+    UserListingItem(
+        navController = rememberNavController()
+    )
 }

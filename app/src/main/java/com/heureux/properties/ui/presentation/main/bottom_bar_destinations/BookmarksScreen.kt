@@ -12,11 +12,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.property_list_item.PropertyListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarksScreen(
+    navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     Column(
@@ -32,7 +35,7 @@ fun BookmarksScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             items(20) {
-                PropertyListItem()
+                PropertyListItem(navController = navController)
             }
         }
     }
@@ -43,5 +46,8 @@ fun BookmarksScreen(
 @Composable
 private fun BookmarksScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    BookmarksScreen(scrollBehavior = scrollBehavior)
+    BookmarksScreen(
+        navController = rememberNavController(),
+        scrollBehavior = scrollBehavior
+    )
 }

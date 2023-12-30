@@ -21,11 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.property_list_item.UserListingItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyListingsScreen(
+    navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     Scaffold(
@@ -52,7 +55,9 @@ fun MyListingsScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(20) {
-                    UserListingItem()
+                    UserListingItem(
+                        navController = navController
+                    )
                 }
                 item {
                     Spacer(modifier = Modifier.size(96.dp))
@@ -67,5 +72,8 @@ fun MyListingsScreen(
 @Composable
 private fun MyListingsScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    MyListingsScreen(scrollBehavior = scrollBehavior)
+    MyListingsScreen(
+        navController = rememberNavController(),
+        scrollBehavior = scrollBehavior
+    )
 }

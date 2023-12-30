@@ -36,21 +36,18 @@ fun MainScreen(
 
     val userData = viewModel.userProfileData.collectAsState().value
 
-    Scaffold(
-        topBar = {
-            MainScreenAppbar(
-                userData = userData,
-                scrollBehavior = scrollBehavior,
-                bottomNavController = bottomNavController,
-                mainNavController = mainNavController,
-            )
-        },
-        bottomBar = {
-            MainScreenBottomBar(
-                bottomNavController = bottomNavController,
-            )
-        }
-    ) { paddingValues ->
+    Scaffold(topBar = {
+        MainScreenAppbar(
+            userData = userData,
+            scrollBehavior = scrollBehavior,
+            bottomNavController = bottomNavController,
+            mainNavController = mainNavController,
+        )
+    }, bottomBar = {
+        MainScreenBottomBar(
+            bottomNavController = bottomNavController,
+        )
+    }) { paddingValues ->
         NavHost(
             navController = bottomNavController,
             startDestination = Screens.HomeScreen.route,
@@ -59,13 +56,19 @@ fun MainScreen(
                 .padding(paddingValues = paddingValues),
         ) {
             composable(route = Screens.HomeScreen.route) {
-                HomeScreen(scrollBehavior = scrollBehavior)
+                HomeScreen(
+                    navController = mainNavController, scrollBehavior = scrollBehavior
+                )
             }
             composable(route = Screens.BookmarksScreen.route) {
-                BookmarksScreen(scrollBehavior = scrollBehavior)
+                BookmarksScreen(
+                    navController = mainNavController, scrollBehavior = scrollBehavior
+                )
             }
             composable(route = Screens.MyListingsScreen.route) {
-                MyListingsScreen(scrollBehavior = scrollBehavior)
+                MyListingsScreen(
+                    navController = mainNavController, scrollBehavior = scrollBehavior
+                )
             }
             composable(route = Screens.MoreScreen.route) {
                 MoreScreen(
