@@ -1,6 +1,10 @@
 package com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.material3.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -9,17 +13,25 @@ import com.heureux.properties.ui.presentation.composables.images.CoilImage
 
 @Composable
 fun DetailsImageListItem(
-    modifier: Modifier = Modifier,
-    imageUrl: String = "",
+    imageUrl: String = "https://picsum.photos/200",
 ) {
-    CoilImage(
-//        imageUrl = imageUrl,
-        modifier = modifier
-            .heightIn(
-                min = 160.dp, max = 220.dp
+    Card(
+        modifier = Modifier
+            .padding(
+                vertical = 4.dp, horizontal = 8.dp
             )
-            .then(modifier)
-    )
+            .widthIn(min = 200.dp, max = 300.dp)
+    ) {
+        Column {
+            CoilImage(
+                imageUrl = imageUrl,
+                modifier = Modifier.heightIn(
+                    min = 400.dp,
+                    max = 500.dp
+                )
+            )
+        }
+    }
 }
 
 @Preview(showBackground = true)
