@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun RegistrationScreen(
     viewModel: AuthViewModel,
-    mainNavController: NavController,
+    navController: NavController,
     onSignInWithGoogle: () -> Unit,
 ) {
 
@@ -84,9 +84,9 @@ fun RegistrationScreen(
                 delay(2_000L)
 
             }.invokeOnCompletion {
-                mainNavController.navigate(Screens.MainScreen.route) {
+                navController.navigate(Screens.MainScreen.route) {
                     launchSingleTop = true
-                    mainNavController.popBackStack()
+                    navController.popBackStack()
                 }
             }
         }
@@ -98,7 +98,7 @@ fun RegistrationScreen(
                 title = { Text(text = "Registration") },
                 navigationIcon = {
                     IconButton(onClick = {
-                        mainNavController.navigateUp()
+                        navController.navigateUp()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -259,7 +259,7 @@ private fun RegistrationScreenPreview() {
             val mainNavController = rememberNavController()
             RegistrationScreen(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                mainNavController = mainNavController,
+                navController = mainNavController,
             ) {}
         }
     }

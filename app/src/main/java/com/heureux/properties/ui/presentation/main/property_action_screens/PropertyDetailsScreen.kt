@@ -10,6 +10,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -19,14 +20,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PropertyDetailsScreen() {
+fun PropertyDetailsScreen(
+    navController: NavController,
+) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                {
+                navigationIcon = {
+                    IconButton(onClick = {
+                        navController.navigateUp()
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Navigate back"
+                        )
+                    }
+                },
+                title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -37,12 +52,8 @@ fun PropertyDetailsScreen() {
                         Spacer(modifier = Modifier.padding(8.dp))
                         Text(text = "Details")
                     }
-                }, navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Navigate back"
-                    )
                 },
+
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     titleContentColor = MaterialTheme.colorScheme.primary
                 )
@@ -60,5 +71,7 @@ fun PropertyDetailsScreen() {
 @Preview
 @Composable
 private fun PropertyDetailsScreenPreview() {
-    PropertyDetailsScreen()
+    PropertyDetailsScreen(
+        navController = rememberNavController()
+    )
 }

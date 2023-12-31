@@ -32,7 +32,7 @@ import com.heureux.properties.ui.presentation.composables.property_list_item.Sol
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoldPropertiesScreen(
-    mainNavController: NavController,
+    navController: NavController,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
@@ -40,7 +40,7 @@ fun SoldPropertiesScreen(
         CenterAlignedTopAppBar(
             scrollBehavior = scrollBehavior,
             navigationIcon = {
-                IconButton(onClick = { mainNavController.navigateUp() }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Navigate back"
@@ -80,7 +80,7 @@ fun SoldPropertiesScreen(
             ) {
                 items(20) {
                     SoldPropertyListItem(
-                        navController = mainNavController
+                        navController = navController
                     )
                 }
             }
@@ -92,6 +92,6 @@ fun SoldPropertiesScreen(
 @Composable
 private fun SoldPropertiesScreenPreview() {
     SoldPropertiesScreen(
-        mainNavController = rememberNavController()
+        navController = rememberNavController()
     )
 }

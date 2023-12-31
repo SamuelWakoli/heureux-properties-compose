@@ -63,7 +63,7 @@ import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 @Composable
 fun SignInScreen(
     viewModel: AuthViewModel,
-    mainNavController: NavController,
+    navController: NavController,
     onSignInWithGoogle: () -> Unit,
 ) {
 
@@ -78,9 +78,9 @@ fun SignInScreen(
                 "Signed in successfully", Toast.LENGTH_LONG
             ).show()
 
-            mainNavController.navigate(Screens.MainScreen.route) {
+            navController.navigate(Screens.MainScreen.route) {
                 launchSingleTop = true
-                mainNavController.popBackStack()
+                navController.popBackStack()
             }
         }
     })
@@ -143,7 +143,7 @@ fun SignInScreen(
                         text = "Register",
                         modifier = Modifier
                             .clickable {
-                                mainNavController.navigate(route = Screens.RegistrationScreen.route) {
+                                navController.navigate(route = Screens.RegistrationScreen.route) {
                                     launchSingleTop = true
                                 }
                             }
@@ -218,7 +218,7 @@ fun SignInScreen(
                     text = "Forgot password?",
                     modifier = Modifier
                         .clickable {
-                            mainNavController.navigate(route = Screens.ForgotPasswordScreen.route) {
+                            navController.navigate(route = Screens.ForgotPasswordScreen.route) {
                                 launchSingleTop = true
                             }
                         }
@@ -281,7 +281,7 @@ private fun SignInScreenPreview() {
             val mainNavController = rememberNavController()
             SignInScreen(
                 viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                mainNavController = mainNavController,
+                navController = mainNavController,
             ) {}
         }
     }

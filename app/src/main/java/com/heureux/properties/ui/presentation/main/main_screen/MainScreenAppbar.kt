@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Feedback
-import androidx.compose.material.icons.outlined.FilterList
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -116,23 +115,23 @@ fun MainScreenAppbar(
                     expanded = showDropdownMenu,
                     onDismissRequest = { showDropdownMenu = false },
                     content = {
-                        if (currentRoute == Screens.HomeScreen.route) {
-                            DropdownMenuItem(
-                                leadingIcon = {
-                                    Icon(
-                                        imageVector = Icons.Outlined.FilterList,
-                                        contentDescription = null,
-                                    )
-                                },
-                                text = { Text(text = "Filter") },
-                                onClick = {
-                                    showDropdownMenu = false
-                                    mainNavController.navigate(Screens.FilterScreen.route) {
-                                        launchSingleTop = true
-                                    }
-                                },
-                            )
-                        }
+//                        if (currentRoute == Screens.HomeScreen.route) {
+//                            DropdownMenuItem(
+//                                leadingIcon = {
+//                                    Icon(
+//                                        imageVector = Icons.Outlined.FilterList,
+//                                        contentDescription = null,
+//                                    )
+//                                },
+//                                text = { Text(text = "Filter") },
+//                                onClick = {
+//                                    showDropdownMenu = false
+//                                    mainNavController.navigate(Screens.FilterScreen.route) {
+//                                        launchSingleTop = true
+//                                    }
+//                                },
+//                            )
+//                        }
                         DropdownMenuItem(
                             leadingIcon = {
                                 Icon(

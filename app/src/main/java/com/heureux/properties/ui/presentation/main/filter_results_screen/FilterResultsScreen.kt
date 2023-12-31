@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun FilterResultsScreen(mainNavController: NavHostController) {
+fun FilterResultsScreen(navController: NavHostController) {
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier
@@ -28,6 +28,6 @@ fun FilterResultsScreen(mainNavController: NavHostController) {
 @Composable
 private fun FilterResultsScreenPreview() {
     MaterialTheme {
-        FilterResultsScreen(mainNavController = rememberNavController())
+        FilterResultsScreen(navController = rememberNavController())
     }
 }

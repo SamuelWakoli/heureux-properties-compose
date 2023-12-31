@@ -21,12 +21,12 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutUsScreen(mainNavController: NavController) {
+fun AboutUsScreen(navController: NavController) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { mainNavController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Navigate back",
@@ -53,5 +53,5 @@ fun AboutUsScreen(mainNavController: NavController) {
 @Preview
 @Composable
 private fun AboutUsScreenPreview() {
-    AboutUsScreen(mainNavController = rememberNavController())
+    AboutUsScreen(navController = rememberNavController())
 }

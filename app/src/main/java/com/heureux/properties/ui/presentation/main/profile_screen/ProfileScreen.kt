@@ -56,7 +56,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
-    mainNavController: NavController,
+    navController: NavController,
     profileScreenViewModel: ProfileScreenViewModel,
 ) {
 
@@ -72,7 +72,7 @@ fun ProfileScreen(
             CenterAlignedTopAppBar(
                 scrollBehavior = scrollBehavior,
                 navigationIcon = {
-                    IconButton(onClick = { mainNavController.popBackStack() }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Navigate back",
@@ -160,7 +160,7 @@ fun ProfileScreen(
                         Text(text = userData?.phone ?: "Click to add phone number")
                     },
                     modifier = Modifier.clickable {
-                        mainNavController.navigate(route = Screens.EditProfileScreen.route) {
+                        navController.navigate(route = Screens.EditProfileScreen.route) {
                             launchSingleTop = true
                         }
                     }
@@ -186,7 +186,7 @@ fun ProfileScreen(
                         Text(text = "My properties")
                     },
                     modifier = Modifier.clickable {
-                        mainNavController.navigate(route = Screens.MyPropertiesScreen.route) {
+                        navController.navigate(route = Screens.MyPropertiesScreen.route) {
                             launchSingleTop = true
                         }
                     }
@@ -202,7 +202,7 @@ fun ProfileScreen(
                         Text(text = "Sold properties")
                     },
                     modifier = Modifier.clickable {
-                        mainNavController.navigate(route = Screens.SoldPropertiesScreen.route) {
+                        navController.navigate(route = Screens.SoldPropertiesScreen.route) {
                             launchSingleTop = true
                         }
                     }
@@ -218,7 +218,7 @@ fun ProfileScreen(
                         Text(text = "Payment history")
                     },
                     modifier = Modifier.clickable {
-                        mainNavController.navigate(route = Screens.PaymentHistoryScreen.route) {
+                        navController.navigate(route = Screens.PaymentHistoryScreen.route) {
                             launchSingleTop = true
                         }
                     }
@@ -244,7 +244,7 @@ fun ProfileScreen(
                         Text(text = "Edit profile")
                     },
                     modifier = Modifier.clickable {
-                        mainNavController.navigate(route = Screens.EditProfileScreen.route) {
+                        navController.navigate(route = Screens.EditProfileScreen.route) {
                             launchSingleTop = true
                         }
                     }
@@ -283,7 +283,7 @@ fun ProfileScreen(
                         coroutineScope.launch {
                             profileScreenViewModel.signOut(
                                 onSuccess = {
-                                    mainNavController.navigate(route = Screens.SignInScreen.route) {
+                                    navController.navigate(route = Screens.SignInScreen.route) {
                                         popUpTo(Screens.HomeScreen.route) {
                                             inclusive = true
                                         }
@@ -309,7 +309,7 @@ fun ProfileScreen(
                         coroutineScope.launch {
                             profileScreenViewModel.deleteProfileAndData(
                                 onSuccess = {
-                                    mainNavController.navigate(route = Screens.SignInScreen.route) {
+                                    navController.navigate(route = Screens.SignInScreen.route) {
                                         popUpTo(Screens.HomeScreen.route) {
                                             inclusive = true
                                         }
@@ -338,7 +338,7 @@ fun ProfileScreen(
 @Composable
 private fun ProfileScreenPreview() {
     ProfileScreen(
-        mainNavController = rememberNavController(),
+        navController = rememberNavController(),
         profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }

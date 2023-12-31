@@ -54,7 +54,7 @@ import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun ForgotPasswordScreen(
-    mainNavController: NavController,
+    navController: NavController,
     viewModel: AuthViewModel,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
@@ -71,7 +71,7 @@ fun ForgotPasswordScreen(
             CenterAlignedTopAppBar(
                 title = { Text(text = "Forgot password") },
                 navigationIcon = {
-                    IconButton(onClick = { mainNavController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Outlined.ArrowBack,
                             contentDescription = "Navigate back"
@@ -154,7 +154,7 @@ fun ForgotPasswordScreen(
                 if (uiState.showDialogPwdResetEmailSent) {
                     PasswordResetEmailDialog {
                         viewModel.hidePasswordResetDialog()
-                        mainNavController.navigateUp()
+                        navController.navigateUp()
                     }
                 }
             }
@@ -167,7 +167,7 @@ fun ForgotPasswordScreen(
 @Composable
 fun ForgotPasswordScreenPreview() {
     ForgotPasswordScreen(
-        mainNavController = rememberNavController(),
+        navController = rememberNavController(),
         viewModel = viewModel<AuthViewModel>(factory = AppViewModelProvider.Factory),
     )
 }

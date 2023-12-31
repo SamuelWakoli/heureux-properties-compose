@@ -29,13 +29,13 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentHistoryScreen(
-    mainNavController: NavController,
+    navController: NavController,
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { mainNavController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Navigate back"
@@ -78,6 +78,6 @@ fun PaymentHistoryScreen(
 @Composable
 private fun PaymentHistoryScreenPreview() {
     PaymentHistoryScreen(
-        mainNavController = rememberNavController()
+        navController = rememberNavController()
     )
 }

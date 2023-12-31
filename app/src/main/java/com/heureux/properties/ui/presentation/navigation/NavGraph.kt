@@ -44,27 +44,27 @@ fun NavGraph(
     ) {
         composable(route = Screens.SignInScreen.route) {
             SignInScreen(
-                mainNavController = navController,
+                navController = navController,
                 viewModel = authViewModel,
                 onSignInWithGoogle = { onSignInWithGoogle() }
             )
         }
         composable(route = Screens.RegistrationScreen.route) {
             RegistrationScreen(
-                mainNavController = navController,
+                navController = navController,
                 viewModel = authViewModel,
                 onSignInWithGoogle = { onSignInWithGoogle() }
             )
         }
         composable(route = Screens.ForgotPasswordScreen.route) {
             ForgotPasswordScreen(
-                mainNavController = navController,
+                navController = navController,
                 viewModel = authViewModel,
             )
         }
         composable(route = Screens.MainScreen.route) {
             MainScreen(
-                mainNavController = navController,
+                navController = navController,
                 viewModel = mainScreenViewModel,
             )
         }
@@ -72,39 +72,39 @@ fun NavGraph(
         // other screens
         composable(route = Screens.ProfileScreen.route) {
             ProfileScreen(
-                mainNavController = navController,
+                navController = navController,
                 profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
             )
         }
         composable(route = Screens.EditProfileScreen.route) {
             EditProfileScreen(
-                mainNavController = navController,
+                navController = navController,
                 editProfileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
             )
         }
         composable(route = Screens.AboutUsScreen.route) {
-            AboutUsScreen(mainNavController = navController)
+            AboutUsScreen(navController = navController)
         }
         composable(route = Screens.ContactUsScreen.route) {
-            ContactUsScreen(mainNavController = navController)
+            ContactUsScreen(navController = navController)
         }
         composable(route = Screens.FilterScreen.route) {
-            FilterScreen(mainNavController = navController)
+            FilterScreen(navController = navController)
         }
         composable(route = Screens.FilterResultsScreen.route) {
-            FilterResultsScreen(mainNavController = navController)
+            FilterResultsScreen(navController = navController)
         }
         composable(route = Screens.FeedbackScreen.route) {
-            FeedbackScreen(mainNavController = navController)
+            FeedbackScreen(navController = navController)
         }
         composable(route = Screens.MyPropertiesScreen.route) {
-            MyPropertiesScreen(mainNavController = navController)
+            MyPropertiesScreen(navController = navController)
         }
         composable(route = Screens.PaymentHistoryScreen.route) {
-            PaymentHistoryScreen(mainNavController = navController)
+            PaymentHistoryScreen(navController = navController)
         }
         composable(route = Screens.SoldPropertiesScreen.route) {
-            SoldPropertiesScreen(mainNavController = navController)
+            SoldPropertiesScreen(navController = navController)
         }
         composable(route = Screens.AddPropertyScreen.route) {
             AddPropertyScreen()
@@ -113,7 +113,9 @@ fun NavGraph(
             EditPropertyScreen()
         }
         composable(route = Screens.PropertyDetailsScreen.route) {
-            PropertyDetailsScreen()
+            PropertyDetailsScreen(
+                navController = navController
+            )
         }
         composable(route = Screens.InquiryScreen.route) {
             InquiryScreen()

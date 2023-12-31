@@ -58,7 +58,7 @@ import com.heureux.properties.ui.presentation.viewmodels.EditProfileScreenViewMo
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun EditProfileScreen(
-    mainNavController: NavController,
+    navController: NavController,
     editProfileScreenViewModel: EditProfileScreenViewModel,
 ) {
 
@@ -70,7 +70,7 @@ fun EditProfileScreen(
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(navigationIcon = {
-            IconButton(onClick = { mainNavController.navigateUp() }) {
+            IconButton(onClick = { navController.navigateUp() }) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
                 )
@@ -228,7 +228,7 @@ fun EditProfileScreen(
                                     "Profile updated successfully",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                mainNavController.navigateUp()
+                                navController.navigateUp()
                             },
                             onFailure = {
                                 Toast.makeText(
@@ -343,7 +343,7 @@ fun EditProfileScreen(
 @Composable
 private fun EditProfileScreenPreview() {
     EditProfileScreen(
-        mainNavController = rememberNavController(),
+        navController = rememberNavController(),
         editProfileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
     )
 }

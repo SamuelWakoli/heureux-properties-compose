@@ -27,7 +27,7 @@ import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    mainNavController: NavController,
+    navController: NavController,
     viewModel: MainScreenViewModel,
 ) {
     val bottomNavController: NavHostController = rememberNavController()
@@ -41,7 +41,7 @@ fun MainScreen(
             userData = userData,
             scrollBehavior = scrollBehavior,
             bottomNavController = bottomNavController,
-            mainNavController = mainNavController,
+            mainNavController = navController,
         )
     }, bottomBar = {
         MainScreenBottomBar(
@@ -57,24 +57,24 @@ fun MainScreen(
         ) {
             composable(route = Screens.HomeScreen.route) {
                 HomeScreen(
-                    navController = mainNavController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior
                 )
             }
             composable(route = Screens.BookmarksScreen.route) {
                 BookmarksScreen(
-                    navController = mainNavController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior
                 )
             }
             composable(route = Screens.MyListingsScreen.route) {
                 MyListingsScreen(
-                    navController = mainNavController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior
                 )
             }
             composable(route = Screens.MoreScreen.route) {
                 MoreScreen(
                     scrollBehavior = scrollBehavior,
                     moreScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
-                    mainNavController = mainNavController,
+                    mainNavController = navController,
                 )
             }
 
@@ -87,7 +87,7 @@ fun MainScreen(
 private fun MainScreenPreview() {
     MaterialTheme {
         MainScreen(
-            mainNavController = rememberNavController(),
+            navController = rememberNavController(),
             viewModel = viewModel(factory = AppViewModelProvider.Factory)
         )
     }

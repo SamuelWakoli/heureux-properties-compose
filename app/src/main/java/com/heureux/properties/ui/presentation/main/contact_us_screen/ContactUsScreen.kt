@@ -20,13 +20,13 @@ import androidx.navigation.compose.rememberNavController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContactUsScreen(
-    mainNavController: NavController,
+    navController: NavController,
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    IconButton(onClick = { mainNavController.navigateUp() }) {
+                    IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
                             contentDescription = "Navigate back"
@@ -49,5 +49,5 @@ fun ContactUsScreen(
 @Preview
 @Composable
 private fun ContactUsScreenPreview() {
-    ContactUsScreen(mainNavController = rememberNavController())
+    ContactUsScreen(navController = rememberNavController())
 }
