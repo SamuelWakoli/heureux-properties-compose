@@ -85,15 +85,14 @@ fun PropertyDetailsScreen(
             Column(
                 Modifier
                     .fillMaxWidth()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .padding(horizontal = 16.dp),
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
                 verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
                 Column(
                     Modifier
-                        .weight(9f)
+                        .weight(1f)
                         .verticalScroll(rememberScrollState())
                 ) {
                     LazyRow(
@@ -101,28 +100,31 @@ fun PropertyDetailsScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 4.dp)
                     ) {
-                        items(6) {
+                        items(20) {
                             DetailsImageListItem(
-                                modifier = Modifier.padding(horizontal = 4.dp, vertical = 8.dp)
                             )
                         }
                     }
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Price: Ksh. 2,000,000",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        text = "Property Name",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                    Text(
-                        text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                    Spacer(modifier = Modifier.padding(600.dp))
+                    Column(
+                        Modifier.padding(horizontal = 8.dp)
+                    ){
+                        Text(
+                            text = "Price: Ksh. 2,000,000",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = "Property Name",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Text(
+                            text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(8.dp))
                 }
 
                 ElevatedButton(
@@ -132,9 +134,8 @@ fun PropertyDetailsScreen(
                         }
                     },
                     modifier = Modifier
-                        .widthIn(min = 400.dp, max = 600.dp)
-                        .padding(vertical = 16.dp)
-                        .weight(1f)
+                        .widthIn(max = 400.dp)
+                        .padding(vertical = 4.dp)
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -146,7 +147,7 @@ fun PropertyDetailsScreen(
                             contentDescription = null
                         )
                         Spacer(modifier = Modifier.padding(8.dp))
-                        Text(text = "Inquire")
+                        Text(text = "Inquire", style = MaterialTheme.typography.titleMedium)
                     }
                 }
             }

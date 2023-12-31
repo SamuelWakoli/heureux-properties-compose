@@ -22,8 +22,8 @@ import com.heureux.properties.ui.presentation.main.payment_history_screen.Paymen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.AddPropertyScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.EditPropertyScreen
-import com.heureux.properties.ui.presentation.main.property_action_screens.InquiryScreen
-import com.heureux.properties.ui.presentation.main.property_action_screens.PropertyDetailsScreen
+import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
+import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
 import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
 import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
@@ -118,7 +118,9 @@ fun NavGraph(
             )
         }
         composable(route = Screens.InquiryScreen.route) {
-            InquiryScreen()
+            InquiryScreen(
+                navController = navController,
+            )
         }
         composable(route = Screens.MyInquiresScreen.route) {
             MyInquiresScreen()
