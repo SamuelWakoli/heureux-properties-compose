@@ -4,6 +4,7 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.RateReview
+import androidx.compose.material.icons.outlined.Sell
 import androidx.compose.material.icons.outlined.SupportAgent
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -60,13 +62,15 @@ fun MoreScreen(
 
     val scrollState = rememberScrollState()
     Column(
+        modifier = Modifier
+        .nestedScroll(connection = scrollBehavior.nestedScrollConnection)
+        .verticalScroll(state = scrollState)
+        .padding(horizontal = 8.dp)
+        .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
             modifier = Modifier
-                .nestedScroll(connection = scrollBehavior.nestedScrollConnection)
-                .verticalScroll(state = scrollState)
-                .padding(horizontal = 8.dp)
                 .fillMaxHeight()
                 .widthIn(max = 600.dp),
             verticalArrangement = Arrangement.Center,
@@ -94,6 +98,19 @@ fun MoreScreen(
                 },
                 onClick = {
                     mainNavController.navigate(Screens.NotificationsScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Sell, contentDescription = null)
+                },
+                headlineContent = {
+                    Text(text = "Sell with us")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.AddPropertyScreen.route) {
                         launchSingleTop = true
                     }
                 }

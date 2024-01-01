@@ -107,7 +107,7 @@ fun NavGraph(
             SoldPropertiesScreen(navController = navController)
         }
         composable(route = Screens.AddPropertyScreen.route) {
-            AddPropertyScreen()
+            AddPropertyScreen(navController = navController)
         }
         composable(route = Screens.EditPropertyScreen.route) {
             EditPropertyScreen()
