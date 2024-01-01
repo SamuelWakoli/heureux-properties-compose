@@ -33,6 +33,7 @@ import com.heureux.properties.ui.presentation.navigation.Screens
 @Composable
 fun UserListingItem(
     navController: NavController,
+    onClickDelete: () -> Unit = {},
 ) {
     Card(
         modifier = Modifier
@@ -44,8 +45,8 @@ fun UserListingItem(
         Column {
             CoilImage(
                 modifier = Modifier.heightIn(
-                        min = 160.dp, max = 220.dp
-                    )
+                    min = 160.dp, max = 220.dp
+                )
             )
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -70,7 +71,10 @@ fun UserListingItem(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        onClickDelete()
+                        /*TODO*/
+                    }) {
                         Icon(
                             imageVector = Icons.Outlined.Delete,
                             contentDescription = "Delete",

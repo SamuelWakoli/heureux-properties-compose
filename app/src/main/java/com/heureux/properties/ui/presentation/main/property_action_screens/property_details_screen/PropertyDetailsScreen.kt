@@ -100,7 +100,7 @@ fun PropertyDetailsScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 4.dp)
                     ) {
-                        items(20) {
+                        items(6) {
                             DetailsImageListItem(
                             )
                         }

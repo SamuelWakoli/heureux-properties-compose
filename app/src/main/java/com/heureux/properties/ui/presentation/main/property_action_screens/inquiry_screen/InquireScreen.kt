@@ -134,7 +134,7 @@ fun InquiryScreen(
                 PaymentMethodItem(label = "Full payment", currentValue = "Full payment") {
 
                 }
-                PaymentMethodItem(label = "Hire purchase", currentValue = "Full payment") {
+                PaymentMethodItem(label = "Mortgage", currentValue = "Full payment") {
 
                 }
                 PaymentMethodItem(label = "Bank finance", currentValue = "Full payment") {
