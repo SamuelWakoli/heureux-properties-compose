@@ -10,7 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DoneAll
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -66,30 +70,32 @@ fun EditProfileScreen(
     val userData = editProfileScreenViewModel.userProfileData.collectAsState().value
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
-
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(navigationIcon = {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
-                )
-            }
-        }, title = {
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Edit,
-                    contentDescription = null,
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "Edit Profile")
-            }
-        }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            titleContentColor = MaterialTheme.colorScheme.primary
-        )
+        CenterAlignedTopAppBar(
+            scrollBehavior = scrollBehavior,
+            navigationIcon = {
+                IconButton(onClick = { navController.navigateUp() }) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
+                    )
+                }
+            }, title = {
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Edit,
+                        contentDescription = null,
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = "Edit Profile")
+                }
+            }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                titleContentColor = MaterialTheme.colorScheme.primary
+            )
         )
     }) { paddingValues ->
 
@@ -113,165 +119,173 @@ fun EditProfileScreen(
         } else {
             Column(
                 modifier = Modifier
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
                     .fillMaxSize()
                     .padding(paddingValues)
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Spacer(modifier = Modifier.size(16.dp))
                 Column(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    modifier = Modifier.widthIn(max = 600.dp)
                 ) {
-
-                    if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
-                        CoilImage(
-                            modifier = Modifier.size(64.dp),
-                            imageUrl = userData.photoURL.toString(),
-                            applyCircleShape = true,
-                            errorContent = {
-                                Icon(
-                                    imageVector = Icons.Outlined.AccountCircle,
-                                    contentDescription = "Profile",
-                                    modifier = Modifier.size(256.dp)
-                                )
-                            },
-                        )
-                    } else {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
-                            contentDescription = "Profile image",
-                            modifier = Modifier.size(256.dp),
-                        )
-                    }
-                    TextButton(onClick = { /*TODO*/
-                        editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
-                    }) {
-                        Text(text = "Select Image")
-                    }
-                }
-
-
-                OutlinedTextField(
-                    value = uiState.userName,
-                    onValueChange = { newName ->
-                        editProfileScreenViewModel.updateUserName(newName)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    label = {
-                        Text(text = "Name")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
-                            contentDescription = null,
-                        )
-                    },
-                    supportingText = {
-                        if (uiState.userNameError) Text(text = "Name cannot be empty")
-                    },
-                    isError = uiState.userNameError,
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next,
-                    ),
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                OutlinedTextField(
-                    value = uiState.phoneNumber,
-                    onValueChange = { newPhoneNumber ->
-                        editProfileScreenViewModel.updatePhoneNumber(newPhoneNumber)
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    label = {
-                        Text(text = "Phone")
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Outlined.Phone,
-                            contentDescription = null,
-                        )
-                    },
-                    supportingText = {
-                        if (uiState.phoneNumberError) Text(text = "Phone cannot be empty")
-                    },
-                    isError = uiState.phoneNumberError,
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Words,
-                        autoCorrect = false,
-                        keyboardType = KeyboardType.Phone,
-                        imeAction = ImeAction.Done,
-                    ),
-                    singleLine = true,
-                    shape = MaterialTheme.shapes.medium,
-                )
-
-
-                Spacer(modifier = Modifier.size(8.dp))
-
-
-                ElevatedButton(
-                    onClick = {
-                        keyboardController?.hide()
-                        editProfileScreenViewModel.updateProfile(
-                            onSuccess = {
-                                Toast.makeText(
-                                    context,
-                                    "Profile updated successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                navController.navigateUp()
-                            },
-                            onFailure = {
-                                Toast.makeText(
-                                    context,
-                                    "Failed to update profile",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        )
-                    }, modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 8.dp)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Column(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
                     ) {
 
-                        Text(
-                            text = "Save", style = MaterialTheme.typography.titleMedium,
-                            modifier = Modifier.weight(9f),
-                            textAlign = TextAlign.Center,
-                        )
-
-                        if (uiState.isSaving) {
-                            Spacer(modifier = Modifier.width(12.dp))
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(20.dp),
-                                color = MaterialTheme.colorScheme.primary,
-                                strokeWidth = 2.dp,
+                        if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
+                            CoilImage(
+                                modifier = Modifier.size(64.dp),
+                                imageUrl = userData.photoURL.toString(),
+                                applyCircleShape = true,
+                                errorContent = {
+                                    Icon(
+                                        imageVector = Icons.Outlined.AccountCircle,
+                                        contentDescription = "Profile",
+                                        modifier = Modifier.size(256.dp)
+                                    )
+                                },
                             )
                         } else {
                             Icon(
-                                imageVector = Icons.Default.DoneAll,
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .size(18.dp)
-                                    .weight(1f)
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "Profile image",
+                                modifier = Modifier.size(256.dp),
                             )
                         }
+                        TextButton(onClick = { /*TODO*/
+                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
+                        }) {
+                            Text(text = "Select Image")
+                        }
                     }
-                }
 
+
+                    OutlinedTextField(
+                        value = uiState.userName,
+                        onValueChange = { newName ->
+                            editProfileScreenViewModel.updateUserName(newName)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        label = {
+                            Text(text = "Name")
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = null,
+                            )
+                        },
+                        supportingText = {
+                            if (uiState.userNameError) Text(text = "Name cannot be empty")
+                        },
+                        isError = uiState.userNameError,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Text,
+                            imeAction = ImeAction.Next,
+                        ),
+                        singleLine = true,
+                        shape = MaterialTheme.shapes.medium,
+                    )
+                    Spacer(modifier = Modifier.size(8.dp))
+                    OutlinedTextField(
+                        value = uiState.phoneNumber,
+                        onValueChange = { newPhoneNumber ->
+                            editProfileScreenViewModel.updatePhoneNumber(newPhoneNumber)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        label = {
+                            Text(text = "Phone")
+                        },
+                        leadingIcon = {
+                            Icon(
+                                imageVector = Icons.Outlined.Phone,
+                                contentDescription = null,
+                            )
+                        },
+                        supportingText = {
+                            if (uiState.phoneNumberError) Text(text = "Phone cannot be empty")
+                        },
+                        isError = uiState.phoneNumberError,
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Words,
+                            autoCorrect = false,
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Done,
+                        ),
+                        singleLine = true,
+                        shape = MaterialTheme.shapes.medium,
+                    )
+
+
+                    Spacer(modifier = Modifier.size(8.dp))
+
+
+                    ElevatedButton(
+                        onClick = {
+                            keyboardController?.hide()
+                            editProfileScreenViewModel.updateProfile(
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        "Profile updated successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.navigateUp()
+                                },
+                                onFailure = {
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to update profile",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            )
+                        }, modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 8.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+
+                            Text(
+                                text = "Save", style = MaterialTheme.typography.titleMedium,
+                                modifier = Modifier.weight(9f),
+                                textAlign = TextAlign.Center,
+                            )
+
+                            if (uiState.isSaving) {
+                                Spacer(modifier = Modifier.width(12.dp))
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = MaterialTheme.colorScheme.primary,
+                                    strokeWidth = 2.dp,
+                                )
+                            } else {
+                                Icon(
+                                    imageVector = Icons.Default.DoneAll,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .size(18.dp)
+                                        .weight(1f)
+                                )
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.size(16.dp))
+                }
             }
         }
 
