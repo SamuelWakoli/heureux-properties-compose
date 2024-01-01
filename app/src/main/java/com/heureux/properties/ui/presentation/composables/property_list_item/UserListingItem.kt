@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -103,25 +102,6 @@ fun UserListingItem(
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
                                 Text(text = "Details")
-                            }
-                        }
-                        Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = {
-                            /*TODO*/
-                            navController.navigate(Screens.EditPropertyScreen.route) {
-                                launchSingleTop = true
-                            }
-                        }) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.EditNote, contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Edit")
                             }
                         }
                     }
