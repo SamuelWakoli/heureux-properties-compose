@@ -1,5 +1,7 @@
 package com.heureux.properties.ui.presentation.main.bottom_bar_destinations
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -61,12 +64,14 @@ fun MoreScreen(
         moreScreenViewModel.currentDynamicColorState.collectAsState(initial = false).value
 
     val scrollState = rememberScrollState()
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
-        .nestedScroll(connection = scrollBehavior.nestedScrollConnection)
-        .verticalScroll(state = scrollState)
-        .padding(horizontal = 8.dp)
-        .fillMaxSize(),
+            .nestedScroll(connection = scrollBehavior.nestedScrollConnection)
+            .verticalScroll(state = scrollState)
+            .padding(horizontal = 8.dp)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
@@ -182,6 +187,12 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Rate us")
+                },
+                onClick = {
+                    // intent used for testing purposes
+                    val intent =
+                        Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps"))
+                    context.startActivity(intent)
                 }
             )
             Divider()
