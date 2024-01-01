@@ -21,7 +21,6 @@ import com.heureux.properties.ui.presentation.main.notifications_screen.Notifica
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.AddPropertyScreen
-import com.heureux.properties.ui.presentation.main.property_action_screens.EditPropertyScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
@@ -108,9 +107,6 @@ fun NavGraph(
         }
         composable(route = Screens.AddPropertyScreen.route) {
             AddPropertyScreen(navController = navController)
-        }
-        composable(route = Screens.EditPropertyScreen.route) {
-            EditPropertyScreen()
         }
         composable(route = Screens.PropertyDetailsScreen.route) {
             PropertyDetailsScreen(

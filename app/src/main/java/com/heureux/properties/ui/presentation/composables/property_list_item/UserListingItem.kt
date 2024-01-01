@@ -10,12 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -69,60 +66,25 @@ fun UserListingItem(
                 )
                 Row(
                     modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconButton(onClick = {
-                        onClickDelete()
+                    TextButton(onClick = {
                         /*TODO*/
-                    }) {
-                        Icon(
-                            imageVector = Icons.Outlined.Delete,
-                            contentDescription = "Delete",
-                            modifier = Modifier.size(26.dp),
-                            tint = MaterialTheme.colorScheme.error
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        TextButton(onClick = {
-                            /*TODO*/
-                            navController.navigate(Screens.PropertyDetailsScreen.route) {
-                                launchSingleTop = true
-                            }
-                        }) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
-
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Info, contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Details")
-                            }
+                        navController.navigate(Screens.PropertyDetailsScreen.route) {
+                            launchSingleTop = true
                         }
-                        Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = {
-                            /*TODO*/
-                            navController.navigate(Screens.EditPropertyScreen.route) {
-                                launchSingleTop = true
-                            }
-                        }) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
+                    }) {
+                        Row(
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically,
 
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.EditNote, contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Edit")
-                            }
+                            ) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info, contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.size(8.dp))
+                            Text(text = "Details")
                         }
                     }
                 }
