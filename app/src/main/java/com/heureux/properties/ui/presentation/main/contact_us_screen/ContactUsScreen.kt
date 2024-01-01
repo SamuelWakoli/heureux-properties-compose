@@ -99,8 +99,8 @@ fun ContactUsScreen(
                     },
                 )
                 ContactListItem(
-                    title = "Phone",
-                    description = "+25412345678",
+                    title = "Call us",
+                    description = "+254797228948",
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Phone, contentDescription = null)
                     },
@@ -111,7 +111,7 @@ fun ContactUsScreen(
                 )
                 ContactListItem(
                     title = "WhatsApp",
-                    description = "+25412345678",
+                    description = "+254797228948",
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Whatsapp, contentDescription = null)
                     },

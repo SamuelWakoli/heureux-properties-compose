@@ -19,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -144,7 +145,12 @@ fun MainScreenAppbar(
                                 mainNavController.navigate(Screens.ContactUsScreen.route) {
                                     launchSingleTop = true
                                 }
-                            })
+                            },
+                            colors = MenuDefaults.itemColors(
+                                leadingIconColor = MaterialTheme.colorScheme.primary,
+                                textColor = MaterialTheme.colorScheme.primary,
+                            )
+                        )
                         DropdownMenuItem(
                             leadingIcon = {
                                 Icon(
@@ -157,12 +163,17 @@ fun MainScreenAppbar(
                                 mainNavController.navigate(Screens.FeedbackScreen.route) {
                                     launchSingleTop = true
                                 }
-                            })
+                            },
+                            colors = MenuDefaults.itemColors(
+                                leadingIconColor = MaterialTheme.colorScheme.primary,
+                                textColor = MaterialTheme.colorScheme.primary,
+                            )
+                        )
 
                     },
                 )
             }
-        }
+        },
     )
 }
 
