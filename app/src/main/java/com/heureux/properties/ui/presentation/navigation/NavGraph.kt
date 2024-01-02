@@ -114,12 +114,10 @@ fun NavGraph(
             )
         }
         composable(route = Screens.InquiryScreen.route) {
-            InquiryScreen(
-                navController = navController,
-            )
+            InquiryScreen(navController = navController,)
         }
         composable(route = Screens.MyInquiresScreen.route) {
-            MyInquiresScreen()
+            MyInquiresScreen(navController = navController)
         }
         composable(route = Screens.NotificationsScreen.route) {
             NotificationsScreen()
