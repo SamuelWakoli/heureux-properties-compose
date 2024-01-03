@@ -10,11 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Business
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -44,14 +46,19 @@ fun NotificationsScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 navigationIcon = {
-                    navController.navigateUp()
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Navigate back"
+                        )
+                    }
                 },
                 title = {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Icon(imageVector = Icons.Outlined.Notifications, contentDescription = null)
-                        Spacer(modifier = Modifier.size(16.dp))
+                        Spacer(modifier = Modifier.size(8.dp))
                         Text(text = "Notifications")
                     }
                 },
@@ -74,14 +81,14 @@ fun NotificationsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Business,
+                        imageVector = Icons.Outlined.NotificationsOff,
                         contentDescription = null,
                         modifier = Modifier.size(128.dp),
                         tint = MaterialTheme.colorScheme.primary,
                     )
                     Spacer(modifier = Modifier.size(16.dp))
                     Text(
-                        text = "No Properties Found",
+                        text = "You have no notifications",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.primary,
                     )
