@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -45,6 +46,8 @@ fun MyListingsScreen(
 ) {
 
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var isItemsEmpty by remember { mutableStateOf(false) }
+
 
     Scaffold(
         floatingActionButton = {
@@ -68,19 +71,39 @@ fun MyListingsScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            LazyColumn(
-                Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                items(20) {
-                    UserListingItem(
-                        navController = navController,
-                        onClickDelete = { showDeleteDialog = true },
+
+            if (!isItemsEmpty) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.ListAlt,
+                        contentDescription = null,
+                        modifier = Modifier.size(128.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(
+                        text = "Click \"+\" button to sell your property",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary,
                     )
                 }
-                item {
-                    Spacer(modifier = Modifier.size(96.dp))
+            } else {
+                LazyColumn(
+                    Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    items(20) {
+                        UserListingItem(
+                            navController = navController,
+                            onClickDelete = { showDeleteDialog = true },
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.size(96.dp))
+                    }
                 }
             }
         }
