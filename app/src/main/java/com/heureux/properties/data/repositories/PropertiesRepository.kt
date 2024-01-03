@@ -1,6 +1,5 @@
 package com.heureux.properties.data.repositories
 
-import com.google.firebase.firestore.FirebaseFirestore
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
@@ -8,9 +7,6 @@ import com.heureux.properties.data.types.PaymentItem
 import kotlinx.coroutines.flow.Flow
 
 interface PropertiesRepository {
-
-    val firestore: FirebaseFirestore
-
 
     fun getHomeProperties(
         onFailure: (exception: Exception) -> Unit,
