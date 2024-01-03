@@ -1,5 +1,6 @@
-package com.heureux.properties.ui.presentation.main.my_inquires_screen
+package com.heureux.properties.ui.presentation.main.inquires_screen
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -35,6 +40,8 @@ fun MyInquiresScreen(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    var isItemsEmpty by remember { mutableStateOf(false) }
+
 
     Scaffold(
         topBar = {
@@ -56,7 +63,7 @@ fun MyInquiresScreen(
                     ) {
                         Icon(imageVector = Icons.Outlined.Cases, contentDescription = null)
                         Spacer(modifier = Modifier.size(8.dp))
-                        Text(text = "My inquires")
+                        Text(text = "My Inquiries")
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -72,11 +79,32 @@ fun MyInquiresScreen(
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            LazyColumn(
-                modifier = Modifier.widthIn(max = 600.dp)
-            ) {
-                items(30){
-                    MyInquiresListItem()
+            if (!isItemsEmpty) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Cases,
+                        contentDescription = null,
+                        modifier = Modifier.size(128.dp),
+                        tint = MaterialTheme.colorScheme.primary,
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(
+                        text = "No Inquiries Found",
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.widthIn(max = 600.dp)
+                ) {
+                    items(30){
+                        InquiriesListItem()
+                    }
                 }
             }
         }

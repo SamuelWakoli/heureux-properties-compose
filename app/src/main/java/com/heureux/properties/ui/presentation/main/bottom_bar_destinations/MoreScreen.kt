@@ -125,7 +125,7 @@ fun MoreScreen(
                     Icon(imageVector = Icons.Outlined.Cases, contentDescription = null)
                 },
                 headlineContent = {
-                    Text(text = "My inquires")
+                    Text(text = "My inquiries")
                 },
                 onClick = {
                     mainNavController.navigate(Screens.MyInquiresScreen.route) {

@@ -14,8 +14,8 @@ import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfi
 import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
 import com.heureux.properties.ui.presentation.main.filter_results_screen.FilterResultsScreen
 import com.heureux.properties.ui.presentation.main.filter_screen.FilterScreen
+import com.heureux.properties.ui.presentation.main.inquires_screen.MyInquiresScreen
 import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
-import com.heureux.properties.ui.presentation.main.my_inquires_screen.MyInquiresScreen
 import com.heureux.properties.ui.presentation.main.my_properties_screen.MyPropertiesScreen
 import com.heureux.properties.ui.presentation.main.notifications_screen.NotificationsScreen
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen

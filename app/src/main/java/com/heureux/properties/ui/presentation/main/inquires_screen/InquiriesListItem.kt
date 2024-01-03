@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.main.my_inquires_screen
+package com.heureux.properties.ui.presentation.main.inquires_screen
 
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun MyInquiresListItem() {
+fun InquiriesListItem() {
     ListItem(
         overlineContent = {
             Text(text = "12:30 pm     02/01/2024")
@@ -23,5 +23,5 @@ fun MyInquiresListItem() {
 @Preview
 @Composable
 private fun MyInquiresListItemPreview() {
-    MyInquiresListItem()
+    InquiriesListItem()
 }
