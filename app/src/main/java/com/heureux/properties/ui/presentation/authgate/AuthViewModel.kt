@@ -1,9 +1,8 @@
-package com.heureux.properties.ui.presentation.viewmodels
+package com.heureux.properties.ui.presentation.authgate
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.heureux.properties.data.repositories.ProfileRepository
-import com.heureux.properties.ui.presentation.authgate.GoogleSignInResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

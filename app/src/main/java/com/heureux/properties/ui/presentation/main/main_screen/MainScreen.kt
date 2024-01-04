@@ -21,8 +21,8 @@ import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.HomeS
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MoreScreen
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MyListingsScreen
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +73,7 @@ fun MainScreen(
             composable(route = Screens.MoreScreen.route) {
                 MoreScreen(
                     scrollBehavior = scrollBehavior,
-                    moreScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
                     mainNavController = navController,
                 )
             }

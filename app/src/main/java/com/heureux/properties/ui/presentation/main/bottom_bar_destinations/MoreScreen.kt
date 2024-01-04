@@ -41,27 +41,26 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.bottom_sheet.DynamicThemeBottomSheet
 import com.heureux.properties.ui.presentation.composables.dialogs.ThemeSelectionDialog
 import com.heureux.properties.ui.presentation.composables.more_screen_list_item.MoreScreenListItem
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.MoreScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreScreen(
     scrollBehavior: TopAppBarScrollBehavior,
-    moreScreenViewModel: MoreScreenViewModel,
+    viewModel: MoreScreenViewModel,
     mainNavController: NavController,
 ) {
 
-    val uiState = moreScreenViewModel.uiState.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
 
     val currentThemeData =
-        moreScreenViewModel.currentThemeData.collectAsState(initial = "Light").value
+        viewModel.currentThemeData.collectAsState(initial = "Light").value
     val dynamicColorState =
-        moreScreenViewModel.currentDynamicColorState.collectAsState(initial = false).value
+        viewModel.currentDynamicColorState.collectAsState(initial = false).value
 
     val scrollState = rememberScrollState()
     val context = LocalContext.current
@@ -211,7 +210,7 @@ fun MoreScreen(
                     Text(text = currentThemeData)
                 },
                 onClick = {
-                    moreScreenViewModel.hideOrShowThemeDialog()
+                    viewModel.hideOrShowThemeDialog()
                 }
             )
             MoreScreenListItem(
@@ -225,7 +224,7 @@ fun MoreScreen(
                     Text(text = if (dynamicColorState) "Enabled" else "Disabled")
                 },
                 onClick = {
-                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
+                    viewModel.hideOrShowDynamicThemeBottomSheet()
                 }
             )
         }
@@ -234,16 +233,16 @@ fun MoreScreen(
             ThemeSelectionDialog(
                 currentTheme = currentThemeData,
                 onDismissRequest = { newThemeData ->
-                    moreScreenViewModel.hideOrShowThemeDialog()
-                    moreScreenViewModel.updateThemeData(newThemeData)
+                    viewModel.hideOrShowThemeDialog()
+                    viewModel.updateThemeData(newThemeData)
                 })
 
         if (uiState.showDynamicThemeBottomSheet)
             DynamicThemeBottomSheet(
                 currentState = dynamicColorState,
                 onDismissRequest = { boolean ->
-                    moreScreenViewModel.updateDynamicTheme(boolean)
-                    moreScreenViewModel.hideOrShowDynamicThemeBottomSheet()
+                    viewModel.updateDynamicTheme(boolean)
+                    viewModel.hideOrShowDynamicThemeBottomSheet()
                 }
             )
     }
@@ -256,7 +255,7 @@ private fun MoreScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     MoreScreen(
         scrollBehavior = scrollBehavior,
-        moreScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        viewModel = viewModel(factory = AppViewModelProvider.Factory),
         mainNavController = rememberNavController()
     )
 }

@@ -21,9 +21,9 @@ import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.UserPreferencesRepository
 import com.heureux.properties.ui.presentation.authgate.GoogleAuthUiClient
 import com.heureux.properties.ui.presentation.navigation.NavGraph
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.authgate.AuthViewModel
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 import com.heureux.properties.ui.theme.HeureuxPropertiesTheme
 import kotlinx.coroutines.launch
 

@@ -56,8 +56,7 @@ import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
 import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
+import com.heureux.properties.ui.AppViewModelProvider
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable

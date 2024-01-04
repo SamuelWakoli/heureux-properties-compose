@@ -49,8 +49,7 @@ import com.heureux.properties.ui.presentation.composables.dialogs.DeleteProfileD
 import com.heureux.properties.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.ProfileScreenViewModel
+import com.heureux.properties.ui.AppViewModelProvider
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)

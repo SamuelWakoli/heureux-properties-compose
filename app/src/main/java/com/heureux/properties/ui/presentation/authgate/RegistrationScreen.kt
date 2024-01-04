@@ -54,8 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.presentation.composables.buttons.GoogleSignInButton
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
+import com.heureux.properties.ui.AppViewModelProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.viewmodels
+package com.heureux.properties.ui.presentation.main.bottom_bar_destinations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

@@ -24,9 +24,9 @@ import com.heureux.properties.ui.presentation.main.property_action_screens.AddPr
 import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
-import com.heureux.properties.ui.presentation.viewmodels.AppViewModelProvider
-import com.heureux.properties.ui.presentation.viewmodels.AuthViewModel
-import com.heureux.properties.ui.presentation.viewmodels.MainScreenViewModel
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.authgate.AuthViewModel
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 
 @Composable
 fun NavGraph(

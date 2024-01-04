@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.viewmodels
+package com.heureux.properties.ui.presentation.main.profile_screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +27,9 @@ class ProfileScreenViewModel(val profileRepository: ProfileRepository) : ViewMod
         Firebase.auth.currentUser
     }
 
-    private var _uiState: MutableStateFlow<ProfileScreenUiState> = MutableStateFlow(ProfileScreenUiState())
+    private var _uiState: MutableStateFlow<ProfileScreenUiState> = MutableStateFlow(
+        ProfileScreenUiState()
+    )
     val uiState: StateFlow<ProfileScreenUiState> = _uiState.asStateFlow()
 
     val userProfileData by lazy {
