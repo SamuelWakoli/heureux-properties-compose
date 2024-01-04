@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface PropertiesDataSource {
     val firestore: FirebaseFirestore
 
+    /// READING DATA
 
     fun getHomeProperties(
         onFailure: (exception: Exception) -> Unit,
@@ -60,5 +61,15 @@ interface PropertiesDataSource {
     fun getPropertyItem(
         propertyId: String,
     ): Flow<HeureuxProperty>
+
+
+    /// WRITING DATA
+
+    suspend fun submitInquiry(
+        inquiryItem: InquiryItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
+
 
 }

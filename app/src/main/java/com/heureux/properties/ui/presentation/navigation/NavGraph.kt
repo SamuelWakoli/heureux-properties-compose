@@ -5,10 +5,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.authgate.AuthViewModel
 import com.heureux.properties.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactUsScreen
 import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfileScreen
 import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
@@ -24,9 +27,6 @@ import com.heureux.properties.ui.presentation.main.property_action_screens.AddPr
 import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
-import com.heureux.properties.ui.AppViewModelProvider
-import com.heureux.properties.ui.presentation.authgate.AuthViewModel
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 
 @Composable
 fun NavGraph(
@@ -42,18 +42,14 @@ fun NavGraph(
         startDestination = if (currentUserSignedIn) Screens.MainScreen.route else Screens.SignInScreen.route
     ) {
         composable(route = Screens.SignInScreen.route) {
-            SignInScreen(
-                navController = navController,
+            SignInScreen(navController = navController,
                 viewModel = authViewModel,
-                onSignInWithGoogle = { onSignInWithGoogle() }
-            )
+                onSignInWithGoogle = { onSignInWithGoogle() })
         }
         composable(route = Screens.RegistrationScreen.route) {
-            RegistrationScreen(
-                navController = navController,
+            RegistrationScreen(navController = navController,
                 viewModel = authViewModel,
-                onSignInWithGoogle = { onSignInWithGoogle() }
-            )
+                onSignInWithGoogle = { onSignInWithGoogle() })
         }
         composable(route = Screens.ForgotPasswordScreen.route) {
             ForgotPasswordScreen(
@@ -110,11 +106,11 @@ fun NavGraph(
         }
         composable(route = Screens.PropertyDetailsScreen.route) {
             PropertyDetailsScreen(
-                navController = navController
+                navController = navController, viewModel = mainScreenViewModel
             )
         }
         composable(route = Screens.InquiryScreen.route) {
-            InquiryScreen(navController = navController,)
+            InquiryScreen(navController = navController, viewModel = mainScreenViewModel)
         }
         composable(route = Screens.MyInquiresScreen.route) {
             MyInquiresScreen(navController = navController)

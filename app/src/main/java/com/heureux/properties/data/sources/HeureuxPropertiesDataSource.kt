@@ -18,6 +18,8 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
 
+    /// READING DATA
+
     override fun getHomeProperties(
         onFailure: (exception: Exception) -> Unit,
     ): Flow<List<HeureuxProperty>> = callbackFlow {
@@ -234,5 +236,33 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
             }
 
         awaitClose { snapshotListener.remove() }
+    }
+
+
+    /// WRITING DATA
+
+    override suspend fun submitInquiry(
+        inquiryItem: InquiryItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        val data = hashMapOf(
+            "id" to inquiryItem.id,
+            "time" to inquiryItem.time,
+            "propertyId" to inquiryItem.propertyId,
+            "senderId" to inquiryItem.senderId,
+            "offerAmount" to inquiryItem.offerAmount,
+            "preferredPaymentMethod" to inquiryItem.preferredPaymentMethod,
+            "phoneNumber" to inquiryItem.phoneNumber,
+        )
+
+        firestore.collection(FirebaseDirectories.InquiresCollection.name).document(inquiryItem.id)
+            .set(
+                data
+            ).addOnSuccessListener {
+                onSuccessListener()
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
+            }
     }
 }

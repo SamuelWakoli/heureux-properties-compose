@@ -58,4 +58,11 @@ interface PropertiesRepository {
     fun getPropertyItem(
         propertyId: String,
     ): Flow<HeureuxProperty>
+
+
+    suspend fun submitInquiry(
+        inquiryItem: InquiryItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
 }

@@ -5,4 +5,7 @@ data class InquiryItem(
     val time: String,
     val propertyId: String,
     val senderId: String,
+    val offerAmount: String,
+    val preferredPaymentMethod: String,
+    val phoneNumber: String,
 )

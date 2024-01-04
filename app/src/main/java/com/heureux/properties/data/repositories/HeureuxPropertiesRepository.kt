@@ -7,7 +7,8 @@ import com.heureux.properties.data.types.NotificationItem
 import com.heureux.properties.data.types.PaymentItem
 import kotlinx.coroutines.flow.Flow
 
-class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) : PropertiesRepository {
+class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) :
+    PropertiesRepository {
 
     override fun getHomeProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>> =
         dataSource.getHomeProperties(onFailure = onFailure)
@@ -63,4 +64,13 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
 
     override fun getPropertyItem(propertyId: String): Flow<HeureuxProperty> =
         dataSource.getPropertyItem(propertyId)
+
+
+    override suspend fun submitInquiry(
+        inquiryItem: InquiryItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) = dataSource.submitInquiry(
+        inquiryItem, onSuccessListener, onFailure
+    )
 }
