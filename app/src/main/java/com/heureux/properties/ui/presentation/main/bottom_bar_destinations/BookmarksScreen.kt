@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Bookmarks
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,17 +17,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.PropertyListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,10 +34,11 @@ import com.heureux.properties.ui.presentation.composables.property_list_item.Pro
 fun BookmarksScreen(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
+    viewModel: MainScreenViewModel,
 ) {
 
+    val bookmarksList = viewModel.bookmarksList.collectAsState().value
 
-    var isItemsEmpty by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -45,7 +47,14 @@ fun BookmarksScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (!isItemsEmpty) {
+        if (bookmarksList == null) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(48.dp),
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                trackColor = MaterialTheme.colorScheme.primaryContainer,
+                strokeWidth = 2.dp
+            )
+        } else if (bookmarksList.isEmpty()) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -68,7 +77,7 @@ fun BookmarksScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(20) {
+                items(bookmarksList) {
                     PropertyListItem(navController = navController)
                 }
             }
@@ -83,6 +92,7 @@ private fun BookmarksScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     BookmarksScreen(
         navController = rememberNavController(),
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory),
     )
 }

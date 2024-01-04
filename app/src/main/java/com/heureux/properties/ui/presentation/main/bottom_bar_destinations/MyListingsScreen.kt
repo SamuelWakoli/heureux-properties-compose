@@ -9,10 +9,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.ListAlt
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -23,6 +25,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,8 +36,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.UserListingItem
 import com.heureux.properties.ui.presentation.navigation.Screens
 
@@ -43,11 +48,12 @@ import com.heureux.properties.ui.presentation.navigation.Screens
 fun MyListingsScreen(
     navController: NavController,
     scrollBehavior: TopAppBarScrollBehavior,
+    viewModel: MainScreenViewModel,
 ) {
 
     var showDeleteDialog by remember { mutableStateOf(false) }
-    var isItemsEmpty by remember { mutableStateOf(false) }
 
+    val userListings = viewModel.userListings.collectAsState().value
 
     Scaffold(
         floatingActionButton = {
@@ -72,7 +78,14 @@ fun MyListingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            if (!isItemsEmpty) {
+            if (userListings == null) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    trackColor = MaterialTheme.colorScheme.primaryContainer,
+                    strokeWidth = 2.dp
+                )
+            } else if (userListings.isEmpty()) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -95,7 +108,7 @@ fun MyListingsScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(20) {
+                    items(userListings) {
                         UserListingItem(
                             navController = navController,
                             onClickDelete = { showDeleteDialog = true },
@@ -153,6 +166,7 @@ private fun MyListingsScreenPreview() {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     MyListingsScreen(
         navController = rememberNavController(),
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }
