@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Cases
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -63,27 +65,6 @@ fun InquiryScreen(
     val uiState = viewModel.mainScreenUiState.collectAsState().value
     val userProfileData = viewModel.userProfileData.collectAsState().value
 
-    var offerAmount by rememberSaveable {
-        mutableStateOf("")
-    }
-    var offerAmountError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var paymentMethod by rememberSaveable {
-        mutableStateOf("Full payment")
-    }
-
-    var phoneNumber by rememberSaveable {
-        mutableStateOf(userProfileData?.phone ?: "")
-    }
-    var phoneNumberError by rememberSaveable {
-        mutableStateOf(false)
-    }
-
-    var errorMessage by rememberSaveable {
-        mutableStateOf("")
-    }
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
@@ -122,157 +103,190 @@ fun InquiryScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column(
-                Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Column(
-                    Modifier.widthIn(min = 400.dp, max = 600.dp),
-                ) {
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Price: Ksh. ${uiState.currentProperty?.price}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        text = uiState.currentProperty?.name ?: "",
-                        style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Make an offer",
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    OutlinedTextField(
-                        value = offerAmount,
-                        onValueChange = { value ->
-                            offerAmount = value
-                            offerAmountError = false
-                        },
-                        label = {
-                            Text(text = "Ksh.")
-                        },
-                        supportingText = {
-                            if (offerAmountError)
-                                Text(text = "Amount cannot be empty")
-                        },
-                        isError = offerAmountError,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (offerAmount.isEmpty()) offerAmountError = true
-                            }
-                        ),
-                        singleLine = true,
-                        shape = MaterialTheme.shapes.medium,
-                    )
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Select payment method",
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    RadioButtonListItem(
-                        label = "Full payment", currentValue = paymentMethod
-                    ) { value ->
-                        paymentMethod = value
-                    }
-                    RadioButtonListItem(label = "Mortgage", currentValue = paymentMethod) { value ->
-                        paymentMethod = value
-                    }
-                    RadioButtonListItem(
-                        label = "Bank finance", currentValue = paymentMethod
-                    ) { value ->
-                        paymentMethod = value
-                    }
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Divider()
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Text(
-                        text = "Contact",
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                    Spacer(modifier = Modifier.padding(4.dp))
-                    OutlinedTextField(
-                        value = phoneNumber,
-                        onValueChange = { value ->
-                            phoneNumber = value
-                            phoneNumberError = false
-                        },
-                        label = {
-                            Text(text = "Phone number")
-                        },
-                        supportingText = {
-                            if (phoneNumberError)
-                                Text(text = "Phone number cannot be empty")
-                        },
-                        isError = phoneNumberError,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done,
-                        ),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                if (phoneNumber.isEmpty()) phoneNumberError = true
-                            }
-                        ),
-                        singleLine = true,
-                        shape = MaterialTheme.shapes.medium,
-                    )
-                    Spacer(modifier = Modifier.padding(16.dp))
-                    if (errorMessage.isNotEmpty()) Text(
-                        text = errorMessage,
-                        color = MaterialTheme.colorScheme.error
-                    )
-                }
+            if (userProfileData == null) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    trackColor = MaterialTheme.colorScheme.primaryContainer,
+                    strokeWidth = 2.dp
+                )
             }
-            ElevatedButton(
-                onClick = {
-                    val time = LocalDate.now()
+            else {
 
-                    if (offerAmount.isEmpty()) {
-                        offerAmountError = true
-                    } else if (phoneNumber.isEmpty()) {
-                        phoneNumberError = true
-                    } else {
-                        viewModel.submitInquiry(
-                            inquiryItem = InquiryItem(
-                                id = time.toString(),
-                                time = time.toString(),
-                                propertyId = uiState.currentProperty?.id ?: "",
-                                senderId = userProfileData?.userEmail ?: "",
-                                offerAmount = offerAmount,
-                                preferredPaymentMethod = paymentMethod,
-                                phoneNumber = phoneNumber,
-                            ),
-                            onSuccess = {
-                                Toast.makeText(context, "Inquiry Submitted", Toast.LENGTH_SHORT)
-                                    .show()
+                var offerAmount by rememberSaveable {
+                    mutableStateOf("")
+                }
+                var offerAmountError by rememberSaveable {
+                    mutableStateOf(false)
+                }
+
+                var paymentMethod by rememberSaveable {
+                    mutableStateOf("Full payment")
+                }
+
+                var phoneNumber by rememberSaveable {
+                    mutableStateOf(userProfileData.phone ?: "")
+                }
+                var phoneNumberError by rememberSaveable {
+                    mutableStateOf(false)
+                }
+
+                var errorMessage by rememberSaveable {
+                    mutableStateOf("")
+                }
+
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                ) {
+                    Column(
+                        Modifier.widthIn(min = 400.dp, max = 600.dp),
+                    ) {
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Price: Ksh. ${uiState.currentProperty?.price}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = uiState.currentProperty?.name ?: "",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Divider()
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Make an offer",
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        OutlinedTextField(
+                            value = offerAmount,
+                            onValueChange = { value ->
+                                offerAmount = value
+                                offerAmountError = false
                             },
-                            onFailure = { exception: Exception ->
-                                errorMessage = "An error occurred: ${exception.message}"
-                            }
+                            label = {
+                                Text(text = "Ksh.")
+                            },
+                            supportingText = {
+                                if (offerAmountError)
+                                    Text(text = "Amount cannot be empty")
+                            },
+                            isError = offerAmountError,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done,
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    if (offerAmount.isEmpty()) offerAmountError = true
+                                }
+                            ),
+                            singleLine = true,
+                            shape = MaterialTheme.shapes.medium,
+                        )
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Divider()
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Select payment method",
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        RadioButtonListItem(
+                            label = "Full payment", currentValue = paymentMethod
+                        ) { value ->
+                            paymentMethod = value
+                        }
+                        RadioButtonListItem(label = "Mortgage", currentValue = paymentMethod) { value ->
+                            paymentMethod = value
+                        }
+                        RadioButtonListItem(
+                            label = "Bank finance", currentValue = paymentMethod
+                        ) { value ->
+                            paymentMethod = value
+                        }
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Divider()
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Text(
+                            text = "Contact",
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        OutlinedTextField(
+                            value = phoneNumber,
+                            onValueChange = { value ->
+                                phoneNumber = value
+                                phoneNumberError = false
+                            },
+                            label = {
+                                Text(text = "Phone number")
+                            },
+                            supportingText = {
+                                if (phoneNumberError)
+                                    Text(text = "Phone number cannot be empty")
+                            },
+                            isError = phoneNumberError,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                                imeAction = ImeAction.Done,
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    if (phoneNumber.isEmpty()) phoneNumberError = true
+                                }
+                            ),
+                            singleLine = true,
+                            shape = MaterialTheme.shapes.medium,
+                        )
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        if (errorMessage.isNotEmpty()) Text(
+                            text = errorMessage,
+                            color = MaterialTheme.colorScheme.error
                         )
                     }
-                },
-                modifier = Modifier
-                    .padding(4.dp)
-                    .widthIn(min = 400.dp, max = 600.dp)
-            ) {
-                Text(text = "Submit", style = MaterialTheme.typography.titleMedium)
+                    ElevatedButton(
+                        onClick = {
+                            val time = LocalDate.now()
+
+                            if (offerAmount.isEmpty()) {
+                                offerAmountError = true
+                            } else if (phoneNumber.isEmpty()) {
+                                phoneNumberError = true
+                            } else {
+                                viewModel.submitInquiry(
+                                    inquiryItem = InquiryItem(
+                                        id = time.toString(),
+                                        time = time.toString(),
+                                        propertyId = uiState.currentProperty?.id ?: "",
+                                        senderId = userProfileData.userEmail ?: "",
+                                        offerAmount = offerAmount,
+                                        preferredPaymentMethod = paymentMethod,
+                                        phoneNumber = phoneNumber,
+                                    ),
+                                    onSuccess = {
+                                        Toast.makeText(context, "Inquiry Submitted", Toast.LENGTH_SHORT)
+                                            .show()
+                                    },
+                                    onFailure = { exception: Exception ->
+                                        errorMessage = "An error occurred: ${exception.message}"
+                                    }
+                                )
+                            }
+                        },
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .widthIn(min = 400.dp, max = 600.dp)
+                    ) {
+                        Text(text = "Submit", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
             }
         }
     }
