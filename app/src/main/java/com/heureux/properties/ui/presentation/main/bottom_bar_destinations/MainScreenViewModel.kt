@@ -8,12 +8,14 @@ import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.ProfileRepository
 import com.heureux.properties.data.repositories.PropertiesRepository
 import com.heureux.properties.data.types.HeureuxProperty
+import com.heureux.properties.data.types.InquiryItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 data class MainScreenUiState(
     val currentProperty: HeureuxProperty? = null,
@@ -80,5 +82,19 @@ class MainScreenViewModel(
 
     fun updateCurrentProperty(property: HeureuxProperty?) {
         _mainScreenUiState.update { it.copy(currentProperty = property) }
+    }
+
+    fun submitInquiry(
+        inquiryItem: InquiryItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        viewModelScope.launch {
+            propertiesRepository.submitInquiry(
+                inquiryItem = inquiryItem,
+                onSuccessListener = onSuccess,
+                onFailure = onFailure
+            )
+        }
     }
 }
