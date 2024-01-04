@@ -21,10 +21,14 @@ object AppViewModelProvider {
             MainScreenViewModel(
                 profileRepository = heureuxApp().container.profileRepository,
                 propertiesRepository = heureuxApp().container.propertiesRepository
+
             )
         }
         initializer {
-            ProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
+            ProfileScreenViewModel(
+                profileRepository = heureuxApp().container.profileRepository,
+                propertiesRepository = heureuxApp().container.propertiesRepository
+            )
         }
         initializer {
             EditProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)

@@ -6,6 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.ProfileRepository
+import com.heureux.properties.data.repositories.PropertiesRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,12 +20,19 @@ data class ProfileScreenUiState(
     val showDeleteProfileDialog: Boolean = false,
 )
 
-class ProfileScreenViewModel(val profileRepository: ProfileRepository) : ViewModel() {
+class ProfileScreenViewModel(
+    val profileRepository: ProfileRepository,
+    val propertiesRepository: PropertiesRepository,
+) : ViewModel() {
 
     // by lazy so as to buy time for current user to be fetched / configured
     // after authentication
     private val currentUser: FirebaseUser? by lazy {
         Firebase.auth.currentUser
+    }
+
+    companion object{
+        private const val TIMEOUT_MILLIS = 5_000L
     }
 
     private var _uiState: MutableStateFlow<ProfileScreenUiState> = MutableStateFlow(
@@ -38,7 +46,7 @@ class ProfileScreenViewModel(val profileRepository: ProfileRepository) : ViewMod
             onFailure = {}
         ).stateIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000L),
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
         )
     }
@@ -74,4 +82,25 @@ class ProfileScreenViewModel(val profileRepository: ProfileRepository) : ViewMod
             )
         }
     }
+
+    val userPurchasedProperties by lazy {
+        propertiesRepository.getMyProperties(
+            email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
+        ) { }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = null
+        )
+    }
+
+    val userSoldProperties by lazy {
+        propertiesRepository.getUserSoldProperties(
+            email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
+        ) { }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = null
+        )
+    }
+
 }
