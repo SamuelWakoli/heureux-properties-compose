@@ -31,7 +31,7 @@ import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
-fun PropertyListItem(navController: NavController) {
+fun PropertyListItem(navController: NavController, onUpdateCurrentProperty: () -> Unit) {
     Card(
         modifier = Modifier
             .padding(
@@ -85,7 +85,7 @@ fun PropertyListItem(navController: NavController) {
                     )
                     {
                         TextButton(onClick = {
-                            // TODO:
+                            onUpdateCurrentProperty()
                             navController.navigate(Screens.PropertyDetailsScreen.route) {
                                 launchSingleTop = true
                             }
@@ -104,7 +104,8 @@ fun PropertyListItem(navController: NavController) {
                             }
                         }
                         Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = { /*TODO*/
+                        TextButton(onClick = {
+                            onUpdateCurrentProperty()
                             navController.navigate(Screens.InquiryScreen.route) {
                                 launchSingleTop = true
                             }
@@ -137,6 +138,7 @@ fun PropertyListItem(navController: NavController) {
 @Composable
 private fun PropertyListItemPreview() {
     PropertyListItem(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        onUpdateCurrentProperty = {}
     )
 }

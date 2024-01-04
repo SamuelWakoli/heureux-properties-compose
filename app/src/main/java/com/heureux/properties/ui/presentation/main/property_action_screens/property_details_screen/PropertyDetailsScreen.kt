@@ -25,22 +25,28 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyDetailsScreen(
     navController: NavController,
+    viewModel: MainScreenViewModel,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val uiState = viewModel.mainScreenUiState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -108,19 +114,19 @@ fun PropertyDetailsScreen(
                     Spacer(modifier = Modifier.padding(8.dp))
                     Column(
                         Modifier.padding(horizontal = 8.dp)
-                    ){
+                    ) {
                         Text(
-                            text = "Price: Ksh. 2,000,000",
+                            text = "Price: Ksh. ${uiState.currentProperty?.price}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.primary,
                         )
                         Text(
-                            text = "Property Name",
+                            text = uiState.currentProperty?.name ?: "",
                             style = MaterialTheme.typography.titleLarge,
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                         Text(
-                            text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
+                            text = uiState.currentProperty?.description ?: "",
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                     }
@@ -159,6 +165,7 @@ fun PropertyDetailsScreen(
 @Composable
 private fun PropertyDetailsScreenPreview() {
     PropertyDetailsScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }

@@ -8,15 +8,26 @@ import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.ProfileRepository
 import com.heureux.properties.data.repositories.PropertiesRepository
 import com.heureux.properties.data.types.HeureuxProperty
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+
+data class MainScreenUiState(
+    val currentProperty: HeureuxProperty? = null,
+)
 
 class MainScreenViewModel(
     private val profileRepository: ProfileRepository,
     private val propertiesRepository: PropertiesRepository,
 ) :
     ViewModel() {
+
+    private var _mainScreenUiState: MutableStateFlow<MainScreenUiState> =
+        MutableStateFlow(MainScreenUiState())
+    val mainScreenUiState: StateFlow<MainScreenUiState> = _mainScreenUiState.asStateFlow()
 
     // by lazy so as to buy time for current user to be fetched / configured
     // after authentication
@@ -67,4 +78,7 @@ class MainScreenViewModel(
         initialValue = null
     )
 
+    fun updateCurrentProperty(property: HeureuxProperty?) {
+        _mainScreenUiState.update { it.copy(currentProperty = property) }
+    }
 }

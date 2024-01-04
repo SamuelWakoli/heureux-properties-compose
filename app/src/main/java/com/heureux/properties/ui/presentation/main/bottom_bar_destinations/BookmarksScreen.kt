@@ -77,8 +77,12 @@ fun BookmarksScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(bookmarksList) {
-                    PropertyListItem(navController = navController)
+                items(bookmarksList) { property ->
+                    PropertyListItem(navController = navController,
+                        onUpdateCurrentProperty = {
+                            viewModel.updateCurrentProperty(property)
+                        }
+                    )
                 }
             }
         }

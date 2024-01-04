@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -34,17 +35,22 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.buttons.RadioButtonListItem
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun InquiryScreen(
     navController: NavController,
+    viewModel: MainScreenViewModel,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val uiState = viewModel.mainScreenUiState.collectAsState().value
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(scrollBehavior = scrollBehavior, navigationIcon = {
@@ -86,19 +92,19 @@ fun InquiryScreen(
                     .verticalScroll(rememberScrollState())
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
+            ) {
                 Column(
                     Modifier
                         .widthIn(min = 400.dp, max = 600.dp),
                 ) {
                     Spacer(modifier = Modifier.padding(8.dp))
                     Text(
-                        text = "Price: Ksh. 2,000,000",
+                        text = "Price: Ksh. ${uiState.currentProperty?.price}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                     )
                     Text(
-                        text = "Property Name",
+                        text = uiState.currentProperty?.name ?: "",
                         style = MaterialTheme.typography.titleLarge,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
@@ -188,6 +194,7 @@ fun InquiryScreen(
 @Composable
 private fun InquiryScreenPreview() {
     InquiryScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }

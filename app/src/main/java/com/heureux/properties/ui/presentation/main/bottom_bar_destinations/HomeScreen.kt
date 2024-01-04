@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.PropertyListItem
 
@@ -76,9 +77,10 @@ fun HomeScreen(
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                items(items = propertiesList!!) {
+                items(items = propertiesList) { property: HeureuxProperty ->
                     PropertyListItem(
                         navController = navController,
+                        onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) }
                     )
                 }
             }
