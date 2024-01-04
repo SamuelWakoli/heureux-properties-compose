@@ -16,13 +16,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.BookmarksScreen
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.HomeScreen
+import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MoreScreen
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MyListingsScreen
 import com.heureux.properties.ui.presentation.navigation.Screens
-import com.heureux.properties.ui.AppViewModelProvider
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,17 +57,20 @@ fun MainScreen(
         ) {
             composable(route = Screens.HomeScreen.route) {
                 HomeScreen(
-                    navController = navController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior,
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
                 )
             }
             composable(route = Screens.BookmarksScreen.route) {
                 BookmarksScreen(
-                    navController = navController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior,
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory)
                 )
             }
             composable(route = Screens.MyListingsScreen.route) {
                 MyListingsScreen(
-                    navController = navController, scrollBehavior = scrollBehavior
+                    navController = navController, scrollBehavior = scrollBehavior,
+                    viewModel = viewModel(factory = AppViewModelProvider.Factory)
                 )
             }
             composable(route = Screens.MoreScreen.route) {
