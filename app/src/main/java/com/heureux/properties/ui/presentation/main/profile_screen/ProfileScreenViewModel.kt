@@ -103,4 +103,14 @@ class ProfileScreenViewModel(
         )
     }
 
+    val paymentHistory by lazy {
+        propertiesRepository.getPaymentHistory(
+            email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
+        ) { }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = null
+        )
+    }
+
 }

@@ -93,13 +93,22 @@ fun NavGraph(
             FeedbackScreen(navController = navController)
         }
         composable(route = Screens.MyPropertiesScreen.route) {
-            MyPropertiesScreen(navController = navController)
+            MyPropertiesScreen(
+                navController = navController,
+                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+            )
         }
         composable(route = Screens.PaymentHistoryScreen.route) {
-            PaymentHistoryScreen(navController = navController)
+            PaymentHistoryScreen(
+                navController = navController,
+                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+            )
         }
         composable(route = Screens.SoldPropertiesScreen.route) {
-            SoldPropertiesScreen(navController = navController)
+            SoldPropertiesScreen(
+                navController = navController,
+                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+            )
         }
         composable(route = Screens.AddPropertyScreen.route) {
             AddPropertyScreen(navController = navController)

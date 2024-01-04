@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -20,23 +21,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PaymentHistoryScreen(
     navController: NavController,
+    viewModel: ProfileScreenViewModel,
 ) {
-    var isItemsEmpty by remember { mutableStateOf(false) }
+
+    val paymentList = viewModel.paymentHistory.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -69,9 +72,24 @@ fun PaymentHistoryScreen(
         }
     ) { paddingValues ->
 
-        if (!isItemsEmpty) {
+        if (paymentList == null) {
             Column(
-                modifier = Modifier.padding(paddingValues).fillMaxSize(),
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(48.dp),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    trackColor = MaterialTheme.colorScheme.primaryContainer,
+                    strokeWidth = 2.dp
+                )
+            }
+        } else if (paymentList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {
@@ -107,6 +125,7 @@ fun PaymentHistoryScreen(
 @Composable
 private fun PaymentHistoryScreenPreview() {
     PaymentHistoryScreen(
-        navController = rememberNavController()
+        navController = rememberNavController(),
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }
