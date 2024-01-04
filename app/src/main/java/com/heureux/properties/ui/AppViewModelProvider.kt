@@ -18,7 +18,10 @@ object AppViewModelProvider {
             AuthViewModel(profileRepository = heureuxApp().container.profileRepository)
         }
         initializer {
-            MainScreenViewModel(profileRepository = heureuxApp().container.profileRepository, propertiesRepository = heureuxApp().container.propertiesRepository)
+            MainScreenViewModel(
+                profileRepository = heureuxApp().container.profileRepository,
+                propertiesRepository = heureuxApp().container.propertiesRepository
+            )
         }
         initializer {
             ProfileScreenViewModel(profileRepository = heureuxApp().container.profileRepository)
