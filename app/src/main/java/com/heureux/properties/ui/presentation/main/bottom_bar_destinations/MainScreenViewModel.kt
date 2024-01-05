@@ -111,4 +111,18 @@ class MainScreenViewModel(
             )
         }
     }
+
+    fun sendFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        viewModelScope.launch {
+            propertiesRepository.sendFeedback(
+                feedback = feedbackItem,
+                onSuccessListener = onSuccess,
+                onFailure = onFailure
+            )
+        }
+    }
 }

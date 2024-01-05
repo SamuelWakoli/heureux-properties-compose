@@ -90,7 +90,10 @@ fun NavGraph(
             FilterResultsScreen(navController = navController)
         }
         composable(route = Screens.FeedbackScreen.route) {
-            FeedbackScreen(navController = navController)
+            FeedbackScreen(
+                navController = navController,
+                viewModel = mainScreenViewModel
+            )
         }
         composable(route = Screens.MyPropertiesScreen.route) {
             MyPropertiesScreen(
