@@ -265,4 +265,32 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                 onFailure(exception)
             }
     }
+    override suspend fun updateBookmarkProperty(
+        email: String,
+        property: HeureuxProperty,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        try {
+            val userBookmarksRef = firestore.collection(FirebaseDirectories.UsersCollection.name)
+                .document(email)
+                .collection(FireStoreUserFields.BookmarksCollection.field)
+
+            // Check if the property is already in bookmarks
+            val existingDocument = userBookmarksRef.document(property.id).get().await()
+
+            if (!existingDocument.exists()) {
+
+                // Add the property to the bookmarks sub-collection
+                userBookmarksRef.document(property.id).set(property).await()
+            } else {
+                // Property is already bookmarked, remove it
+                userBookmarksRef.document(property.id).delete().await()
+            }
+
+        } catch (exception: Exception) {
+            onFailure(exception)
+        }
+    }
+
+
 }

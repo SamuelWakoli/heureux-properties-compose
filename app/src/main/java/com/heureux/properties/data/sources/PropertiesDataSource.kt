@@ -71,5 +71,10 @@ interface PropertiesDataSource {
         onFailure: (exception: Exception) -> Unit,
     )
 
+    suspend fun updateBookmarkProperty(
+        email: String,
+        property: HeureuxProperty,
+        onFailure: (exception: Exception) -> Unit,
+    )
 
 }
