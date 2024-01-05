@@ -51,7 +51,7 @@ import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.buttons.RadioButtonListItem
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -253,7 +253,7 @@ fun InquiryScreen(
                     }
                     ElevatedButton(
                         onClick = {
-                            val time = LocalDate.now()
+                            val time = LocalDateTime.now()
 
                             if (offerAmount.isEmpty()) {
                                 offerAmountError = true

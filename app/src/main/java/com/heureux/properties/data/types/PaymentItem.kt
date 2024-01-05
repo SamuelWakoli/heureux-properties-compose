@@ -8,6 +8,6 @@ data class PaymentItem(
     val totalPrice: String,
     val owingAmount: String,
     val paymentMethod: String,
-    val date: String,
+    val time: String,
     val approvedBy: String,
 )

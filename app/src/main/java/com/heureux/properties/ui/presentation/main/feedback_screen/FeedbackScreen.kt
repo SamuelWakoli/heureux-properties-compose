@@ -41,11 +41,12 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
-import java.time.LocalDate
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -143,7 +144,7 @@ fun FeedbackScreen(
                         viewModel.sendFeedback(
                             feedbackItem = FeedbackItem(
                                 message = feedbackText,
-                                time = LocalDate.now().toString(),
+                                time = LocalDateTime.now().toString(),
                                 senderEmail = userEmail ?: "anonymous",
                             ),
                             onSuccess = {
@@ -159,7 +160,7 @@ fun FeedbackScreen(
                 },
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .padding(16.dp)
+                    .padding(16.dp).widthIn(max = 600.dp)
             ) {
                 Row(
                     modifier = Modifier.widthIn(min = 400.dp, max = 600.dp),
@@ -170,6 +171,7 @@ fun FeedbackScreen(
                         text = "Send",
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
                     )
                     if (isSending) {
                         CircularProgressIndicator(
