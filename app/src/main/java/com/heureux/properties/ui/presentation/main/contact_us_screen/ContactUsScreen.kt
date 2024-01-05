@@ -1,5 +1,9 @@
 package com.heureux.properties.ui.presentation.main.contact_us_screen
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,6 +52,7 @@ fun ContactUsScreen(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val context = LocalContext.current
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
@@ -95,7 +101,15 @@ fun ContactUsScreen(
                         Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
                     },
                     onClick = {
-
+                        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:info@heureuxproperties.co.ke")
+                        }
+                        try {
+                            context.startActivity(emailIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if no email app is found
+                            Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+                        }
                     },
                 )
                 ContactListItem(
@@ -105,7 +119,15 @@ fun ContactUsScreen(
                         Icon(imageVector = Icons.Outlined.Phone, contentDescription = null)
                     },
                     onClick = {
-
+                        val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
+                            data = Uri.parse("tel:+254797228948")
+                        }
+                        try {
+                            context.startActivity(phoneIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if no phone app is found
+                            Toast.makeText(context, "No phone app found", Toast.LENGTH_SHORT).show()
+                        }
                     },
                     leadingIconColor = Color.Cyan
                 )
@@ -116,7 +138,16 @@ fun ContactUsScreen(
                         Icon(imageVector = Icons.Outlined.Whatsapp, contentDescription = null)
                     },
                     onClick = {
-
+                        val whatsAppIntent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://api.whatsapp.com/send?phone=+254797228948")
+                        }
+                        try {
+                            context.startActivity(whatsAppIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if WhatsApp is not installed
+                            Toast.makeText(context, "WhatsApp not installed", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     },
                     leadingIconColor = Color.Green
                 )
