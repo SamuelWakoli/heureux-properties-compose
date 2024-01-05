@@ -5,6 +5,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.FireStoreUserFields
 import com.heureux.properties.data.FirebaseDirectories
+import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
@@ -12,6 +13,7 @@ import com.heureux.properties.data.types.PaymentItem
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 
 class HeureuxPropertiesDataSource : PropertiesDataSource {
 
@@ -246,17 +248,29 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         onSuccessListener: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        val data = hashMapOf(
-            "id" to inquiryItem.id,
-            "time" to inquiryItem.time,
-            "propertyId" to inquiryItem.propertyId,
-            "senderId" to inquiryItem.senderId,
-            "offerAmount" to inquiryItem.offerAmount,
-            "preferredPaymentMethod" to inquiryItem.preferredPaymentMethod,
-            "phoneNumber" to inquiryItem.phoneNumber,
-        )
 
         firestore.collection(FirebaseDirectories.InquiresCollection.name).document(inquiryItem.id)
+            .set(
+                inquiryItem
+            ).addOnSuccessListener {
+                onSuccessListener()
+            }.addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
+
+    override suspend fun sendFeedback(
+        feedback: FeedbackItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        val data = hashMapOf(
+            "message" to feedback.message,
+            "time" to feedback.time,
+            "senderEmail" to feedback.senderEmail,
+        )
+
+        firestore.collection(FirebaseDirectories.FeedbacksCollection.name).document(feedback.time)
             .set(
                 data
             ).addOnSuccessListener {
@@ -265,6 +279,7 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                 onFailure(exception)
             }
     }
+
     override suspend fun updateBookmarkProperty(
         email: String,
         property: HeureuxProperty,

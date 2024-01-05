@@ -1,6 +1,7 @@
 package com.heureux.properties.data.sources
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
@@ -67,6 +68,12 @@ interface PropertiesDataSource {
 
     suspend fun submitInquiry(
         inquiryItem: InquiryItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
+
+    suspend fun sendFeedback(
+        feedback: FeedbackItem,
         onSuccessListener: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     )
