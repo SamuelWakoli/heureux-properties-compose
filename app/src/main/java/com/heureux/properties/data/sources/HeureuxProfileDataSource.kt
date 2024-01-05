@@ -63,9 +63,6 @@ class HeureuxProfileDataSource : ProfileDataSource {
             FireStoreUserFields.PhotoUrl.field to user.photoURL,
             FireStoreUserFields.Name.field to user.displayName,
             FireStoreUserFields.Phone.field to null,
-            FireStoreUserFields.BookmarksCollection.field to emptyList<String>(),
-            FireStoreUserFields.PropertiesOwned.field to emptyList<String>(),
-            FireStoreUserFields.Listings.field to emptyList<String>(),
         )
 
         try {
