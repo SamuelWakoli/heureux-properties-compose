@@ -37,6 +37,7 @@ fun BookmarksScreen(
     viewModel: MainScreenViewModel,
 ) {
 
+    val propertiesList = viewModel.propertiesList.collectAsState().value
     val bookmarksList = viewModel.bookmarksList.collectAsState().value
 
 
@@ -78,9 +79,12 @@ fun BookmarksScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(bookmarksList) { property ->
-                    PropertyListItem(navController = navController,
-                        onUpdateCurrentProperty = {
-                            viewModel.updateCurrentProperty(property)
+                    PropertyListItem(
+                        navController = navController,
+                        onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
+                        isBookmarked = bookmarksList.contains(property) ?: false,
+                        onClickBookmark = {
+                            //TODO
                         }
                     )
                 }

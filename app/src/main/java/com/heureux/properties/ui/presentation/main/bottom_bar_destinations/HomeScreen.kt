@@ -39,6 +39,7 @@ fun HomeScreen(
 ) {
 
     val propertiesList = viewModel.propertiesList.collectAsState().value
+    val bookmarksList = viewModel.bookmarksList.collectAsState().value
 
     Column(
         modifier = Modifier
@@ -80,7 +81,11 @@ fun HomeScreen(
                 items(items = propertiesList) { property: HeureuxProperty ->
                     PropertyListItem(
                         navController = navController,
-                        onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) }
+                        onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
+                        isBookmarked = bookmarksList?.contains(property) ?: false,
+                        onClickBookmark = {
+                            //TODO
+                        }
                     )
                 }
             }

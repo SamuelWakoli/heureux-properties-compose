@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.Cases
 import androidx.compose.material.icons.outlined.Info
@@ -31,7 +32,12 @@ import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
-fun PropertyListItem(navController: NavController, onUpdateCurrentProperty: () -> Unit) {
+fun PropertyListItem(
+    navController: NavController,
+    onUpdateCurrentProperty: () -> Unit,
+    isBookmarked: Boolean,
+    onClickBookmark: () -> Unit,
+) {
     Card(
         modifier = Modifier
             .padding(
@@ -71,10 +77,12 @@ fun PropertyListItem(navController: NavController, onUpdateCurrentProperty: () -
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        onClickBookmark()
+                    }) {
                         Icon(
-                            imageVector = Icons.Outlined.BookmarkAdd,
-                            contentDescription = "Bookmark",
+                            imageVector = if (isBookmarked) Icons.Filled.Bookmarks else Icons.Outlined.BookmarkAdd,
+                            contentDescription = if (isBookmarked) "Remove from bookmarks" else "Add to bookmarks",
                             modifier = Modifier.size(26.dp),
                         )
                     }
@@ -139,6 +147,8 @@ fun PropertyListItem(navController: NavController, onUpdateCurrentProperty: () -
 private fun PropertyListItemPreview() {
     PropertyListItem(
         navController = rememberNavController(),
-        onUpdateCurrentProperty = {}
+        onUpdateCurrentProperty = {},
+        isBookmarked = false,
+        onClickBookmark = {}
     )
 }
