@@ -1,5 +1,6 @@
 package com.heureux.properties.data.repositories
 
+import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
@@ -63,6 +64,19 @@ interface PropertiesRepository {
     suspend fun submitInquiry(
         inquiryItem: InquiryItem,
         onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
+
+
+    suspend fun sendFeedback(
+        feedback: FeedbackItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    )
+
+    suspend fun updateBookmarkProperty(
+        email: String,
+        property: HeureuxProperty,
         onFailure: (exception: Exception) -> Unit,
     )
 }

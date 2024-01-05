@@ -286,9 +286,9 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         onFailure: (exception: Exception) -> Unit,
     ) {
         try {
-            val userBookmarksRef = firestore.collection(FirebaseDirectories.UsersCollection.name)
-                .document(email)
-                .collection(FireStoreUserFields.BookmarksCollection.field)
+            val userBookmarksRef =
+                firestore.collection(FirebaseDirectories.UsersCollection.name).document(email)
+                    .collection(FireStoreUserFields.BookmarksCollection.field)
 
             // Check if the property is already in bookmarks
             val existingDocument = userBookmarksRef.document(property.id).get().await()

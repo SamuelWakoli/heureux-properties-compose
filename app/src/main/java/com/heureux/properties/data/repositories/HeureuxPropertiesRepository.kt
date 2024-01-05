@@ -1,6 +1,7 @@
 package com.heureux.properties.data.repositories
 
 import com.heureux.properties.data.sources.PropertiesDataSource
+import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
@@ -72,5 +73,21 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
         onFailure: (exception: Exception) -> Unit,
     ) = dataSource.submitInquiry(
         inquiryItem, onSuccessListener, onFailure
+    )
+
+    override suspend fun sendFeedback(
+        feedback: FeedbackItem,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) = dataSource.sendFeedback(
+        feedback, onSuccessListener, onFailure
+    )
+
+    override suspend fun updateBookmarkProperty(
+        email: String,
+        property: HeureuxProperty,
+        onFailure: (exception: Exception) -> Unit,
+    ) = dataSource.updateBookmarkProperty(
+        email = email, property = property, onFailure = onFailure
     )
 }
