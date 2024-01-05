@@ -1,5 +1,6 @@
 package com.heureux.properties.ui.presentation.main.bottom_bar_destinations
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,6 +44,7 @@ fun HomeScreen(
 
     val propertiesList = viewModel.propertiesList.collectAsState().value
     val bookmarksList = viewModel.bookmarksList.collectAsState().value
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -90,7 +93,10 @@ fun HomeScreen(
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
                         isBookmarked = bookmarksList?.contains(property) ?: false,
                         onClickBookmark = {
-                            //TODO
+                            viewModel.updateBookmark(property) { exception: Exception ->
+                                Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     )
                 }

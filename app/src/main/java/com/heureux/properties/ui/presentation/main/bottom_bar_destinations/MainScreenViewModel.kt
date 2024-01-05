@@ -7,6 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.ProfileRepository
 import com.heureux.properties.data.repositories.PropertiesRepository
+import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -93,6 +94,19 @@ class MainScreenViewModel(
             propertiesRepository.submitInquiry(
                 inquiryItem = inquiryItem,
                 onSuccessListener = onSuccess,
+                onFailure = onFailure
+            )
+        }
+    }
+
+    fun updateBookmark(
+        property: HeureuxProperty,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        viewModelScope.launch {
+            propertiesRepository.updateBookmarkProperty(
+                email = userProfileData.value?.userEmail ?: currentUser?.email ?: "",
+                property = property,
                 onFailure = onFailure
             )
         }
