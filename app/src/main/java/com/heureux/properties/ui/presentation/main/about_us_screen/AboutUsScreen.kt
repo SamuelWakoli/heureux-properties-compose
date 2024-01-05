@@ -1,5 +1,9 @@
 package com.heureux.properties.ui.presentation.main.about_us_screen
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -21,6 +25,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -29,16 +34,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutUsScreen(navController: NavController) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -76,7 +84,9 @@ fun AboutUsScreen(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Column(
-                modifier = Modifier.widthIn(max = 600.dp).padding(horizontal = 8.dp)
+                modifier = Modifier
+                    .widthIn(max = 600.dp)
+                    .padding(horizontal = 8.dp)
             ) {
                 ListItem(
                     headlineContent = {
@@ -84,7 +94,10 @@ fun AboutUsScreen(navController: NavController) {
                     },
                     supportingContent = {
                         Text(text = "Our prices are not exaggerated and locations depend on where you want, ready for sale")
-                    }
+                    },
+                    colors = ListItemDefaults.colors(
+                        headlineColor = MaterialTheme.colorScheme.primary
+                    ),
                 )
                 ListItem(
                     headlineContent = {
@@ -92,7 +105,10 @@ fun AboutUsScreen(navController: NavController) {
                     },
                     supportingContent = {
                         Text(text = "We are a real estate company that assists in the acquisition of good and well priced land/property")
-                    }
+                    },
+                    colors = ListItemDefaults.colors(
+                        headlineColor = MaterialTheme.colorScheme.primary
+                    ),
                 )
                 ListItem(
                     headlineContent = {
@@ -100,7 +116,10 @@ fun AboutUsScreen(navController: NavController) {
                     },
                     supportingContent = {
                         Text(text = "We have a track record of pleasing our clients by providing land/property that suites their wants at a good and favourable prices comparable to the current market")
-                    }
+                    },
+                    colors = ListItemDefaults.colors(
+                        headlineColor = MaterialTheme.colorScheme.primary
+                    ),
                 )
                 ListItem(
                     headlineContent = {
@@ -108,52 +127,67 @@ fun AboutUsScreen(navController: NavController) {
                     },
                     supportingContent = {
                         Text(text = "In the current real estate market, it's hard to find a company that focuses on their clients' needs. We are focusing on making our clients happy by providing property that suites their needs at a good and favourable prices.")
-                    }
+                    },
+                    colors = ListItemDefaults.colors(
+                        headlineColor = MaterialTheme.colorScheme.primary
+                    ),
                 )
                 Spacer(modifier = Modifier.size(8.dp))
                 Divider()
                 Spacer(modifier = Modifier.size(8.dp))
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.Email,
-                            contentDescription = null
-                        )
+                ContactListItem(
+                    title = "Email",
+                    description = "info@heureuxproperties.co.ke",
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.Email, contentDescription = null)
                     },
-                    headlineContent = {
-                        Text(text = "Email us")
+                    onClick = {
+                        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:info@heureuxproperties.co.ke")
+                        }
+                        try {
+                            context.startActivity(emailIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if no email app is found
+                            Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show()
+                        }
                     },
-                    supportingContent = {
-                        Text(text = "info@heureuxproperties.co.ke")
-                    }
                 )
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.LocationOn,
-                            contentDescription = null
-                        )
+                ContactListItem(
+                    title = "Website",
+                    description = "www.heureuxproperties.co.ke",
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.Web, contentDescription = null)
                     },
-                    headlineContent = {
-                        Text(text = "Visit our office")
+                    onClick = {
+                        val emailIntent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+                            data = Uri.parse("https://www.heureuxproperties.co.ke")
+                        }
+                        try {
+                            context.startActivity(emailIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if no email app is found
+                            Toast.makeText(context, "No web app found", Toast.LENGTH_SHORT).show()
+                        }
                     },
-                    supportingContent = {
-                        Text(text = "Jetro Chambers(4th Floor), Westlands, Nairobi")
-                    }
                 )
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.Web,
-                            contentDescription = null
-                        )
+                ContactListItem(
+                    title = "Visit our office",
+                    description = "Jetro Chambers(4th Floor), Westlands, Nairobi",
+                    leadingIcon = {
+                        Icon(imageVector = Icons.Outlined.LocationOn, contentDescription = null)
                     },
-                    headlineContent = {
-                        Text(text = "Website")
+                    onClick = {
+                        val emailIntent = Intent(Intent.ACTION_VIEW)
+                        emailIntent.data = Uri.parse("geo:-1.2650562,36.802304?q=Jetro+Chambers")
+                        try {
+                            context.startActivity(emailIntent)
+                        } catch (e: ActivityNotFoundException) {
+                            // Handle error if no email app is found
+                            Toast.makeText(context, "Google Maps not found", Toast.LENGTH_SHORT)
+                                .show()
+                        }
                     },
-                    supportingContent = {
-                        Text(text = "www.heureuxproperties.co.ke")
-                    }
                 )
             }
         }
