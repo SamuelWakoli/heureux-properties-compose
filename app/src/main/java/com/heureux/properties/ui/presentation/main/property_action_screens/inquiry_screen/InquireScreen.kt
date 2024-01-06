@@ -50,7 +50,7 @@ import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.buttons.RadioButtonListItem
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)

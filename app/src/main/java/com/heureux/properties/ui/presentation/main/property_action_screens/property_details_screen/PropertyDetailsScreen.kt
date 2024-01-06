@@ -35,7 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)

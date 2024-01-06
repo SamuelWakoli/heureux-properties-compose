@@ -1,4 +1,4 @@
-package com.heureux.properties.ui.presentation.main.property_action_screens
+package com.heureux.properties.ui.presentation.main.sell_with_us_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,7 +42,7 @@ import androidx.navigation.compose.rememberNavController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddPropertyScreen(
+fun SellWithUsScreen(
     navController: NavController,
 ) {
 
@@ -225,8 +225,8 @@ fun AddPropertyScreen(
 
 @Preview
 @Composable
-private fun AddPropertyScreenPreview() {
-    AddPropertyScreen(
+private fun SellWithUsScreenPreview() {
+    SellWithUsScreen(
         navController = rememberNavController()
     )
 }

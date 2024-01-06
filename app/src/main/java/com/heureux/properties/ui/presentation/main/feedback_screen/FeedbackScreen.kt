@@ -45,7 +45,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.heureux.properties.data.types.FeedbackItem
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)

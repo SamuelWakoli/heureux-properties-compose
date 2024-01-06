@@ -17,11 +17,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.BookmarksScreen
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.HomeScreen
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MoreScreen
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MyListingsScreen
+import com.heureux.properties.ui.presentation.main.main_screen.bottom_bar_destinations.BookmarksScreen
+import com.heureux.properties.ui.presentation.main.main_screen.bottom_bar_destinations.HomeScreen
+import com.heureux.properties.ui.presentation.main.main_screen.bottom_bar_destinations.MoreScreen
+import com.heureux.properties.ui.presentation.main.main_screen.bottom_bar_destinations.MyListingsScreen
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)

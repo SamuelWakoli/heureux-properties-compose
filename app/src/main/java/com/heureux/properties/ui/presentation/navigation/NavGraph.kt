@@ -11,7 +11,7 @@ import com.heureux.properties.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactUsScreen
 import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfileScreen
 import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
@@ -23,7 +23,7 @@ import com.heureux.properties.ui.presentation.main.my_properties_screen.MyProper
 import com.heureux.properties.ui.presentation.main.notifications_screen.NotificationsScreen
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
-import com.heureux.properties.ui.presentation.main.property_action_screens.AddPropertyScreen
+import com.heureux.properties.ui.presentation.main.sell_with_us_screen.SellWithUsScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
@@ -114,7 +114,7 @@ fun NavGraph(
             )
         }
         composable(route = Screens.AddPropertyScreen.route) {
-            AddPropertyScreen(navController = navController)
+            SellWithUsScreen(navController = navController)
         }
         composable(route = Screens.PropertyDetailsScreen.route) {
             PropertyDetailsScreen(
