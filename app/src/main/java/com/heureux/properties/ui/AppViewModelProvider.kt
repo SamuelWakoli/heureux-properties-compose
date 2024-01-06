@@ -7,10 +7,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.heureux.properties.HeureuxApp
 import com.heureux.properties.ui.presentation.authgate.AuthViewModel
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MainScreenViewModel
-import com.heureux.properties.ui.presentation.main.bottom_bar_destinations.MoreScreenViewModel
 import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfileScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
+import com.heureux.properties.ui.presentation.main.main_screen.bottom_bar_destinations.MoreScreenViewModel
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreenViewModel
+import com.heureux.properties.ui.presentation.main.sell_with_us_screen.SellWithUsViewModel
 
 object AppViewModelProvider {
     val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -35,6 +36,12 @@ object AppViewModelProvider {
         }
         initializer {
             MoreScreenViewModel(userPreferencesRepository = heureuxApp().userPreferencesRepository)
+        }
+        initializer {
+            SellWithUsViewModel(
+                profileRepository = heureuxApp().container.profileRepository,
+                propertiesRepository = heureuxApp().container.propertiesRepository
+            )
         }
     }
 }
