@@ -6,6 +6,7 @@ import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
 import com.heureux.properties.data.types.PaymentItem
+import com.heureux.properties.data.types.SellWithUsRequest
 import kotlinx.coroutines.flow.Flow
 
 class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) :
@@ -89,5 +90,13 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
         onFailure: (exception: Exception) -> Unit,
     ) = dataSource.updateBookmarkProperty(
         email = email, property = property, onFailure = onFailure
+    )
+
+    override suspend fun sendSellWithUsRequest(
+        sellWithUsRequest: SellWithUsRequest,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) = dataSource.sendSellWithUsRequest(
+        sellWithUsRequest, onSuccessListener, onFailure
     )
 }

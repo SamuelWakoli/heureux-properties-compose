@@ -5,6 +5,7 @@ import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
 import com.heureux.properties.data.types.PaymentItem
+import com.heureux.properties.data.types.SellWithUsRequest
 import kotlinx.coroutines.flow.Flow
 
 interface PropertiesRepository {
@@ -78,5 +79,11 @@ interface PropertiesRepository {
         email: String,
         property: HeureuxProperty,
         onFailure: (exception: Exception) -> Unit,
+    )
+
+    suspend fun sendSellWithUsRequest(
+        sellWithUsRequest: SellWithUsRequest,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
     )
 }

@@ -9,6 +9,7 @@ sealed class FirebaseDirectories (val name: String) {
     data object PaymentsCollection : FirebaseDirectories(name = "payments")
     data object InquiresCollection : FirebaseDirectories(name = "inquires")
     data object FeedbacksCollection : FirebaseDirectories(name = "feedbacks")
+    data object SellWithUsCollection : FirebaseDirectories(name = "sell_with_us")
 }
 
 sealed class FireStoreUserFields (val field: String) {

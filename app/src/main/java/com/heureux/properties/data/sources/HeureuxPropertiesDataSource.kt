@@ -10,6 +10,7 @@ import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
 import com.heureux.properties.data.types.NotificationItem
 import com.heureux.properties.data.types.PaymentItem
+import com.heureux.properties.data.types.SellWithUsRequest
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -307,5 +308,18 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         }
     }
 
-
+    override suspend fun sendSellWithUsRequest(
+        sellWithUsRequest: SellWithUsRequest,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) {
+        firestore.collection(FirebaseDirectories.SellWithUsCollection.name)
+            .document(sellWithUsRequest.time).set(sellWithUsRequest)
+            .addOnSuccessListener {
+                onSuccessListener()
+            }
+            .addOnFailureListener { exception ->
+                onFailure(exception)
+            }
+    }
 }
