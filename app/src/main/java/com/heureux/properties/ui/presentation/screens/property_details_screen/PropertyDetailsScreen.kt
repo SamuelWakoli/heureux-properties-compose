@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Cases
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,8 +36,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
-import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,6 +48,9 @@ fun PropertyDetailsScreen(
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val uiState = viewModel.mainScreenUiState.collectAsState().value
+
+    //used to check if it's necessary to have the inquiry button
+    val userListings = viewModel.userListings.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -80,80 +84,96 @@ fun PropertyDetailsScreen(
             )
         }
     ) { paddingValues ->
-        Column(
-            Modifier
-                .padding(paddingValues)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-
-
+        if (userListings == null) {
             Column(
                 Modifier
-                    .fillMaxWidth()
-                    .nestedScroll(scrollBehavior.nestedScrollConnection),
-                verticalArrangement = Arrangement.SpaceBetween,
+                    .padding(paddingValues)
+                    .fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                CircularProgressIndicator(
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    trackColor = MaterialTheme.colorScheme.primaryContainer,
+                    strokeWidth = 2.dp
+                )
+            }
+        } else {
+            Column(
+                Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
+
                 Column(
                     Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState())
+                        .fillMaxWidth()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection),
+                    verticalArrangement = Arrangement.SpaceBetween,
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 4.dp)
+
+                    Column(
+                        Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState())
                     ) {
-                        items(6) {
-                            DetailsImageListItem(
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 4.dp)
+                        ) {
+                            items(6) {
+                                DetailsImageListItem(
+                                )
+                            }
+                        }
+                        Spacer(modifier = Modifier.padding(8.dp))
+                        Column(
+                            Modifier.padding(horizontal = 8.dp)
+                        ) {
+                            Text(
+                                text = "Price: Ksh. ${uiState.currentProperty?.price}",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                            Text(
+                                text = uiState.currentProperty?.name ?: "",
+                                style = MaterialTheme.typography.titleLarge,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            )
+                            Text(
+                                text = uiState.currentProperty?.description ?: "",
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                             )
                         }
-                    }
-                    Spacer(modifier = Modifier.padding(8.dp))
-                    Column(
-                        Modifier.padding(horizontal = 8.dp)
-                    ) {
-                        Text(
-                            text = "Price: Ksh. ${uiState.currentProperty?.price}",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                        Text(
-                            text = uiState.currentProperty?.name ?: "",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                        Text(
-                            text = uiState.currentProperty?.description ?: "",
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        )
-                    }
-                    Spacer(modifier = Modifier.padding(8.dp))
-                }
-
-                ElevatedButton(
-                    onClick = {
-                        navController.navigate(Screens.InquiryScreen.route) {
-                            launchSingleTop = true
-                        }
-                    },
-                    modifier = Modifier
-                        .widthIn(max = 400.dp)
-                        .padding(vertical = 4.dp)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Cases,
-                            contentDescription = null
-                        )
                         Spacer(modifier = Modifier.padding(8.dp))
-                        Text(text = "Inquire", style = MaterialTheme.typography.titleMedium)
+                    }
+
+                    if (!userListings.contains(uiState.currentProperty!!)) ElevatedButton(
+                        onClick = {
+                            navController.navigate(Screens.InquiryScreen.route) {
+                                launchSingleTop = true
+                            }
+                        },
+                        modifier = Modifier
+                            .widthIn(max = 400.dp)
+                            .padding(vertical = 4.dp)
+                    ) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Cases,
+                                contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = "Inquire", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
                 }
             }
