@@ -1,5 +1,6 @@
 package com.heureux.properties.data.sources
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -13,12 +14,12 @@ interface ProfileDataSource {
     val firestore: FirebaseFirestore
     val storageReference: StorageReference
 
-    suspend fun uploadImage(
-        imageUri: String,
-        email: String,
-        onSuccessListener: (imageUrl: String) -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    )
+    suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory:String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) : String?
 
     suspend fun getCurrentUser() : Flow<FirebaseUser?>
 

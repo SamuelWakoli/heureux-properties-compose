@@ -1,22 +1,24 @@
 package com.heureux.properties.data.repositories
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.heureux.properties.data.types.UserProfileData
 import kotlinx.coroutines.flow.Flow
 
 interface ProfileRepository {
+
+    suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory:String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) : String?
+
     suspend fun registerUser(
         name: String,
         email: String,
         password: String,
         onSuccessListener: () -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    )
-
-    suspend fun uploadImage(
-        imageUri: String,
-        email: String,
-        onSuccessListener: (imageUrl: String) -> Unit,
         onErrorListener: (exception: Exception) -> Unit,
     )
 

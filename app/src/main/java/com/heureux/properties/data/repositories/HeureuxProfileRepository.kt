@@ -1,11 +1,22 @@
 package com.heureux.properties.data.repositories
 
+import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
 import com.heureux.properties.data.sources.ProfileDataSource
 import com.heureux.properties.data.types.UserProfileData
 import kotlinx.coroutines.flow.Flow
 
 class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepository {
+
+    override suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory: String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ): String? = dataSource.uploadImageGetUrl(
+        uri, directory, onSuccessListener, onFailure
+    )
+
     override suspend fun registerUser(
         name: String,
         email: String,
@@ -98,19 +109,6 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
         )
     }
 
-    override suspend fun uploadImage(
-        imageUri: String,
-        email: String,
-        onSuccessListener: (imageUrl: String) -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    ) {
-        dataSource.uploadImage(
-            imageUri = imageUri,
-            email = email,
-            onSuccessListener = onSuccessListener,
-            onErrorListener = onErrorListener
-        )
-    }
 
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> =
         dataSource.getCurrentUser()

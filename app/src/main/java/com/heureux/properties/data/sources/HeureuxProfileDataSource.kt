@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storage
 import com.heureux.properties.data.FireStoreUserFields
 import com.heureux.properties.data.FirebaseDirectories
@@ -27,22 +28,23 @@ class HeureuxProfileDataSource : ProfileDataSource {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
 
-    override suspend fun uploadImage(
-        imageUri: String,
-        email: String,
-        onSuccessListener: (imageUrl: String) -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    ) {
-        val imageRef =
-            storageReference.child(FirebaseDirectories.UsersStorageReference.name).child(email)
-                .child("profile_image.png")
-        try {
-            imageRef.putFile(Uri.parse(imageUri)).await()
-            val downloadUrl = imageRef.downloadUrl.await()
-            onSuccessListener(downloadUrl.toString())
-        } catch (exception: Exception) {
-            onErrorListener(exception)
+   override suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory: String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ): String? {
+        var downloadUrl: String? = null
+        val storage = com.google.firebase.ktx.Firebase.storage
+
+        storage.reference.child(directory).putFile(uri).addOnSuccessListener { snapshot ->
+            downloadUrl = snapshot.storage.downloadUrl.toString()
+            onSuccessListener.invoke()
+        }.addOnFailureListener { exception ->
+            onFailure.invoke(exception)
         }
+
+        return downloadUrl
     }
 
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> = callbackFlow {
