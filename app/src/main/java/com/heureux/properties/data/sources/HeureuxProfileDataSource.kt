@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.ktx.storage
 import com.google.firebase.storage.storage
 import com.heureux.properties.data.FireStoreUserFields
 import com.heureux.properties.data.FirebaseDirectories
@@ -28,22 +27,36 @@ class HeureuxProfileDataSource : ProfileDataSource {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
 
-   override suspend fun uploadImageGetUrl(
+    override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
         onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        var downloadUrl: String? = null
-        val storage = com.google.firebase.ktx.Firebase.storage
+        try {
+            val storage = Firebase.storage
+            val storageReference = storage.reference.child(directory)
+            val uploadTask = storageReference.putFile(uri)
 
-        storage.reference.child(directory).putFile(uri).addOnSuccessListener { snapshot ->
-            downloadUrl = snapshot.storage.downloadUrl.toString()
-            onSuccessListener.invoke(downloadUrl!!)
-        }.addOnFailureListener { exception ->
-            onFailure.invoke(exception)
+            // Wait for the upload to complete, then get the download URL
+            val urlTask = uploadTask.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception!!
+                }
+                storageReference.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUrl = storageReference.downloadUrl.toString()
+                    onSuccessListener.invoke(downloadUrl)
+                } else {
+                    onFailure.invoke(task.exception!!)
+                }
+            }
+        } catch (e: Exception) {
+            onFailure.invoke(e)
         }
     }
+
 
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> = callbackFlow {
         val snapshotListener = auth.addAuthStateListener {
