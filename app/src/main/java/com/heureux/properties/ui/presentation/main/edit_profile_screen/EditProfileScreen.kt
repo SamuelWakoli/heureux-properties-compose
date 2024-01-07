@@ -1,6 +1,14 @@
 package com.heureux.properties.ui.presentation.main.edit_profile_screen
 
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,6 +24,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.DoneAll
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Camera
@@ -39,11 +48,17 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -55,21 +70,42 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.composables.images.CoilImage
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
 fun EditProfileScreen(
     navController: NavController,
-    editProfileScreenViewModel: EditProfileScreenViewModel,
+    viewModel: EditProfileScreenViewModel,
 ) {
 
-    val uiState = editProfileScreenViewModel.uiState.collectAsState().value
-    val userData = editProfileScreenViewModel.userProfileData.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
+    val userData = viewModel.userProfileData.collectAsState().value
     val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
+
+    var profileImageUri: Uri? by remember { mutableStateOf(null) }
+    var profileBitmap: Bitmap? by remember { mutableStateOf(null) }
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+            profileImageUri = uri
+            viewModel.uploadProfileImage(
+                uri = uri!!,
+                onSuccess = { photoURL ->
+                    viewModel.updatePhotoURL(photoURL)
+                },
+                onFailure = { exception ->
+                    Toast.makeText(
+                        context,
+                        "An error occurred: [${exception.message}] Please try editing profile image later",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            )
+        }
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
@@ -136,27 +172,63 @@ fun EditProfileScreen(
                     ) {
 
                         if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
-                            CoilImage(
-                                modifier = Modifier.size(64.dp),
-                                imageUrl = userData.photoURL.toString(),
-                                applyCircleShape = true,
-                                errorContent = {
-                                    Icon(
-                                        imageVector = Icons.Outlined.AccountCircle,
-                                        contentDescription = "Profile",
-                                        modifier = Modifier.size(256.dp)
-                                    )
-                                },
-                            )
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                CoilImage(
+                                    modifier = Modifier.size(64.dp),
+                                    imageUrl = userData.photoURL.toString(),
+                                    applyCircleShape = true,
+                                    errorContent = {
+                                        Icon(
+                                            imageVector = Icons.Outlined.AccountCircle,
+                                            contentDescription = "Profile",
+                                            modifier = Modifier.size(128.dp)
+                                        )
+                                    },
+                                )
+
+                                profileImageUri?.let { uri ->
+                                    profileBitmap = if (Build.VERSION.SDK_INT < 28) {
+                                        MediaStore.Images.Media.getBitmap(
+                                            context.contentResolver,
+                                            uri
+                                        )
+                                    } else {
+                                        val source =
+                                            ImageDecoder.createSource(context.contentResolver, uri)
+                                        ImageDecoder.decodeBitmap(source)
+                                    }
+
+                                    profileBitmap.let { bitmap ->
+                                        Spacer(modifier = Modifier.size(8.dp))
+                                        Icon(
+                                            imageVector = Icons.Default.ArrowForward,
+                                            contentDescription = "to"
+                                        )
+                                        Spacer(modifier = Modifier.size(8.dp))
+                                        Image(
+                                            bitmap = bitmap?.asImageBitmap()!!,
+                                            contentDescription = "New profile image",
+                                            modifier = Modifier.size(128.dp),
+                                            contentScale = ContentScale.Crop,
+                                        )
+                                    }
+                                }
+                            }
                         } else {
                             Icon(
                                 imageVector = Icons.Outlined.AccountCircle,
                                 contentDescription = "Profile image",
-                                modifier = Modifier.size(256.dp),
+                                modifier = Modifier.size(128.dp),
                             )
                         }
-                        TextButton(onClick = { /*TODO*/
-                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
+                        TextButton(onClick = {
+                            launcher.launch("image/*")
+
+                            /// The code comment below shows options for selecting image either from gallery
+                            /// or from camera. Logically, most users prefer selecting image from gallery.
+                            // viewModel.hideOrShowEditProfileBottomSheet()
                         }) {
                             Text(text = "Select Image")
                         }
@@ -166,7 +238,7 @@ fun EditProfileScreen(
                     OutlinedTextField(
                         value = uiState.userName,
                         onValueChange = { newName ->
-                            editProfileScreenViewModel.updateUserName(newName)
+                            viewModel.updateUserName(newName)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -197,7 +269,7 @@ fun EditProfileScreen(
                     OutlinedTextField(
                         value = uiState.phoneNumber,
                         onValueChange = { newPhoneNumber ->
-                            editProfileScreenViewModel.updatePhoneNumber(newPhoneNumber)
+                            viewModel.updatePhoneNumber(newPhoneNumber)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -232,7 +304,7 @@ fun EditProfileScreen(
                     ElevatedButton(
                         onClick = {
                             keyboardController?.hide()
-                            editProfileScreenViewModel.updateProfile(
+                            viewModel.updateProfile(
                                 onSuccess = {
                                     Toast.makeText(
                                         context,
@@ -241,10 +313,10 @@ fun EditProfileScreen(
                                     ).show()
                                     navController.navigateUp()
                                 },
-                                onFailure = {
+                                onFailure = { exception ->
                                     Toast.makeText(
                                         context,
-                                        "Failed to update profile",
+                                        "Internal error: ${exception.message}. Try again later",
                                         Toast.LENGTH_LONG
                                     ).show()
                                 }
@@ -292,7 +364,7 @@ fun EditProfileScreen(
 
 
         if (uiState.showBottomSheet) ModalBottomSheet(onDismissRequest = { /*TODO*/
-            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
+            viewModel.hideOrShowEditProfileBottomSheet()
         }) {
             Column(
                 modifier = Modifier.padding(16.dp),
@@ -305,7 +377,7 @@ fun EditProfileScreen(
                     Card(
                         onClick = {
                             // TODO:
-                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
+                            viewModel.hideOrShowEditProfileBottomSheet()
                         }, shape = MaterialTheme.shapes.large, colors = CardDefaults.cardColors(
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
@@ -327,7 +399,7 @@ fun EditProfileScreen(
                     Card(
                         onClick = {
                             // TODO:
-                            editProfileScreenViewModel.hideOrShowEditProfileBottomSheet()
+                            viewModel.hideOrShowEditProfileBottomSheet()
                         }, shape = MaterialTheme.shapes.large, colors = CardDefaults.cardColors(
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
@@ -357,6 +429,6 @@ fun EditProfileScreen(
 private fun EditProfileScreenPreview() {
     EditProfileScreen(
         navController = rememberNavController(),
-        editProfileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+        viewModel = viewModel(factory = AppViewModelProvider.Factory),
     )
 }
