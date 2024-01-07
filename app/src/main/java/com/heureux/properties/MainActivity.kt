@@ -23,7 +23,7 @@ import com.heureux.properties.ui.presentation.authgate.GoogleAuthUiClient
 import com.heureux.properties.ui.presentation.navigation.NavGraph
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.authgate.AuthViewModel
-import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
+import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.theme.HeureuxPropertiesTheme
 import kotlinx.coroutines.launch
 
