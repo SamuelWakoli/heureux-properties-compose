@@ -8,7 +8,7 @@ data class SellWithUsUiState(
     val propertyPrice: String = "",
     val propertyPriceError: Boolean = false,
     val propertiesImagesCount: Int = 0,
-    val propertyImages: List<String> = emptyList(),
+    val propertyImages: MutableList<String> = mutableListOf(),
     val propertyImagesError: Boolean= false,
     val userPhoneNumber: String = "",
     val userPhoneNumberError: Boolean = false,
