@@ -1,5 +1,6 @@
 package com.heureux.properties.data.sources
 
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
@@ -66,6 +67,13 @@ interface PropertiesDataSource {
 
 
     /// WRITING DATA
+
+    suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory:String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) : String?
 
     suspend fun submitInquiry(
         inquiryItem: InquiryItem,

@@ -1,5 +1,6 @@
 package com.heureux.properties.data.repositories
 
+import android.net.Uri
 import com.heureux.properties.data.sources.PropertiesDataSource
 import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
@@ -67,6 +68,15 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
     override fun getPropertyItem(propertyId: String): Flow<HeureuxProperty> =
         dataSource.getPropertyItem(propertyId)
 
+
+    override suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory: String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ): String? = dataSource.uploadImageGetUrl(
+        uri, directory, onSuccessListener, onFailure
+    )
 
     override suspend fun submitInquiry(
         inquiryItem: InquiryItem,

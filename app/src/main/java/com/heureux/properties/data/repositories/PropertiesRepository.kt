@@ -1,5 +1,6 @@
 package com.heureux.properties.data.repositories
 
+import android.net.Uri
 import com.heureux.properties.data.types.FeedbackItem
 import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.data.types.InquiryItem
@@ -61,6 +62,13 @@ interface PropertiesRepository {
         propertyId: String,
     ): Flow<HeureuxProperty>
 
+
+    suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory:String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) : String?
 
     suspend fun submitInquiry(
         inquiryItem: InquiryItem,

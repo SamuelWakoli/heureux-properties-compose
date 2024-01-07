@@ -1,8 +1,10 @@
 package com.heureux.properties.data.sources
 
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.heureux.properties.data.FireStoreUserFields
 import com.heureux.properties.data.FirebaseDirectories
 import com.heureux.properties.data.types.FeedbackItem
@@ -243,6 +245,25 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
 
 
     /// WRITING DATA
+
+    override suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory: String,
+        onSuccessListener: () -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ): String? {
+        var downloadUrl: String? = null
+        val storage = Firebase.storage
+
+        storage.reference.child(directory).putFile(uri).addOnSuccessListener { snapshot ->
+            downloadUrl = snapshot.storage.downloadUrl.toString()
+            onSuccessListener.invoke()
+        }.addOnFailureListener { exception ->
+            onFailure.invoke(exception)
+        }
+
+        return downloadUrl
+    }
 
     override suspend fun submitInquiry(
         inquiryItem: InquiryItem,
