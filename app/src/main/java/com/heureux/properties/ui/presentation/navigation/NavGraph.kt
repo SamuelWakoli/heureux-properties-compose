@@ -11,7 +11,6 @@ import com.heureux.properties.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.properties.ui.presentation.authgate.RegistrationScreen
 import com.heureux.properties.ui.presentation.authgate.SignInScreen
 import com.heureux.properties.ui.presentation.main.about_us_screen.AboutUsScreen
-import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.main.contact_us_screen.ContactUsScreen
 import com.heureux.properties.ui.presentation.main.edit_profile_screen.EditProfileScreen
 import com.heureux.properties.ui.presentation.main.feedback_screen.FeedbackScreen
@@ -19,13 +18,16 @@ import com.heureux.properties.ui.presentation.main.filter_results_screen.FilterR
 import com.heureux.properties.ui.presentation.main.filter_screen.FilterScreen
 import com.heureux.properties.ui.presentation.main.inquires_screen.MyInquiresScreen
 import com.heureux.properties.ui.presentation.main.main_screen.MainScreen
+import com.heureux.properties.ui.presentation.main.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.main.my_properties_screen.MyPropertiesScreen
 import com.heureux.properties.ui.presentation.main.notifications_screen.NotificationsScreen
 import com.heureux.properties.ui.presentation.main.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.main.profile_screen.ProfileScreen
-import com.heureux.properties.ui.presentation.main.sell_with_us_screen.SellWithUsScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.main.property_action_screens.property_details_screen.PropertyDetailsScreen
+import com.heureux.properties.ui.presentation.main.sell_with_us_screen.AddPropertyImagesScreen
+import com.heureux.properties.ui.presentation.main.sell_with_us_screen.SellWithUsScreen
+import com.heureux.properties.ui.presentation.main.sell_with_us_screen.SellWithUsViewModel
 import com.heureux.properties.ui.presentation.main.sold_properties_screen.SoldPropertiesScreen
 
 @Composable
@@ -36,6 +38,8 @@ fun NavGraph(
     mainScreenViewModel: MainScreenViewModel,
     onSignInWithGoogle: () -> Unit,
 ) {
+
+    val sellWithUsViewModel = viewModel<SellWithUsViewModel>(factory = AppViewModelProvider.Factory)
 
     NavHost(
         navController = navController,
@@ -114,7 +118,16 @@ fun NavGraph(
             )
         }
         composable(route = Screens.AddPropertyScreen.route) {
-            SellWithUsScreen(navController = navController)
+            SellWithUsScreen(
+                navController = navController,
+                viewModel = sellWithUsViewModel,
+            )
+        }
+        composable(route = Screens.AddPropertyImagesScreen.route) {
+            AddPropertyImagesScreen(
+                navController = navController,
+                viewModel = sellWithUsViewModel,
+            )
         }
         composable(route = Screens.PropertyDetailsScreen.route) {
             PropertyDetailsScreen(
