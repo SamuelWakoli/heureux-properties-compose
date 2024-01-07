@@ -113,33 +113,7 @@ fun AddPropertyImagesScreen(navController: NavHostController, viewModel: SellWit
                 .fillMaxSize()
         ) {
             Column {
-                Spacer(modifier = Modifier.size(16.dp))
-                if (uiState.propertiesImagesCount != 0) {
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = "Selected images:")
-                    LazyRow(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .fillMaxWidth()
-                    ) {
-                        items(uiState.propertyImages) { imageUrl ->
-                            CoilImage(
-                                imageUrl = imageUrl,
-                                modifier = Modifier
-                                    .height(200.dp)
-                                    .width(150.dp)
-                                    .padding(horizontal = 2.dp)
-                            )
-                        }
-                        item {
-                            TextButton(onClick = { viewModel.clearImageSelection() }) {
-                                Text(text = "Clear")
-                                Spacer(modifier = Modifier.size(4.dp))
-                                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
-                            }
-                        }
-                    }
-                }
+
 
 
                 profileImageUri?.let { uri ->
@@ -162,6 +136,35 @@ fun AddPropertyImagesScreen(navController: NavHostController, viewModel: SellWit
                             contentScale = ContentScale.Crop,
                         )
                     Spacer(modifier = Modifier.size(16.dp))
+                }
+
+                Spacer(modifier = Modifier.size(16.dp))
+                if (uiState.propertiesImagesCount != 0) {
+                    Spacer(modifier = Modifier.size(8.dp))
+                    Text(text = "Selected images:")
+                    LazyRow(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        items(uiState.propertyImages) { imageUrl ->
+                            CoilImage(
+                                imageUrl = imageUrl,
+                                modifier = Modifier
+                                    .height(180.dp)
+                                    .width(120.dp)
+                                    .padding(horizontal = 2.dp)
+                            )
+                        }
+                        item {
+                            TextButton(onClick = { viewModel.clearImageSelection() }) {
+                                Text(text = "Clear")
+                                Spacer(modifier = Modifier.size(4.dp))
+                                Icon(imageVector = Icons.Default.Clear, contentDescription = null)
+                            }
+                        }
+                    }
                 }
                 Spacer(modifier = Modifier.size(8.dp))
                 OutlinedButton(onClick = { launcher.launch("image/*") }) {
