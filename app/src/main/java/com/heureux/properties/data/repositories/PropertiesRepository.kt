@@ -66,9 +66,9 @@ interface PropertiesRepository {
     suspend fun uploadImageGetUrl(
         uri: Uri,
         directory:String,
-        onSuccessListener: () -> Unit,
+        onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit
-    ) : String?
+    )
 
     suspend fun submitInquiry(
         inquiryItem: InquiryItem,

@@ -249,20 +249,18 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
     override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
-        onSuccessListener: () -> Unit,
+        onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,
-    ): String? {
+    ) {
         var downloadUrl: String? = null
         val storage = Firebase.storage
 
         storage.reference.child(directory).putFile(uri).addOnSuccessListener { snapshot ->
             downloadUrl = snapshot.storage.downloadUrl.toString()
-            onSuccessListener.invoke()
+            onSuccessListener.invoke(downloadUrl!!)
         }.addOnFailureListener { exception ->
             onFailure.invoke(exception)
         }
-
-        return downloadUrl
     }
 
     override suspend fun submitInquiry(

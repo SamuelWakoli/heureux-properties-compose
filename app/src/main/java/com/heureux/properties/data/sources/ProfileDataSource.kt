@@ -17,9 +17,9 @@ interface ProfileDataSource {
     suspend fun uploadImageGetUrl(
         uri: Uri,
         directory:String,
-        onSuccessListener: () -> Unit,
+        onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit
-    ) : String?
+    )
 
     suspend fun getCurrentUser() : Flow<FirebaseUser?>
 

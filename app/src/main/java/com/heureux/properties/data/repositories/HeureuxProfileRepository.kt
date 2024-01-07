@@ -11,9 +11,9 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
-        onSuccessListener: () -> Unit,
+        onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,
-    ): String? = dataSource.uploadImageGetUrl(
+    ) = dataSource.uploadImageGetUrl(
         uri, directory, onSuccessListener, onFailure
     )
 
