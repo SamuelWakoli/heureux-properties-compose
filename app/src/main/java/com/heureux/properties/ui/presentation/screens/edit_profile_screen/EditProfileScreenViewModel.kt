@@ -77,7 +77,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
     ) = viewModelScope.launch {
         profileRepository.uploadImageGetUrl(
             uri = uri,
-            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/profile image",
+            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/profile image.png",
             onSuccessListener = onSuccess,
             onFailure = onFailure,
         )

@@ -91,20 +91,22 @@ fun EditProfileScreen(
     var profileBitmap: Bitmap? by remember { mutableStateOf(null) }
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-            profileImageUri = uri
-            viewModel.uploadProfileImage(
-                uri = uri!!,
-                onSuccess = { photoURL ->
-                    viewModel.updatePhotoURL(photoURL)
-                },
-                onFailure = { exception ->
-                    Toast.makeText(
-                        context,
-                        "An error occurred: [${exception.message}] Please try editing profile image later",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            )
+            if (uri != null) {
+                profileImageUri = uri
+                viewModel.uploadProfileImage(
+                    uri = uri,
+                    onSuccess = { photoURL ->
+                        viewModel.updatePhotoURL(photoURL)
+                    },
+                    onFailure = { exception ->
+                        Toast.makeText(
+                            context,
+                            "An error occurred: [${exception.message}] Please try editing profile image later",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                )
+            }
         }
 
     Scaffold(topBar = {
