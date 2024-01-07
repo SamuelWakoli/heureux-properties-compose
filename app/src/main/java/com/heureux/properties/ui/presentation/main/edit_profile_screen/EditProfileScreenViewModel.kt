@@ -1,7 +1,11 @@
 package com.heureux.properties.ui.presentation.main.edit_profile_screen
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.heureux.properties.data.FirebaseDirectories
 import com.heureux.properties.data.repositories.ProfileRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -66,6 +70,22 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
 
     val uiState: StateFlow<EditProfileScreenUiState> by lazy { _uiState.asStateFlow() }
 
+    fun uploadProfileImage(
+        uri: Uri,
+        onSuccess: (downloadUrl: String) -> Unit,
+        onFailure: (exception: Exception) -> Unit,
+    ) = viewModelScope.launch {
+        profileRepository.uploadImageGetUrl(
+            uri = uri,
+            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/profile image",
+            onSuccessListener = onSuccess,
+            onFailure = onFailure,
+        )
+    }
+
+    fun updatePhotoURL(photoURL: String) {
+        _uiState.update { it.copy(photoURL = photoURL) }
+    }
 
     fun updateUserName(userName: String) =
         _uiState.update { it.copy(userName = userName) }
