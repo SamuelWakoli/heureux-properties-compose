@@ -28,6 +28,7 @@ import com.heureux.admin.ui.theme.HeureuxPropertiesTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+
     val userDataStore = UserPreferencesRepository(dataStore = user_dataStore)
 
     private val googleAuthUiClient by lazy {

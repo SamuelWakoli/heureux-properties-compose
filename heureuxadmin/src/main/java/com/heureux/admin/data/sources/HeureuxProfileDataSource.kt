@@ -1,5 +1,6 @@
 package com.heureux.admin.data.sources
 
+
 import android.net.Uri
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -21,10 +22,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
 class HeureuxProfileDataSource : ProfileDataSource {
-    override val auth: FirebaseAuth = Firebase.auth
-    override val firestore: FirebaseFirestore = Firebase.firestore
-    override val storageReference: StorageReference = Firebase.storage.reference
+    override val auth: FirebaseAuth by lazy { Firebase.auth }
+    override val firestore: FirebaseFirestore by lazy { Firebase.firestore }
+    override val storageReference: StorageReference by lazy { Firebase.storage.reference }
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
