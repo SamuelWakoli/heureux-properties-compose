@@ -7,5 +7,18 @@ sealed class Screens(val route: String) {
 
     data object MainScreen : Screens(route = "main_screen")
 
+    // Main screen bottom nav destinations
+
+
+    // Bottom Nav
+    data object HomeScreen : Screens(route = "home")
+    data object UsersScreen : Screens(route = "users")
+    data object InquiriesScreen : Screens(route = "my_listings")
+    data object MoreScreen : Screens(route = "more")
+
+    // Other Screens
+    data object ProfileScreen : Screens(route = "profile_screen")
+    data object EditProfileScreen : Screens(route = "edit_profile_screen")
+
 
 }
