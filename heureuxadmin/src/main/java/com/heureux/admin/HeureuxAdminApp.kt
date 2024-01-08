@@ -3,7 +3,6 @@ package com.heureux.admin
 import android.app.Application
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
-import com.google.firebase.FirebaseApp
 import com.heureux.admin.data.AppContainer
 import com.heureux.admin.data.HeureuxAppContainer
 import com.heureux.admin.data.repositories.UserPreferencesRepository
@@ -19,8 +18,6 @@ class HeureuxAdminApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        // Initialize Firebase
-        FirebaseApp.initializeApp(this)
 
         container = HeureuxAppContainer(this)
         userPreferencesRepository = UserPreferencesRepository(dataStore = user_dataStore)
