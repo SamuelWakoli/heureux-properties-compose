@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/heureuxadmin/google-services.json
+/heureuxuser/google-services.json

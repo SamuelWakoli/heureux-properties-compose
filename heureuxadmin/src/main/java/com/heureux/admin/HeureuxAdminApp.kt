@@ -1,28 +1,28 @@
-package com.heureux.properties
+package com.heureux.admin
 
 import android.app.Application
 import android.content.Context
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.firebase.FirebaseApp
-import com.heureux.properties.data.AppContainer
-import com.heureux.properties.data.HeureuxAppContainer
-import com.heureux.properties.data.repositories.UserPreferencesRepository
+import com.heureux.admin.data.AppContainer
+import com.heureux.admin.data.HeureuxAppContainer
+import com.heureux.admin.data.repositories.UserPreferencesRepository
 
-private const val USER_PREFERENCE_NAME = "user_preferences"
+private const val USER_PREFERENCE_NAME = "admin_preferences"
 val Context.user_dataStore by preferencesDataStore(
     name = USER_PREFERENCE_NAME
 )
+class HeureuxAdminApp : Application() {
 
-class HeureuxApp : Application() {
     lateinit var container: AppContainer
     lateinit var userPreferencesRepository: UserPreferencesRepository
 
     override fun onCreate() {
         super.onCreate()
-
+        // Initialize Firebase
         FirebaseApp.initializeApp(this)
 
-        container = HeureuxAppContainer(context = this)
+        container = HeureuxAppContainer(this)
         userPreferencesRepository = UserPreferencesRepository(dataStore = user_dataStore)
     }
 }

@@ -19,10 +19,10 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.properties.data.repositories.UserPreferencesRepository
-import com.heureux.properties.ui.presentation.authgate.GoogleAuthUiClient
-import com.heureux.properties.ui.presentation.navigation.NavGraph
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.authgate.AuthViewModel
+import com.heureux.properties.ui.presentation.authgate.GoogleAuthUiClient
+import com.heureux.properties.ui.presentation.navigation.NavGraph
 import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.theme.HeureuxPropertiesTheme
 import kotlinx.coroutines.launch

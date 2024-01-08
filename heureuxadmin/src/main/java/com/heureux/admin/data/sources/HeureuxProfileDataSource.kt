@@ -5,7 +5,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import com.heureux.admin.data.FireStoreUserFields
@@ -20,8 +22,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 class HeureuxProfileDataSource : ProfileDataSource {
-    override val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    override val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
+    override val auth: FirebaseAuth = Firebase.auth
+    override val firestore: FirebaseFirestore = Firebase.firestore
     override val storageReference: StorageReference = Firebase.storage.reference
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
