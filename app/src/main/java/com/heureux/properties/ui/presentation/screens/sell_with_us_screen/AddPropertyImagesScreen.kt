@@ -77,7 +77,7 @@ fun AddPropertyImagesScreen(navController: NavHostController, viewModel: SellWit
                     onFailure = { exception ->
                         Toast.makeText(
                             context,
-                            "An error occurred: [${exception.message}] Please try editing profile image later",
+                            "An error occurred: [${exception.message}] Please try uploading images later",
                             Toast.LENGTH_LONG
                         ).show()
                     }

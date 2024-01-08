@@ -1,14 +1,9 @@
 package com.heureux.properties.ui.presentation.screens.edit_profile_screen
 
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -56,9 +51,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
@@ -88,51 +81,49 @@ fun EditProfileScreen(
 
 
     var profileImageUri: Uri? by remember { mutableStateOf(null) }
-    var profileBitmap: Bitmap? by remember { mutableStateOf(null) }
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 profileImageUri = uri
-                viewModel.uploadProfileImage(
-                    uri = uri,
-                    onSuccess = { photoURL ->
-                        viewModel.updatePhotoURL(photoURL)
-                    },
-                    onFailure = { exception ->
-                        Toast.makeText(
-                            context,
-                            "An error occurred: [${exception.message}] Please try editing profile image later",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-                )
+                Toast.makeText(
+                    context, "Image uploading", Toast.LENGTH_LONG
+                ).show()
+
+                viewModel.uploadProfileImage(uri = uri, onSuccess = { photoURL ->
+                    viewModel.updatePhotoURL(photoURL)
+                }, onFailure = { exception ->
+                    Toast.makeText(
+                        context,
+                        "An error occurred: [${exception.message}] Please try editing profile image later",
+                        Toast.LENGTH_LONG
+                    ).show()
+                })
             }
         }
 
+
     Scaffold(topBar = {
-        CenterAlignedTopAppBar(
-            scrollBehavior = scrollBehavior,
-            navigationIcon = {
-                IconButton(onClick = { navController.navigateUp() }) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
-                    )
-                }
-            }, title = {
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = null,
-                    )
-                    Spacer(modifier = Modifier.size(8.dp))
-                    Text(text = "Edit Profile")
-                }
-            }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                titleContentColor = MaterialTheme.colorScheme.primary
-            )
+        CenterAlignedTopAppBar(scrollBehavior = scrollBehavior, navigationIcon = {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(
+                    imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
+                )
+            }
+        }, title = {
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = null,
+                )
+                Spacer(modifier = Modifier.size(8.dp))
+                Text(text = "Edit Profile")
+            }
+        }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            titleContentColor = MaterialTheme.colorScheme.primary
+        )
         )
     }) { paddingValues ->
 
@@ -143,8 +134,7 @@ fun EditProfileScreen(
                 verticalArrangement = Arrangement.Center
             ) {
                 CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(16.dp),
+                    modifier = Modifier.padding(16.dp),
                     color = MaterialTheme.colorScheme.primary,
                     strokeWidth = 2.dp,
                     trackColor = MaterialTheme.colorScheme.primaryContainer,
@@ -190,33 +180,29 @@ fun EditProfileScreen(
                                     },
                                 )
 
-                                profileImageUri?.let { uri ->
-                                    profileBitmap = if (Build.VERSION.SDK_INT < 28) {
-                                        MediaStore.Images.Media.getBitmap(
-                                            context.contentResolver,
-                                            uri
-                                        )
-                                    } else {
-                                        val source =
-                                            ImageDecoder.createSource(context.contentResolver, uri)
-                                        ImageDecoder.decodeBitmap(source)
-                                    }
 
-                                    profileBitmap.let { bitmap ->
-                                        Spacer(modifier = Modifier.size(8.dp))
-                                        Icon(
-                                            imageVector = Icons.Default.ArrowForward,
-                                            contentDescription = "to"
-                                        )
-                                        Spacer(modifier = Modifier.size(8.dp))
-                                        Image(
-                                            bitmap = bitmap?.asImageBitmap()!!,
-                                            contentDescription = "New profile image",
-                                            modifier = Modifier.size(128.dp),
-                                            contentScale = ContentScale.Crop,
-                                        )
-                                    }
+                                if (uiState.newPhotoURL.isNotEmpty()) {
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    Icon(
+                                        imageVector = Icons.Default.ArrowForward,
+                                        contentDescription = "to"
+                                    )
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    CoilImage(
+                                        modifier = Modifier.size(128.dp),
+                                        imageUrl = uiState.newPhotoURL,
+                                        applyCircleShape = true,
+                                        errorContent = {
+                                            Icon(
+                                                imageVector = Icons.Outlined.AccountCircle,
+                                                contentDescription = "New profile image",
+                                                modifier = Modifier.size(128.dp)
+                                            )
+                                        },
+                                    )
                                 }
+
+
                             }
                         } else {
                             Icon(
@@ -306,23 +292,18 @@ fun EditProfileScreen(
                     ElevatedButton(
                         onClick = {
                             keyboardController?.hide()
-                            viewModel.updateProfile(
-                                onSuccess = {
-                                    Toast.makeText(
-                                        context,
-                                        "Profile updated successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    navController.navigateUp()
-                                },
-                                onFailure = { exception ->
-                                    Toast.makeText(
-                                        context,
-                                        "Internal error: ${exception.message}. Try again later",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                            )
+                            viewModel.updateProfile(onSuccess = {
+                                Toast.makeText(
+                                    context, "Profile updated successfully", Toast.LENGTH_SHORT
+                                ).show()
+                                navController.navigateUp()
+                            }, onFailure = { exception ->
+                                Toast.makeText(
+                                    context,
+                                    "Internal error: ${exception.message}. Try again later",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            })
                         }, modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 8.dp)

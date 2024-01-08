@@ -23,6 +23,7 @@ data class EditProfileScreenUiState(
     val phoneNumber: String = "",
     val phoneNumberError: Boolean = false,
     val photoURL: String = "",
+    val newPhotoURL: String = "",
     val showBottomSheet: Boolean = false,
     val isSaving: Boolean = false,
 )
@@ -84,7 +85,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
     }
 
     fun updatePhotoURL(photoURL: String) {
-        _uiState.update { it.copy(photoURL = photoURL) }
+        _uiState.update { it.copy(newPhotoURL = photoURL) }
     }
 
     fun updateUserName(userName: String) =
@@ -125,6 +126,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
                     userProfileData = userProfileData.value!!.copy(
                         displayName = uiState.value.userName,
                         phone = uiState.value.phoneNumber,
+                        photoURL = Uri.parse(uiState.value.newPhotoURL),
                     ),
                     onSuccess = {
                         onSuccess()
