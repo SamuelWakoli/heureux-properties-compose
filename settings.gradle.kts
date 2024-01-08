@@ -20,5 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Heureux Properties"
-include(":app")
- 
+include(":heureuxuser")
+include(":heureuxadmin")
