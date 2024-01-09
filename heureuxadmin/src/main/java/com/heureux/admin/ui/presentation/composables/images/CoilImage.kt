@@ -70,8 +70,13 @@ fun CoilImage(
 
         if (painter.state is AsyncImagePainter.State.Empty) {
             if (emptyContent == null) {
-                // TODO: Handle empty
-            } else {
+                Icon(
+                    imageVector = Icons.Outlined.Error,
+                    contentDescription = "Image URL has error",
+                    modifier = Modifier
+                        .alpha(0.5f)
+                        .then(modifier),
+                )            } else {
                 emptyContent()
             }
         }

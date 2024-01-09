@@ -20,25 +20,27 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination =  Screens.MainScreen.route
+        startDestination = if (currentUserSignedIn) Screens.MainScreen.route else Screens.SignInScreen.route
     ) {
-//        composable(route = Screens.SignInScreen.route) {
+//        composable(Screens.SignInScreen.route) {
 //            SignInScreen(navController = navController,
 //                viewModel = authViewModel,
-//                onSignInWithGoogle = { onSignInWithGoogle() })
+//                onSignInWithGoogle = { onSignInWithGoogle() },
+//            )
 //        }
-//        composable(route = Screens.RegistrationScreen.route) {
+//        composable(Screens.RegistrationScreen.route) {
 //            RegistrationScreen(navController = navController,
 //                viewModel = authViewModel,
-//                onSignInWithGoogle = { onSignInWithGoogle() })
+//                onSignInWithGoogle = { onSignInWithGoogle() },
+//            )
 //        }
-//        composable(route = Screens.ForgotPasswordScreen.route) {
+//        composable(Screens.ForgotPasswordScreen.route) {
 //            ForgotPasswordScreen(
 //                navController = navController,
 //                viewModel = authViewModel,
 //            )
 //        }
-        composable(route = Screens.MainScreen.route) {
+        composable(Screens.MainScreen.route) {
             MainScreen(
                 navController = navController,
                 viewModel = mainScreenViewModel,

@@ -5,8 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -26,6 +30,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.R
 import com.heureux.admin.data.types.UserProfileData
+import com.heureux.admin.ui.presentation.composables.images.CoilImage
+import com.heureux.admin.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,8 +48,37 @@ fun MainScreenAppbar(
         mutableStateOf(false)
     }
 
+
     CenterAlignedTopAppBar(
         scrollBehavior = scrollBehavior,
+        navigationIcon = {
+            IconButton(onClick = {
+                mainNavController.navigate(route = Screens.ProfileScreen.route) {
+                    launchSingleTop = true
+                }
+            }) {
+                if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
+                    CoilImage(
+                        modifier = Modifier.size(36.dp),
+                        imageUrl = userData.photoURL.toString(),
+                        applyCircleShape = true,
+                        errorContent = {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = "Profile",
+                                modifier = Modifier.size(36.dp)
+                            )
+                        },
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Outlined.AccountCircle,
+                        contentDescription = "Profile",
+                        modifier = Modifier.size(36.dp)
+                    )
+                }
+            }
+        },
         title = {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
