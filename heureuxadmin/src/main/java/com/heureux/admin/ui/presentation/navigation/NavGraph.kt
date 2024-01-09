@@ -5,9 +5,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.heureux.admin.ui.presentation.authgate.AuthViewModel
-import com.heureux.admin.ui.presentation.authgate.ForgotPasswordScreen
-import com.heureux.admin.ui.presentation.authgate.RegistrationScreen
-import com.heureux.admin.ui.presentation.authgate.SignInScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 
@@ -23,30 +20,29 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = if (currentUserSignedIn) Screens.MainScreen.route else Screens.SignInScreen.route
+        startDestination =  Screens.MainScreen.route
     ) {
-        composable(route = Screens.SignInScreen.route) {
-            SignInScreen(navController = navController,
-                viewModel = authViewModel,
-                onSignInWithGoogle = { onSignInWithGoogle() })
-        }
-        composable(route = Screens.RegistrationScreen.route) {
-            RegistrationScreen(navController = navController,
-                viewModel = authViewModel,
-                onSignInWithGoogle = { onSignInWithGoogle() })
-        }
-        composable(route = Screens.ForgotPasswordScreen.route) {
-            ForgotPasswordScreen(
-                navController = navController,
-                viewModel = authViewModel,
-            )
-        }
+//        composable(route = Screens.SignInScreen.route) {
+//            SignInScreen(navController = navController,
+//                viewModel = authViewModel,
+//                onSignInWithGoogle = { onSignInWithGoogle() })
+//        }
+//        composable(route = Screens.RegistrationScreen.route) {
+//            RegistrationScreen(navController = navController,
+//                viewModel = authViewModel,
+//                onSignInWithGoogle = { onSignInWithGoogle() })
+//        }
+//        composable(route = Screens.ForgotPasswordScreen.route) {
+//            ForgotPasswordScreen(
+//                navController = navController,
+//                viewModel = authViewModel,
+//            )
+//        }
         composable(route = Screens.MainScreen.route) {
             MainScreen(
                 navController = navController,
                 viewModel = mainScreenViewModel,
             )
         }
-
     }
 }
