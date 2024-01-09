@@ -31,7 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,15 +45,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.presentation.composables.buttons.GoogleSignInButton
 import com.heureux.admin.ui.presentation.navigation.Screens
-import com.heureux.admin.ui.AppViewModelProvider
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -246,20 +241,6 @@ fun RegistrationScreen(
                 }
                 Spacer(modifier = Modifier.size(24.dp))
             }
-        }
-    }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-private fun RegistrationScreenPreview() {
-    MaterialTheme {
-        Surface {
-            val mainNavController = rememberNavController()
-            RegistrationScreen(
-                viewModel = viewModel(factory = AppViewModelProvider.Factory),
-                navController = mainNavController,
-            ) {}
         }
     }
 }

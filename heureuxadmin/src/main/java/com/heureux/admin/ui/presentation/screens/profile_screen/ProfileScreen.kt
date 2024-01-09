@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Logout
-import androidx.compose.material.icons.outlined.NoAccounts
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
@@ -43,7 +42,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.AppViewModelProvider
-import com.heureux.admin.ui.presentation.composables.dialogs.DeleteProfileDialog
 import com.heureux.admin.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
 import com.heureux.admin.ui.presentation.navigation.Screens
@@ -201,20 +199,6 @@ fun ProfileScreen(
                         profileScreenViewModel.hideOrShowSignOutDialog()
                     }
                 )
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.NoAccounts,
-                            contentDescription = null,
-                        )
-                    },
-                    headlineContent = {
-                        Text(text = "Delete profile & data")
-                    },
-                    modifier = Modifier.clickable {
-                        profileScreenViewModel.hideOrShowDeleteProfileDialog()
-                    }
-                )
 
                 if (uiState.showSignOutDialog) SignOutDialog(
                     onConfirmation = {
@@ -239,32 +223,6 @@ fun ProfileScreen(
                         }
                     }, onDismissRequest = {
                         profileScreenViewModel.hideOrShowSignOutDialog()
-                    }
-                )
-
-                if (uiState.showDeleteProfileDialog) DeleteProfileDialog(
-                    onConfirmation = {
-                        coroutineScope.launch {
-                            profileScreenViewModel.deleteProfileAndData(
-                                onSuccess = {
-                                    navController.navigate(route = Screens.SignInScreen.route) {
-                                        popUpTo(Screens.HomeScreen.route) {
-                                            inclusive = true
-                                        }
-                                    }
-                                },
-                                onFailure = { exception: Exception ->
-                                    profileScreenViewModel.hideOrShowDeleteProfileDialog()
-                                    Toast.makeText(
-                                        context,
-                                        "Failed to delete profile and data: ${exception.message}",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            )
-                        }
-                    }, onDismissRequest = {
-                        profileScreenViewModel.hideOrShowDeleteProfileDialog()
                     }
                 )
             }

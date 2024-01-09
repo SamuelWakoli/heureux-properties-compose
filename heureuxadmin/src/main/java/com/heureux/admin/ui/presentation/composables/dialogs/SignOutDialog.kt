@@ -69,7 +69,7 @@ fun SignOutDialog(
                     Spacer(modifier = Modifier.size(8.dp))
                     TextButton(onClick = {
                         onConfirmation()
-// TODO: handle error when sign out fails
+                        // TODO: handle error when sign out fails
                         onDismissRequest()
                     }) {
                         Text(text = "Okay")

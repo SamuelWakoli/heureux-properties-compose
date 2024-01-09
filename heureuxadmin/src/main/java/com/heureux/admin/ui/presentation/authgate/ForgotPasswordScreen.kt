@@ -45,10 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.admin.ui.AppViewModelProvider
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -162,14 +159,6 @@ fun ForgotPasswordScreen(
 }
 
 
-@Preview
-@Composable
-fun ForgotPasswordScreenPreview() {
-    ForgotPasswordScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel<AuthViewModel>(factory = AppViewModelProvider.Factory),
-    )
-}
 
 
 @Composable
