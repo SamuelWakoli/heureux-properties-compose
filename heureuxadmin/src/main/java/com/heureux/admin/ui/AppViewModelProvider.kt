@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.heureux.admin.HeureuxAdminApp
 import com.heureux.admin.ui.presentation.authgate.AuthViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 
 object AppViewModelProvider {
@@ -19,12 +20,15 @@ object AppViewModelProvider {
             MainScreenViewModel(
                 profileRepository = heureuxAdminApp().container.profileRepository,
 
-            )
+                )
         }
         initializer {
             ProfileScreenViewModel(
                 profileRepository = heureuxAdminApp().container.profileRepository
             )
+        }
+        initializer {
+            MoreScreenViewModel(userPreferencesRepository = heureuxAdminApp().userPreferencesRepository)
         }
     }
 }

@@ -26,7 +26,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 
@@ -91,15 +90,6 @@ fun ThemeSelectionDialog(
     }
 }
 
-@Preview
-@Composable
-private fun ThemeSelectionDialogPreview() {
-    ThemeSelectionDialog(
-        onDismissRequest = {
-
-        },
-    )
-}
 
 @Composable
 fun RadioListItem(
@@ -120,14 +110,4 @@ fun RadioListItem(
                 Text(text = label)
             }
         })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun RadioListItemPreview() {
-    RadioListItem(
-        currentTheme = "Dark",
-        label = "Dark",
-        onClick = {}
-    )
 }

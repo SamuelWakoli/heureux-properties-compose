@@ -21,6 +21,7 @@ import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.inquiries_screen.InquiriesScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreen
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -35,6 +36,8 @@ fun MainScreen(
 
     val userData = viewModel.userProfileData.collectAsState().value
 
+
+    val moreScreenViewModel = viewModel<MoreScreenViewModel>(factory = AppViewModelProvider.Factory)
     Scaffold(topBar = {
         MainScreenAppbar(
             userData = userData,
@@ -77,8 +80,9 @@ fun MainScreen(
             }
             composable(Screens.MoreScreen.route) {
                 MoreScreen(
-                    bottomNavHostController = bottomNavController,
-                    mainNavHostController = navController,
+                    scrollBehavior = scrollBehavior,
+                    viewModel = moreScreenViewModel,
+                    mainNavController = navController,
                 )
             }
         }
