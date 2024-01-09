@@ -16,9 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Logout
-import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -140,25 +138,6 @@ fun ProfileScreen(
                         Text(text = userData?.userEmail ?: "")
                     },
                 )
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.Phone,
-                            contentDescription = null,
-                        )
-                    },
-                    headlineContent = {
-                        Text(text = "Phone")
-                    },
-                    supportingContent = {
-                        Text(text = userData?.phone ?: "Click to add phone number")
-                    },
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = Screens.EditProfileScreen.route) {
-                            launchSingleTop = true
-                        }
-                    }
-                )
                 Divider(
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
@@ -168,22 +147,6 @@ fun ProfileScreen(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .padding(top = 24.dp),
-                )
-                ListItem(
-                    leadingContent = {
-                        Icon(
-                            imageVector = Icons.Outlined.Edit,
-                            contentDescription = null,
-                        )
-                    },
-                    headlineContent = {
-                        Text(text = "Edit profile")
-                    },
-                    modifier = Modifier.clickable {
-                        navController.navigate(route = Screens.EditProfileScreen.route) {
-                            launchSingleTop = true
-                        }
-                    }
                 )
                 ListItem(
                     leadingContent = {
