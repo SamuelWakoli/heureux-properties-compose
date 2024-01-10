@@ -13,7 +13,6 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
@@ -61,46 +60,45 @@ val mainBottomBarItems: List<MainBottomBarItem> = listOf(
 
 @Composable
 fun MainScreenBottomBar(bottomNavController: NavHostController) {
-    BottomAppBar {
-        NavigationBar {
-            val backStackEntry = bottomNavController.currentBackStackEntryAsState()
+    BottomAppBar{
+        val backStackEntry = bottomNavController.currentBackStackEntryAsState()
 
-            mainBottomBarItems.forEach { homeBottomBarItem: MainBottomBarItem ->
-                val currentRoute = backStackEntry.value?.destination?.route;
-                val selected = currentRoute == homeBottomBarItem.route
+        mainBottomBarItems.forEach { homeBottomBarItem: MainBottomBarItem ->
+            val currentRoute = backStackEntry.value?.destination?.route;
+            val selected = currentRoute == homeBottomBarItem.route
 
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = {
-                        bottomNavController.navigate(homeBottomBarItem.route) {
-                            launchSingleTop = true
-                            popUpTo(route = Screens.HomeScreen.route) {
-                                inclusive = false
-                            }
+            NavigationBarItem(
+                selected = selected,
+                onClick = {
+                    bottomNavController.navigate(homeBottomBarItem.route) {
+                        launchSingleTop = true
+                        popUpTo(route = Screens.HomeScreen.route) {
+                            inclusive = false
                         }
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                        unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    ),
-                    icon = {
-                        Icon(
-                            imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text(text = homeBottomBarItem.label) },
-                )
-            }
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+                icon = {
+                    Icon(
+                        imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
+                        contentDescription = null
+                    )
+                },
+                label = { Text(text = homeBottomBarItem.label) },
+            )
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-private fun HomeScreenBottomBarPreview() {
+private fun MainScreenBottomBarPreview() {
     MaterialTheme {
         MainScreenBottomBar(
             bottomNavController = rememberNavController(),

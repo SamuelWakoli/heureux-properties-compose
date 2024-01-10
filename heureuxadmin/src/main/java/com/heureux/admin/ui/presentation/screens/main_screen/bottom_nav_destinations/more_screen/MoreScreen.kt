@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Feedback
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Payments
@@ -97,13 +98,20 @@ fun MoreScreen(
 //                    }
                 }
             )
-            Divider()
             MoreScreenListItem(
                 leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Lock, contentDescription = null)
                 },
                 headlineContent = {
-                    Text(text = "Privacy policy")
+                    Text(text = "Privacy policy (user app)")
+                }
+            )
+            MoreScreenListItem(
+                leadingIcon = {
+                    Icon(imageVector = Icons.Outlined.Feedback, contentDescription = null)
+                },
+                headlineContent = {
+                    Text(text = "User feedback")
                 }
             )
             MoreScreenListItem(
