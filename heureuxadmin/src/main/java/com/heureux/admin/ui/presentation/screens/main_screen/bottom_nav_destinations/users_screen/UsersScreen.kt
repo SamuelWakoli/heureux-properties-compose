@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Call
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Payments
 import androidx.compose.material.icons.outlined.Sms
@@ -103,7 +104,9 @@ fun HeureuxUserListItem(
         },
         trailingContent = {
             IconButton(onClick = { showOptions = true }) {
-                Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "Options")
+                if (showOptions)
+                    Icon(imageVector = Icons.Outlined.Close, contentDescription = "Hide")
+                else Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "Options")
             }
 
             if (showOptions) {
