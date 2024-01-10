@@ -35,12 +35,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.admin.ui.AppViewModelProvider
 import com.heureux.admin.ui.presentation.composables.dialogs.SignOutDialog
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
 import com.heureux.admin.ui.presentation.navigation.Screens
@@ -207,13 +203,4 @@ fun ProfileScreen(
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun ProfileScreenPreview() {
-    ProfileScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
-    )
 }

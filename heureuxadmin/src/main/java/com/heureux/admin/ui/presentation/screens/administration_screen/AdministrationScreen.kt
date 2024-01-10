@@ -6,8 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AdminPanelSettings
@@ -56,7 +55,7 @@ fun AdministrationScreen(navController: NavHostController, viewModel: ProfileScr
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    titleContentColor = MaterialTheme.colorScheme.primary
+                    titleContentColor = MaterialTheme.colorScheme.primary,
                 ),
             )
         }
@@ -64,10 +63,14 @@ fun AdministrationScreen(navController: NavHostController, viewModel: ProfileScr
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-                .fillMaxSize()
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
+            LazyColumn {
+                items(5){
+                    AdminListItem()
+                }
+            }
         }
     }
 }
