@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
+import com.heureux.admin.ui.presentation.navigation.Screens
 
 @Composable
 fun PropertyListItem(
@@ -90,6 +91,9 @@ fun PropertyListItem(
                         TextButton(onClick = {
                             onUpdateCurrentProperty()
                             //TODO
+                            navController.navigate(Screens.PropertyDetailsScreen.route) {
+                                launchSingleTop = true
+                            }
                         }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,

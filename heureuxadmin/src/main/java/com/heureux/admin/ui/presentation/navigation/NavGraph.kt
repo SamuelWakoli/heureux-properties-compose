@@ -15,6 +15,7 @@ import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
+import com.heureux.admin.ui.presentation.screens.property_details_screen.PropertyDetailsScreen
 
 @Composable
 fun NavGraph(
@@ -69,6 +70,12 @@ fun NavGraph(
             AdministrationScreen(
                 navController = navController,
                 viewModel = profileScreenViewModel
+            )
+        }
+        composable(Screens.PropertyDetailsScreen.route) {
+            PropertyDetailsScreen(
+                navController = navController,
+                viewModel = mainScreenViewModel,
             )
         }
     }
