@@ -1,5 +1,6 @@
 package com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +13,13 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -31,6 +37,12 @@ fun HomeScreen(
     mainNavHostController: NavController,
     viewModel: MainScreenViewModel,
 ) {
+
+    val context = LocalContext.current
+    var showDeleteDialog by remember {
+        mutableStateOf(false)
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { /*TODO: Reset current property to null*/
@@ -55,12 +67,19 @@ fun HomeScreen(
                     PropertyListItem(
                         navController = mainNavHostController,
                         onUpdateCurrentProperty = { /*TODO*/ },
-                        onClickDelete = {/*TODO*/ },
+                        onClickDelete = { showDeleteDialog = true },
                     )
                 }
                 item {
                     Spacer(modifier = Modifier.size(64.dp))
                 }
+            }
+        }
+
+        if (showDeleteDialog) {
+            DeletePropertyDialog(onDismissRequest = { showDeleteDialog = false }) {
+                Toast.makeText(context, "Property deleting...", Toast.LENGTH_SHORT).show()
+                //TODO:
             }
         }
     }
