@@ -16,10 +16,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.DoneAll
-import androidx.compose.material.icons.outlined.Sell
+import androidx.compose.material.icons.outlined.Business
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -80,10 +79,10 @@ fun AddPropertyScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Outlined.Sell, contentDescription = null
+                        imageVector = Icons.Outlined.Business, contentDescription = null
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Sell with us")
+                    Text(text = "Add Property")
                 }
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -125,10 +124,6 @@ fun AddPropertyScreen(
                     Column(
                         Modifier.widthIn(min = 400.dp, max = 600.dp)
                     ) {
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Text(text = "The information you are about to provide below will be analysed by our agents and more inspections will be done.")
-                        Spacer(modifier = Modifier.size(8.dp))
-                        Divider()
                         Spacer(modifier = Modifier.padding(8.dp))
                         Text(
                             text = "Property details",
@@ -147,6 +142,26 @@ fun AddPropertyScreen(
                                 if (uiState.propertyNameError) Text(text = "name cannot be empty")
                             },
                             isError = uiState.propertyNameError,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                                imeAction = ImeAction.Next,
+                            ),
+                            singleLine = true,
+                            shape = MaterialTheme.shapes.medium,
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        OutlinedTextField(
+                            value = uiState.propertyLocation,
+                            onValueChange = { location ->
+                                viewModel.onPropertyLocationChanged(location = location)
+                            },
+                            label = {
+                                Text(text = "Location")
+                            },
+                            supportingText = {
+                                if (uiState.propertyLocationError) Text(text = "name cannot be empty")
+                            },
+                            isError = uiState.propertyLocationError,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next,
@@ -223,33 +238,6 @@ fun AddPropertyScreen(
                                 style = MaterialTheme.typography.bodySmall
                             )
                         }
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Divider()
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Text(
-                            text = "Contact",
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                        Spacer(modifier = Modifier.padding(4.dp))
-                        OutlinedTextField(
-                            value = uiState.userPhoneNumber,
-                            onValueChange = { phone ->
-                                viewModel.onPhoneNumberChanged(phone)
-                            },
-                            label = {
-                                Text(text = "Phone number")
-                            },
-                            supportingText = {
-                                if (uiState.userPhoneNumberError) Text(text = "Phone number cannot be empty")
-                            },
-                            isError = false,
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done,
-                            ),
-                            singleLine = true,
-                            shape = MaterialTheme.shapes.medium,
-                        )
                         Spacer(modifier = Modifier.padding(16.dp))
                     }
                 }
@@ -258,24 +246,6 @@ fun AddPropertyScreen(
 
                     //TODO
 
-                //                    viewModel.sendSellWithUsRequest(
-//                        sellWithUsRequest = SellWithUsRequest(
-//                            time = LocalDateTime.now().toString(),
-//                            userId = userData.userEmail ?: Firebase.auth.currentUser?.email ?: "anonymous",
-//                            propertyName = uiState.propertyName,
-//                            propertyDescription = uiState.propertyDescription,
-//                            propertyPrice = uiState.propertyPrice,
-//                            propertyImages = uiState.propertyImages,
-//                            contactNumber = uiState.userPhoneNumber,
-//                        ),
-//                        onSuccessListener = {
-//                            Toast.makeText(context, "Request sent", Toast.LENGTH_SHORT).show()
-//                            navController.navigateUp()
-//                        },
-//                        onFailure = { exception: Exception ->
-//                            Toast.makeText(context, exception.message, Toast.LENGTH_LONG).show()
-//                        },
-//                    )
                 }) {
                     Row(
                         modifier = Modifier.widthIn(min = 300.dp, max = 400.dp),
@@ -283,7 +253,7 @@ fun AddPropertyScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Submit",
+                            text = "Save",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center

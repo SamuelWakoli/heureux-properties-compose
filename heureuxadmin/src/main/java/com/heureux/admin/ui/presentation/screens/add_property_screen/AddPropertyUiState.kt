@@ -7,6 +7,8 @@ data class AddPropertyUiState(
     val propertyDescriptionError: Boolean = false,
     val propertyPrice: String = "",
     val propertyPriceError: Boolean = false,
+    val propertyLocation: String = "",
+    val propertyLocationError: Boolean = false,
     val propertiesImagesCount: Int = 0,
     val propertyImages: MutableList<String> = mutableListOf(),
     val propertyImagesError: Boolean= false,

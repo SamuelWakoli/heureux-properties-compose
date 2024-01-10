@@ -5,7 +5,7 @@ data class HeureuxProperty(
     val name: String,
     val price: String,
     val location: String,
-    val sellerId: String, // used to determine user listings
+    val sellerId: String = "Heureux Properties", // used to determine user listings
     val description: String,
     val imageUrls: List<String>,
     val purchasedBy: String? = null, // used to determine if listing is sold

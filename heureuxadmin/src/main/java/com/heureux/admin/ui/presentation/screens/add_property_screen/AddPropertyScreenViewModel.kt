@@ -68,6 +68,9 @@ class AddPropertyScreenViewModel(
     fun onPropertyNameChanged(name: String) {
         _uiState.value = _uiState.value.copy(propertyName = name, propertyNameError = false)
     }
+    fun onPropertyLocationChanged(location: String) {
+        _uiState.value = _uiState.value.copy(propertyLocation = location, propertyLocationError = false)
+    }
 
 
     fun onPropertyDescriptionChanged(description: String) {
