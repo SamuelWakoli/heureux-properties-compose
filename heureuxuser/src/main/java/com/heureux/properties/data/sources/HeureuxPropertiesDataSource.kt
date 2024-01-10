@@ -104,7 +104,7 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                             value?.toObjects(HeureuxProperty::class.java) ?: emptyList()
 
                         // Filter the list of properties by the user's email address.
-                        val soldProperties = properties.filter { it.seller == email }
+                        val soldProperties = properties.filter { it.sellerId == email }
 
                         // Call the onSuccess callback and send the list of properties to the flow.
                         trySend(soldProperties)
@@ -169,7 +169,7 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                     onFailure(error)
                 } else {
                     val myListings =
-                        value?.toObjects(HeureuxProperty::class.java)?.filter { it.seller == email }
+                        value?.toObjects(HeureuxProperty::class.java)?.filter { it.sellerId == email }
                             ?: emptyList()
                     trySend(myListings)
                 }
