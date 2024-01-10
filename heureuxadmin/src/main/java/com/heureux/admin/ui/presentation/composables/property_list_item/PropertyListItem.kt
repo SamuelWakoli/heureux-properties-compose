@@ -10,9 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmarks
-import androidx.compose.material.icons.outlined.BookmarkAdd
-import androidx.compose.material.icons.outlined.Cases
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -24,25 +23,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
 
 @Composable
 fun PropertyListItem(
     navController: NavController,
     onUpdateCurrentProperty: () -> Unit,
-    isBookmarked: Boolean,
-    onClickBookmark: () -> Unit,
+    onClickDelete: () -> Unit,
 ) {
     Card(
         modifier = Modifier
             .padding(
                 vertical = 4.dp, horizontal = 8.dp
             )
-            .widthIn(min = 400.dp, max = 600.dp)
+            .widthIn(max = 600.dp)
     ) {
         Column {
             CoilImage(
@@ -77,12 +73,12 @@ fun PropertyListItem(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     IconButton(onClick = {
-                        onClickBookmark()
+                        onClickDelete()
                     }) {
                         Icon(
-                            imageVector = if (isBookmarked) Icons.Filled.Bookmarks else Icons.Outlined.BookmarkAdd,
-                            contentDescription = if (isBookmarked) "Remove from bookmarks" else "Add to bookmarks",
-                            modifier = Modifier.size(26.dp),
+                            imageVector = Icons.Outlined.Delete,
+                            contentDescription = "Delete $ property name", /*TODO*/
+                            tint = MaterialTheme.colorScheme.error
                         )
                     }
                     Row(
@@ -119,11 +115,11 @@ fun PropertyListItem(
 
                                 ) {
                                 Icon(
-                                    imageVector = Icons.Outlined.Cases,
+                                    imageVector = Icons.Outlined.Edit,
                                     contentDescription = null
                                 )
                                 Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Inquire")
+                                Text(text = "Edit")
                             }
                         }
                     }
@@ -135,15 +131,4 @@ fun PropertyListItem(
 
 
     }
-}
-
-@Preview
-@Composable
-private fun PropertyListItemPreview() {
-    PropertyListItem(
-        navController = rememberNavController(),
-        onUpdateCurrentProperty = {},
-        isBookmarked = false,
-        onClickBookmark = {}
-    )
 }
