@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.heureux.admin.data.types.UserProfileData
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
+import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @Composable
@@ -47,7 +48,9 @@ fun UsersScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         items(20) {
-            HeureuxUserListItem()
+            HeureuxUserListItem(
+                navController = mainNavHostController
+            )
         }
     }
 }
@@ -61,7 +64,8 @@ fun HeureuxUserListItem(
         photoURL = null,
         userEmail = "user@gmail.com",
         phone = "0712345678"
-    )
+    ),
+    navController: NavController
 ) {
     var showOptions by remember { mutableStateOf(false) }
 
@@ -109,7 +113,8 @@ fun HeureuxUserListItem(
                             Icon(imageVector = Icons.Outlined.Call, contentDescription = null)
                         },
 
-                        text = { Text(text = "Call Username"/*Username == user firstname*/) }, onClick = { showOptions = false/*TODO*/ })
+                        text = { Text(text = "Call Username"/*Username == user firstname*/) },
+                        onClick = { showOptions = false/*TODO*/ })
                     DropdownMenuItem(
                         leadingIcon = {
                             Icon(imageVector = Icons.Outlined.Whatsapp, contentDescription = null)
@@ -131,9 +136,18 @@ fun HeureuxUserListItem(
                         },
                         text = { Text(text = "Update payment") },
                         trailingIcon = {
-                            Icon(imageVector = Icons.Outlined.ArrowForwardIos, contentDescription = null, modifier = Modifier.size(12.dp))
+                            Icon(
+                                imageVector = Icons.Outlined.ArrowForwardIos,
+                                contentDescription = null,
+                                modifier = Modifier.size(12.dp)
+                            )
                         },
-                        onClick = { showOptions = false/*TODO*/ })
+                        onClick = {
+                            showOptions = false/*TODO*/
+                            navController.navigate(Screens.UpdatePaymentScreen.route) {
+                                launchSingleTop = true
+                            }
+                        })
                 }
             }
         },
