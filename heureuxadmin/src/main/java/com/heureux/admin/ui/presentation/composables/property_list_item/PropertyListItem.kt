@@ -112,6 +112,9 @@ fun PropertyListItem(
                         TextButton(onClick = {
                             onUpdateCurrentProperty()
                             // TODO
+                            navController.navigate(Screens.AddPropertyScreen.route) {
+                                launchSingleTop = true
+                            }
                         }) {
                             Row(
                                 horizontalArrangement = Arrangement.Center,

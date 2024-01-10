@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.AppViewModelProvider
 import com.heureux.admin.ui.presentation.composables.property_list_item.PropertyListItem
+import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @Composable
@@ -32,7 +33,11 @@ fun HomeScreen(
 ) {
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = { /*TODO: Reset current property to null*/
+                mainNavHostController.navigate(Screens.AddPropertyScreen.route) {
+                    launchSingleTop = true
+                }
+            }) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add property")
             }
         }

@@ -10,6 +10,9 @@ import com.heureux.admin.ui.presentation.authgate.AuthViewModel
 import com.heureux.admin.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.admin.ui.presentation.authgate.RegistrationScreen
 import com.heureux.admin.ui.presentation.authgate.SignInScreen
+import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyImagesScreen
+import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreen
+import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreenViewModel
 import com.heureux.admin.ui.presentation.screens.administration_screen.AdministrationScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
@@ -29,6 +32,8 @@ fun NavGraph(
     val profileScreenViewModel =
         viewModel<ProfileScreenViewModel>(factory = AppViewModelProvider.Factory)
 
+    val addPropertyScreenViewModel =
+        viewModel<AddPropertyScreenViewModel>(factory = AppViewModelProvider.Factory)
 
     NavHost(
         navController = navController,
@@ -76,6 +81,18 @@ fun NavGraph(
             PropertyDetailsScreen(
                 navController = navController,
                 viewModel = mainScreenViewModel,
+            )
+        }
+        composable(Screens.AddPropertyScreen.route) {
+            AddPropertyScreen(
+                navController = navController,
+                viewModel = addPropertyScreenViewModel,
+            )
+        }
+        composable(Screens.AddPropertyImagesScreen.route) {
+            AddPropertyImagesScreen(
+                navController = navController,
+                viewModel = addPropertyScreenViewModel,
             )
         }
     }
