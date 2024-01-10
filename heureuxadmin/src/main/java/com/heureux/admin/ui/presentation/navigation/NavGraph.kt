@@ -10,9 +10,11 @@ import com.heureux.admin.ui.presentation.authgate.AuthViewModel
 import com.heureux.admin.ui.presentation.authgate.ForgotPasswordScreen
 import com.heureux.admin.ui.presentation.authgate.RegistrationScreen
 import com.heureux.admin.ui.presentation.authgate.SignInScreen
+import com.heureux.admin.ui.presentation.screens.administration_screen.AdministrationScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
+import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 
 @Composable
 fun NavGraph(
@@ -22,6 +24,9 @@ fun NavGraph(
     mainScreenViewModel: MainScreenViewModel,
     onSignInWithGoogle: () -> Unit,
 ) {
+
+    val profileScreenViewModel =
+        viewModel<ProfileScreenViewModel>(factory = AppViewModelProvider.Factory)
 
 
     NavHost(
@@ -57,7 +62,13 @@ fun NavGraph(
         composable(Screens.ProfileScreen.route) {
             ProfileScreen(
                 navController = navController,
-                profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+                viewModel = profileScreenViewModel
+            )
+        }
+        composable(Screens.AdministrationScreen.route) {
+            AdministrationScreen(
+                navController = navController,
+                viewModel = profileScreenViewModel
             )
         }
     }

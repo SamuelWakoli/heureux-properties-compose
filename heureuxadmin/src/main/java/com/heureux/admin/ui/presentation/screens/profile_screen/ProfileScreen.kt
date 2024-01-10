@@ -16,13 +16,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
+import androidx.compose.material.icons.outlined.AdminPanelSettings
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -49,11 +50,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun ProfileScreen(
     navController: NavController,
-    profileScreenViewModel: ProfileScreenViewModel,
+    viewModel: ProfileScreenViewModel,
 ) {
 
-    val uiState = profileScreenViewModel.uiState.collectAsState().value
-    val userData = profileScreenViewModel.userProfileData.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
+    val userData = viewModel.userProfileData.collectAsState().value
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val coroutineScope = rememberCoroutineScope()
@@ -103,11 +104,7 @@ fun ProfileScreen(
                     .padding(paddingValues)
                     .widthIn(min = 400.dp, max = 600.dp),
             ) {
-                Text(
-                    text = "My details",
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
+
                 ListItem(
                     leadingContent = {
                         if (userData?.photoURL != null && userData.photoURL.toString() != "null") {
@@ -137,16 +134,31 @@ fun ProfileScreen(
                     supportingContent = {
                         Text(text = userData?.userEmail ?: "")
                     },
+                    colors = ListItemDefaults.colors(
+                        leadingIconColor = MaterialTheme.colorScheme.primary,
+                        headlineColor = MaterialTheme.colorScheme.primary,
+                        supportingColor = MaterialTheme.colorScheme.primary,
+                    )
                 )
-                Divider(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                )
-                Text(
-                    text = "Actions",
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .padding(top = 24.dp),
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.AdminPanelSettings,
+                            contentDescription = null,
+                        )
+                    },
+                    headlineContent = {
+                        Text(text = "Administration")
+                    },
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screens.AdministrationScreen.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                    colors = ListItemDefaults.colors(
+                        leadingIconColor = MaterialTheme.colorScheme.primary,
+                        headlineColor = MaterialTheme.colorScheme.primary,
+                    )
                 )
                 ListItem(
                     leadingContent = {
@@ -159,14 +171,18 @@ fun ProfileScreen(
                         Text(text = "Sign out")
                     },
                     modifier = Modifier.clickable {
-                        profileScreenViewModel.hideOrShowSignOutDialog()
-                    }
+                        viewModel.hideOrShowSignOutDialog()
+                    },
+                    colors = ListItemDefaults.colors(
+                        leadingIconColor = MaterialTheme.colorScheme.error,
+                        headlineColor = MaterialTheme.colorScheme.error,
+                    )
                 )
 
                 if (uiState.showSignOutDialog) SignOutDialog(
                     onConfirmation = {
                         coroutineScope.launch {
-                            profileScreenViewModel.signOut(
+                            viewModel.signOut(
                                 onSuccess = {
                                     navController.navigate(route = Screens.SignInScreen.route) {
                                         popUpTo(Screens.HomeScreen.route) {
@@ -175,7 +191,7 @@ fun ProfileScreen(
                                     }
                                 },
                                 onFailure = {
-                                    profileScreenViewModel.hideOrShowSignOutDialog()
+                                    viewModel.hideOrShowSignOutDialog()
                                     Toast.makeText(
                                         context,
                                         "Failed to sign out, Please try again later",
@@ -185,7 +201,7 @@ fun ProfileScreen(
                             )
                         }
                     }, onDismissRequest = {
-                        profileScreenViewModel.hideOrShowSignOutDialog()
+                        viewModel.hideOrShowSignOutDialog()
                     }
                 )
             }
@@ -198,6 +214,6 @@ fun ProfileScreen(
 private fun ProfileScreenPreview() {
     ProfileScreen(
         navController = rememberNavController(),
-        profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory)
+        viewModel = viewModel(factory = AppViewModelProvider.Factory)
     )
 }
