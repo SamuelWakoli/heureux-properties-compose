@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.AdminPanelSettings
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Logout
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -175,6 +176,26 @@ fun ProfileScreen(
                     },
                     modifier = Modifier.clickable {
                         navController.navigate(Screens.AdministrationScreen.route) {
+                            launchSingleTop = true
+                        }
+                    },
+                    colors = ListItemDefaults.colors(
+                        leadingIconColor = MaterialTheme.colorScheme.primary,
+                        headlineColor = MaterialTheme.colorScheme.primary,
+                    )
+                )
+                ListItem(
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.Edit,
+                            contentDescription = null,
+                        )
+                    },
+                    headlineContent = {
+                        Text(text = "Edit profile")
+                    },
+                    modifier = Modifier.clickable {
+                        navController.navigate(Screens.EditProfileScreen.route) {
                             launchSingleTop = true
                         }
                     },

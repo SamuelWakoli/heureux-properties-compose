@@ -14,6 +14,8 @@ import com.heureux.admin.ui.presentation.screens.add_property_screen.AddProperty
 import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreen
 import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreenViewModel
 import com.heureux.admin.ui.presentation.screens.administration_screen.AdministrationScreen
+import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreen
+import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreenViewModel
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_property_inquiry.ArchivedPropertyInquiryScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_sell_with_us.ArchivedSellWithUsReqScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.property_inquiry.PropertyInquiryScreen
@@ -76,6 +78,12 @@ fun NavGraph(
             ProfileScreen(
                 navController = navController,
                 viewModel = profileScreenViewModel
+            )
+        }
+        composable(Screens.EditProfileScreen.route) {
+            EditProfileScreen(
+                navController = navController,
+                viewModel = viewModel<EditProfileScreenViewModel>(factory = AppViewModelProvider.Factory)
             )
         }
         composable(Screens.AdministrationScreen.route) {
