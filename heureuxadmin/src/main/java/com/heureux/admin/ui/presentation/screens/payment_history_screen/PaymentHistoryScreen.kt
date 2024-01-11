@@ -1,4 +1,4 @@
-package com.heureux.admin.ui.presentation.screens.payment_screen
+package com.heureux.admin.ui.presentation.screens.payment_history_screen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -67,7 +67,9 @@ fun PaymentHistoryScreen(
         LazyColumn(
             modifier = Modifier.padding(paddingValues)
         ) {
-
+            items(20){
+                PaymentHistoryListItem()
+            }
         }
     }
 }
