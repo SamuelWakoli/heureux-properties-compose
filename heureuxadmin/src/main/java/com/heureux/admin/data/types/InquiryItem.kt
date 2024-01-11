@@ -8,4 +8,5 @@ data class InquiryItem(
     val offerAmount: String,
     val preferredPaymentMethod: String,
     val phoneNumber: String,
+    val archived: Boolean = false,
 )
