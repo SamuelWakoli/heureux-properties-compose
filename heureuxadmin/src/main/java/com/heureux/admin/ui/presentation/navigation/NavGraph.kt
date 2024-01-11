@@ -17,6 +17,7 @@ import com.heureux.admin.ui.presentation.screens.administration_screen.Administr
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_property_inquiry.ArchivedPropertyInquiryScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_sell_with_us.ArchivedSellWithUsReqScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.property_inquiry.PropertyInquiryScreen
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsImagesScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsRequestScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
@@ -122,6 +123,11 @@ fun NavGraph(
         }
         composable(Screens.SellWithUsRequestsScreen.route) {
             SellWithUsRequestScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.SellWithUsImagesScreen.route) {
+            SellWithUsImagesScreen(
                 navController = navController,
             )
         }
