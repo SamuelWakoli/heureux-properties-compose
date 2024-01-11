@@ -26,6 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.AppViewModelProvider
+import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @Composable
@@ -41,7 +42,11 @@ fun InquiriesScreen(
     ) {
         ListItem(
             modifier = Modifier
-                .clickable { /*TODO*/ }
+                .clickable {
+                    mainNavHostController.navigate(Screens.PropertyInquiryScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
                 .widthIn(max = 600.dp),
             leadingContent = {
                 Icon(imageVector = Icons.Outlined.Business, contentDescription = null)
@@ -64,7 +69,11 @@ fun InquiriesScreen(
         )
         ListItem(
             modifier = Modifier
-                .clickable { /*TODO*/ }
+                .clickable {
+                    mainNavHostController.navigate(Screens.SellWithUsRequestsScreen.route) {
+                        launchSingleTop = true
+                    }
+                }
                 .widthIn(max = 600.dp),
             leadingContent = {
                 Icon(imageVector = Icons.Outlined.Cases, contentDescription = null)
@@ -87,7 +96,11 @@ fun InquiriesScreen(
         )
         ListItem(
             modifier = Modifier
-                .clickable { /*TODO*/ }
+                .clickable {
+                    mainNavHostController.navigate(Screens.ArchivedPropertyInquiryScreen.route){
+                        launchSingleTop = true
+                    }
+                }
                 .widthIn(max = 600.dp),
             leadingContent = {
                 Icon(imageVector = Icons.Outlined.Archive, contentDescription = null)
@@ -113,7 +126,11 @@ fun InquiriesScreen(
         )
         ListItem(
             modifier = Modifier
-                .clickable { /*TODO*/ }
+                .clickable {
+                    mainNavHostController.navigate(Screens.ArchivedSellWithUsReqScreen.route){
+                        launchSingleTop = true
+                    }
+                }
                 .widthIn(max = 600.dp),
             leadingContent = {
                 Icon(imageVector = Icons.Outlined.Archive, contentDescription = null)

@@ -32,27 +32,32 @@ import androidx.navigation.NavHostController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UpdatePaymentScreen(navController: NavHostController) {
-    Scaffold(topBar = {
-        CenterAlignedTopAppBar(navigationIcon = {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Navigate back"
-                )
-            }
-        }, title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(imageVector = Icons.Outlined.Payments, contentDescription = null)
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(text = "Update payment")
-            }
-        }, colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            titleContentColor = MaterialTheme.colorScheme.primary
-        )
-        )
-    }) { paddingValues ->
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Navigate back"
+                        )
+                    }
+                },
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(imageVector = Icons.Outlined.Payments, contentDescription = null)
+                        Spacer(modifier = Modifier.size(8.dp))
+                        Text(text = "Update payment")
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    titleContentColor = MaterialTheme.colorScheme.primary
+                ),
+            )
+        },
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
