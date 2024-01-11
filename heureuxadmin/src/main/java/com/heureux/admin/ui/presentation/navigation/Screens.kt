@@ -23,6 +23,10 @@ sealed class Screens(val route: String) {
     data object AddPropertyScreen : Screens(route = "add_property_screen")
     data object AddPropertyImagesScreen : Screens(route = "add_property_images_screen")
     data object UpdatePaymentScreen : Screens(route = "update_payment_screen")
+    data object ArchivedPropertyInquiryScreen : Screens(route = "archived_property_inq_screen")
+    data object ArchivedSellWithUsReqScreen : Screens(route = "archived_sell_with_us_screen")
+    data object PropertyInquiryScreen : Screens(route = "property_inq_screen")
+    data object SellWithUsRequestsScreen : Screens(route = "sell_with_us_screen")
 
 
 }

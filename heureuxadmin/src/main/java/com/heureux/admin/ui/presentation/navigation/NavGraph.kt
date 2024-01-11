@@ -14,6 +14,10 @@ import com.heureux.admin.ui.presentation.screens.add_property_screen.AddProperty
 import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreen
 import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreenViewModel
 import com.heureux.admin.ui.presentation.screens.administration_screen.AdministrationScreen
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_property_inquiry.ArchivedPropertyInquiryScreen
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_sell_with_us.ArchivedSellWithUsReqScreen
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.property_inquiry.PropertyInquiryScreen
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsRequestScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
@@ -98,6 +102,26 @@ fun NavGraph(
         }
         composable(Screens.UpdatePaymentScreen.route) {
             UpdatePaymentScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.ArchivedPropertyInquiryScreen.route) {
+            ArchivedPropertyInquiryScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.ArchivedSellWithUsReqScreen.route) {
+            ArchivedSellWithUsReqScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.PropertyInquiryScreen.route) {
+            PropertyInquiryScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.SellWithUsRequestsScreen.route) {
+            SellWithUsRequestScreen(
                 navController = navController,
             )
         }
