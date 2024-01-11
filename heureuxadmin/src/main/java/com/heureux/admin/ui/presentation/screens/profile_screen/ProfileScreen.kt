@@ -26,10 +26,17 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,7 +63,27 @@ fun ProfileScreen(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
+    val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
+
+
+    LaunchedEffect(uiState.errorMessage) {
+        if (!uiState.errorMessage.isNullOrEmpty()) {
+
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    message = uiState.errorMessage,
+//                    actionLabel = "Okay",
+                    withDismissAction = true,
+                    duration = SnackbarDuration.Indefinite
+                )
+            }
+        }
+    }
+
     Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        },
         topBar = {
             CenterAlignedTopAppBar(
                 scrollBehavior = scrollBehavior,

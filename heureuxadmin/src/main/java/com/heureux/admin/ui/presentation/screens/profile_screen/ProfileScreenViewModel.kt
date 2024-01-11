@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 
 data class ProfileScreenUiState(
     val showSignOutDialog: Boolean = false,
-    val showDeleteProfileDialog: Boolean = false,
+    val errorMessage: String? = null,
 )
 
 class ProfileScreenViewModel(
@@ -29,7 +29,7 @@ class ProfileScreenViewModel(
         Firebase.auth.currentUser
     }
 
-    companion object{
+    companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
@@ -40,8 +40,12 @@ class ProfileScreenViewModel(
 
     val userProfileData by lazy {
         profileRepository.getUserProfileData(
-            onSuccess = {},
-            onFailure = {}
+            onSuccess = {
+
+            },
+            onFailure = { exception ->
+                _uiState.update { it.copy(errorMessage = exception.message) }
+            }
         ).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -52,9 +56,6 @@ class ProfileScreenViewModel(
     fun hideOrShowSignOutDialog() =
         _uiState.update { it.copy(showSignOutDialog = !it.showSignOutDialog) }
 
-    fun hideOrShowDeleteProfileDialog() =
-        _uiState.update { it.copy(showDeleteProfileDialog = !it.showDeleteProfileDialog) }
-
     fun signOut(onSuccess: () -> Unit, onFailure: () -> Unit) {
         viewModelScope.launch {
             profileRepository.signOut()
@@ -64,20 +65,6 @@ class ProfileScreenViewModel(
             } else {
                 onFailure()
             }
-        }
-    }
-
-    fun deleteProfileAndData(onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit) {
-        viewModelScope.launch {
-            profileRepository.deleteUserAndData(
-                email = currentUser?.email!!,
-                onSuccessListener = {
-                    onSuccess()
-                },
-                onErrorListener = { exception: Exception ->
-                    onFailure(exception)
-                }
-            )
         }
     }
 }
