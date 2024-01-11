@@ -4,7 +4,7 @@ import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
+import com.google.firebase.storage.storage
 import com.heureux.properties.data.FireStoreUserFields
 import com.heureux.properties.data.FirebaseDirectories
 import com.heureux.properties.data.types.FeedbackItem
@@ -252,28 +252,20 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        try {
-            val storage = Firebase.storage
-            val storageReference = storage.reference.child(directory)
-            val uploadTask = storageReference.putFile(uri)
+        val storage = com.google.firebase.Firebase.storage
+        val storageReference = storage.reference.child(directory)
+        val uploadTask = storageReference.putFile(uri)
 
-            // Wait for the upload to complete, then get the download URL
-            val urlTask = uploadTask.continueWithTask { task ->
-                if (!task.isSuccessful) {
-                    throw task.exception!!
-                }
-                storageReference.downloadUrl
-            }.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val downloadUrl = storageReference.downloadUrl.toString()
-                    onSuccessListener.invoke(downloadUrl)
-                } else {
-                    onFailure.invoke(task.exception!!)
-                }
+        // Wait for the upload to complete, then get the download URL
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                throw task.exception!!
             }
-
-        } catch (e: Exception) {
-            onFailure.invoke(e)
+            storageReference.downloadUrl
+        }.addOnSuccessListener {
+            onSuccessListener.invoke(it.toString())
+        }.addOnFailureListener {
+            onFailure.invoke(it)
         }
     }
 

@@ -97,18 +97,6 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
         dataSource.signOut()
     }
 
-    override suspend fun deleteUserAndData(
-        email: String,
-        onSuccessListener: () -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    ) {
-        dataSource.deleteUserAndData(
-            email = email,
-            onSuccessListener = onSuccessListener,
-            onErrorListener = onErrorListener
-        )
-    }
-
 
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> =
         dataSource.getCurrentUser()

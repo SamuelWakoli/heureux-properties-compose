@@ -56,9 +56,4 @@ interface ProfileRepository {
 
     suspend fun signOut()
 
-    suspend fun deleteUserAndData(
-        email: String,
-        onSuccessListener: () -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    )
 }
