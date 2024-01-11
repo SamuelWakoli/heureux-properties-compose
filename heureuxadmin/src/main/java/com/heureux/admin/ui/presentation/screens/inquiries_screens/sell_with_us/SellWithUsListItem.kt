@@ -28,15 +28,19 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.heureux.admin.ui.presentation.navigation.Screens
 
 @Composable
-fun SellWithUsListItem() {
+fun SellWithUsListItem(navController: NavController) {
 
     var showOptions by remember { mutableStateOf(false) }
 
     ListItem(modifier = Modifier.widthIn(max = 600.dp), overlineContent = {
-        Text(text = "12:30pm  11/02/2024",
-            color = MaterialTheme.colorScheme.secondary,)
+        Text(
+            text = "12:30pm  11/02/2024",
+            color = MaterialTheme.colorScheme.secondary,
+        )
     }, headlineContent = {
         Text(
             text = "Property Name",
@@ -76,7 +80,13 @@ fun SellWithUsListItem() {
                 Icon(
                     imageVector = Icons.Outlined.Image, contentDescription = null
                 )
-            }, text = { Text(text = "View images") }, onClick = { showOptions = false /*TODO*/ })
+            }, text = { Text(text = "View images") }, onClick = {
+                showOptions = false
+                /*TODO*/
+                navController.navigate(Screens.SellWithUsImagesScreen.route) {
+                    launchSingleTop = true
+                }
+            })
             // TODO: Hide this if property is archived
             DropdownMenuItem(leadingIcon = {
                 Icon(

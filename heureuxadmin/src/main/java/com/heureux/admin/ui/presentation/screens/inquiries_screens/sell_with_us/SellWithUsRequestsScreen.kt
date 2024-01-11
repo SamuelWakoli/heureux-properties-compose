@@ -66,7 +66,7 @@ fun SellWithUsRequestScreen(navController: NavHostController) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 items(20) {
-                    SellWithUsListItem()
+                    SellWithUsListItem(navController = navController)
                 }
             }
         }
