@@ -21,6 +21,7 @@ import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsRequestScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
+import com.heureux.admin.ui.presentation.screens.payment_screen.PaymentHistoryScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 import com.heureux.admin.ui.presentation.screens.property_details_screen.PropertyDetailsScreen
@@ -128,6 +129,11 @@ fun NavGraph(
         }
         composable(Screens.SellWithUsImagesScreen.route) {
             SellWithUsImagesScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.PaymentHistoryScreen.route) {
+            PaymentHistoryScreen(
                 navController = navController,
             )
         }

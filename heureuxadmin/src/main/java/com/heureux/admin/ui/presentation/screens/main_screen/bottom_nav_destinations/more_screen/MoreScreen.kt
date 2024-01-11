@@ -93,9 +93,9 @@ fun MoreScreen(
                     Text(text = "Payment history")
                 },
                 onClick = {
-//                    mainNavController.navigate(Screens.PaymentHistoryScreen.route) {
-//                        launchSingleTop = true
-//                    }
+                    mainNavController.navigate(Screens.PaymentHistoryScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(

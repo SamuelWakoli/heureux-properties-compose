@@ -28,6 +28,7 @@ sealed class Screens(val route: String) {
     data object PropertyInquiryScreen : Screens(route = "property_inq_screen")
     data object SellWithUsRequestsScreen : Screens(route = "sell_with_us_screen")
     data object SellWithUsImagesScreen : Screens(route = "sell_with_us_images_screen")
+    data object PaymentHistoryScreen : Screens(route = "payments_screen")
 
 
 }
