@@ -104,7 +104,7 @@ class AddPropertyScreenViewModel(
     ) = viewModelScope.launch {
         profileRepository.uploadImageGetUrl(
             uri = uri,
-            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/property listings images/${uiState.value.propertyName.ifEmpty { "No name" }}/image ${uiState.value.propertiesImagesCount}.png",
+            directory = "${FirebaseDirectories.AdminsStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/property listings images/${uiState.value.propertyName.ifEmpty { "No name" }}/image ${uiState.value.propertiesImagesCount}.png",
             onSuccessListener = onSuccess,
             onFailure = onFailure,
         )

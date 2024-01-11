@@ -147,7 +147,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onFailure: (exception: Exception) -> Unit,
     ): Flow<UserProfileData?> = callbackFlow {
 
-        val snapshotListener = firestore.collection(FirebaseDirectories.UsersCollection.name)
+        val snapshotListener = firestore.collection(FirebaseDirectories.AdminsCollection.name)
             .document(auth.currentUser?.email!!)
             .addSnapshotListener { value, error ->
 
@@ -216,7 +216,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
         )
 
         try {
-            firestore.collection(FirebaseDirectories.UsersCollection.name)
+            firestore.collection(FirebaseDirectories.AdminsCollection.name)
                 .document(userProfileDate.userEmail!!)
                 .update(userdata).await()
 
@@ -239,24 +239,5 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
     override suspend fun signOut() {
         auth.signOut()
-    }
-
-    override suspend fun deleteUserAndData(
-        email: String,
-        onSuccessListener: () -> Unit,
-        onErrorListener: (exception: Exception) -> Unit,
-    ) {
-        try {
-            firestore.collection(FirebaseDirectories.UsersCollection.name)
-                .document(email).delete().await()
-
-            storageReference.child(FirebaseDirectories.UsersStorageReference.name)
-                .child(email).delete().await()
-            auth.currentUser?.delete()?.await()
-
-            onSuccessListener()
-        } catch (exception: Exception) {
-            onErrorListener(exception)
-        }
     }
 }

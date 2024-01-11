@@ -1,6 +1,8 @@
 package com.heureux.admin.data
 
 sealed class FirebaseDirectories (val name: String) {
+    data object AdminsCollection : FirebaseDirectories(name = "admins")
+    data object AdminsStorageReference : FirebaseDirectories(name = "admins")
     data object UsersCollection : FirebaseDirectories(name = "users")
     data object UsersStorageReference : FirebaseDirectories(name = "users")
     data object PropertiesCollection : FirebaseDirectories(name = "properties")
