@@ -28,6 +28,7 @@ import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 import com.heureux.admin.ui.presentation.screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.admin.ui.presentation.screens.update_payment_screen.UpdatePaymentScreen
+import com.heureux.admin.ui.presentation.screens.user_feedback_screen.UserFeedbackScreen
 
 @Composable
 fun NavGraph(
@@ -142,6 +143,11 @@ fun NavGraph(
         }
         composable(Screens.PaymentHistoryScreen.route) {
             PaymentHistoryScreen(
+                navController = navController,
+            )
+        }
+        composable(Screens.UserFeedbackScreen.route) {
+            UserFeedbackScreen(
                 navController = navController,
             )
         }

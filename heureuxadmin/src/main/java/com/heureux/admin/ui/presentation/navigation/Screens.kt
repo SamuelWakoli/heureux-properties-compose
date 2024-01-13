@@ -30,6 +30,7 @@ sealed class Screens(val route: String) {
     data object SellWithUsRequestsScreen : Screens(route = "sell_with_us_screen")
     data object SellWithUsImagesScreen : Screens(route = "sell_with_us_images_screen")
     data object PaymentHistoryScreen : Screens(route = "payments_screen")
+    data object UserFeedbackScreen : Screens(route = "user_feedback_screen")
 
 
 }

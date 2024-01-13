@@ -112,6 +112,11 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "User feedback")
+                },
+                onClick = {
+                    mainNavController.navigate(Screens.UserFeedbackScreen.route) {
+                        launchSingleTop = true
+                    }
                 }
             )
             MoreScreenListItem(
