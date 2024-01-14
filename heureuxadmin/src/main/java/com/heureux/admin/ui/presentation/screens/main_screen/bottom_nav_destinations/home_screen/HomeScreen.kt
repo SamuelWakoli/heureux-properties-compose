@@ -9,9 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -19,23 +21,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.admin.ui.AppViewModelProvider
 import com.heureux.admin.ui.presentation.composables.property_list_item.PropertyListItem
 import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    bottomNavHostController: NavHostController,
-    mainNavHostController: NavController,
+    navController: NavController,
     viewModel: MainScreenViewModel,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
 
     val context = LocalContext.current
@@ -46,7 +45,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { /*TODO: Reset current property to null*/
-                mainNavHostController.navigate(Screens.AddPropertyScreen.route) {
+                navController.navigate(Screens.AddPropertyScreen.route) {
                     launchSingleTop = true
                 }
             }) {
@@ -57,6 +56,7 @@ fun HomeScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize(),
         ) {
             LazyColumn(
@@ -65,7 +65,7 @@ fun HomeScreen(
             ) {
                 items(20) {
                     PropertyListItem(
-                        navController = mainNavHostController,
+                        navController = navController,
                         onUpdateCurrentProperty = { /*TODO*/ },
                         onClickDelete = { showDeleteDialog = true },
                     )
@@ -84,14 +84,4 @@ fun HomeScreen(
         }
     }
 
-}
-
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    HomeScreen(
-        bottomNavHostController = rememberNavController(),
-        mainNavHostController = rememberNavController(),
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
-    )
 }

@@ -31,9 +31,7 @@ fun MainScreen(
     viewModel: MainScreenViewModel,
 ) {
     val bottomNavController: NavHostController = rememberNavController()
-
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
     val userData = viewModel.userProfileData.collectAsState().value
 
 
@@ -59,23 +57,23 @@ fun MainScreen(
         ) {
             composable(Screens.HomeScreen.route) {
                 HomeScreen(
-                    bottomNavHostController = bottomNavController,
-                    mainNavHostController = navController,
-                    viewModel = viewModel
+                    navController = navController,
+                    viewModel = viewModel,
+                    scrollBehavior = scrollBehavior
                 )
             }
             composable(Screens.UsersScreen.route) {
                 UsersScreen(
-                    bottomNavHostController = bottomNavController,
-                    mainNavHostController = navController,
-                    viewModel = viewModel
+                    navController = navController,
+                    viewModel = viewModel,
+                    scrollBehavior = scrollBehavior
                 )
             }
             composable(Screens.InquiriesScreen.route) {
                 InquiriesScreen(
-                    bottomNavHostController = bottomNavController,
-                    mainNavHostController = navController,
-                    viewModel = viewModel
+                    navController = navController,
+                    viewModel = viewModel,
+                    scrollBehavior = scrollBehavior
                 )
             }
             composable(Screens.MoreScreen.route) {
