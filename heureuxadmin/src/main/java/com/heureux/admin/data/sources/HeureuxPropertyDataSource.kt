@@ -1,5 +1,6 @@
 package com.heureux.admin.data.sources
 
+import android.net.Uri
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,28 @@ class HeureuxPropertyDataSource : PropertyDataSource {
         get() = Firebase.firestore
     override val storage: FirebaseStorage
         get() = Firebase.storage
+
+    override suspend fun uploadImageGetUrl(
+        uri: Uri,
+        directory: String,
+        onSuccessListener: (downloadUrl: String) -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        val storageReference = storage.reference.child(directory)
+        val uploadTask = storageReference.putFile(uri)
+
+        // Wait for the upload to complete, then get the download URL
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                throw task.exception!!
+            }
+            storageReference.downloadUrl
+        }.addOnSuccessListener {
+            onSuccessListener.invoke(it.toString())
+        }.addOnFailureListener {
+            onFailure.invoke(it)
+        }
+    }
 
     override fun getPropertyData(
         id: String, onFailure: (exception: Exception) -> Unit
