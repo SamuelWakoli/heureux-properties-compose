@@ -3,8 +3,6 @@ package com.heureux.admin.data.sources
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
 import com.heureux.admin.data.FirebaseDirectories
 import com.heureux.admin.data.types.InquiryItem
 import com.heureux.admin.data.types.SellWithUsRequest
@@ -15,8 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 class HeureuxInquiriesDataSource : InquiriesDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
-    override val storage: FirebaseStorage
-        get() = Firebase.storage
+
 
     override fun getPropertyInquiries(
         onError: (Exception) -> Unit,

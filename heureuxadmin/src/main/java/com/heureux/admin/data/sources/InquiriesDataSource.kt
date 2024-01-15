@@ -1,14 +1,12 @@
 package com.heureux.admin.data.sources
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.heureux.admin.data.types.InquiryItem
 import com.heureux.admin.data.types.SellWithUsRequest
 import kotlinx.coroutines.flow.Flow
 
 interface InquiriesDataSource {
     val firestore: FirebaseFirestore
-    val storage: FirebaseStorage
 
     fun getPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>>
     fun getArchivedPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>>
