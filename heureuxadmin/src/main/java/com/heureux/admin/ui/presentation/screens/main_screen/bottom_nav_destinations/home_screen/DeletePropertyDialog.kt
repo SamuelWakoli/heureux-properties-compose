@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeletePropertyDialog(
+    propertyName: String,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
 ) {
@@ -42,7 +43,7 @@ fun DeletePropertyDialog(
                 Spacer(modifier = Modifier.size(8.dp))
                 Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
                 Spacer(modifier = Modifier.size(4.dp))
-                Text(text = "You are about to delete PropertyName. Do you want to continue?")
+                Text(text = "You are about to delete $propertyName. Do you want to continue?")
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,

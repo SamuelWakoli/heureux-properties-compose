@@ -48,7 +48,7 @@ fun HomeScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.updateCurrentProperty(null)
+                viewModel.updateCurrentPropertyState(null)
                 navController.navigate(Screens.AddPropertyScreen.route) {
                     launchSingleTop = true
                 }
@@ -104,9 +104,9 @@ fun HomeScreen(
                         PropertyListItem(
                             property = property,
                             navController = navController,
-                            onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
+                            onUpdateCurrentProperty = { viewModel.updateCurrentPropertyState(property) },
                             onClickDelete = {
-                                viewModel.updateCurrentProperty(property)
+                                viewModel.updateCurrentPropertyState(property)
                                 viewModel.updateDeleteDialogState()
                             },
                         )
@@ -119,7 +119,9 @@ fun HomeScreen(
         }
 
         if (uiState.showDeleteDialog) {
-            DeletePropertyDialog(onDismissRequest = { viewModel.updateDeleteDialogState() }) {
+            DeletePropertyDialog(
+                propertyName = uiState.currentProperty?.name.toString(),
+                onDismissRequest = { viewModel.updateDeleteDialogState() }) {
                 Toast.makeText(context, "Property deleting...", Toast.LENGTH_SHORT).show()
                 viewModel.onDeletePropertyClicked(property = uiState.currentProperty!!)
             }

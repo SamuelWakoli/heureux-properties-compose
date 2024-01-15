@@ -50,7 +50,7 @@ class HomeScreenViewModel(private val propertyRepository: PropertyRepository) : 
         }
     }
 
-    fun updateCurrentProperty(property: HeureuxProperty?) {
+    fun updateCurrentPropertyState(property: HeureuxProperty?) {
         _uiState.update {
             it.copy(currentProperty = property)
         }

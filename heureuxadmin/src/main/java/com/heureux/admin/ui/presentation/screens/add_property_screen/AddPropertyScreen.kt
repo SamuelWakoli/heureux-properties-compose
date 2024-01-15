@@ -285,7 +285,7 @@ fun AddPropertyScreen(
                             }
                         )
                     } else {
-                        homeScreenViewModel.updateCurrentProperty(
+                        homeScreenViewModel.editProperty(
                             property = HeureuxProperty(
                                 id = currentProperty.id,
                                 name = uiState.propertyName,
@@ -294,7 +294,22 @@ fun AddPropertyScreen(
                                 price = uiState.propertyPrice,
                                 imageUrls = uiState.propertyImages,
                                 sellerId = currentProperty.sellerId
-                            )
+                            ),
+                            onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Property updated successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                navController.navigateUp()
+                            },
+                            onError = { exception ->
+                                Toast.makeText(
+                                    context,
+                                    "Failed to update property. Error: ${exception.message} ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
                         )
                     }
 

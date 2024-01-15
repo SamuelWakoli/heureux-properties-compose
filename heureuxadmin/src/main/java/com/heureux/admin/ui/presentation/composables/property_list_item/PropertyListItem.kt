@@ -44,13 +44,24 @@ fun PropertyListItem(
             .widthIn(max = 600.dp)
     ) {
         Column {
-            CoilImage(
-                imageUrl = property.imageUrls.first(),
-                modifier = Modifier
-                    .heightIn(
-                        min = 160.dp, max = 220.dp
-                    )
-            )
+            if (property.imageUrls.isEmpty()) {
+                Text(
+                    text = "No Image Added",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
+            } else {
+                CoilImage(
+                    imageUrl = property.imageUrls.first(),
+                    modifier = Modifier
+                        .heightIn(
+                            min = 160.dp, max = 220.dp
+                        )
+                )
+            }
             Column(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
