@@ -1,6 +1,5 @@
 package com.heureux.admin.ui.presentation.screens.main_screen
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -109,9 +108,8 @@ private fun MainScreenAppbarPreview() {
             mainNavController = rememberNavController(),
             scrollBehavior = scrollBehavior,
             userData = UserProfileData(
-                userID = "test@gmail.com",
                 displayName = "Test",
-                photoURL = Uri.parse(""),
+                photoURL = "",
                 userEmail = "test@gmail.com",
                 phone = "1234567890",
             ),

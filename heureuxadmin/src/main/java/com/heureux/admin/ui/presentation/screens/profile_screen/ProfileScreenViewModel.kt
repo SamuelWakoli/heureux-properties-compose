@@ -53,6 +53,21 @@ class ProfileScreenViewModel(
         )
     }
 
+    val adminsList by lazy {
+        profileRepository.getAdminsList(
+            onFailure = {exception ->
+                _uiState.update { it.copy(errorMessage = exception.message) }
+            }
+        ).stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = emptyList()
+        )
+    }
+
+    fun resetErrorMessage() =
+        _uiState.update { it.copy(errorMessage = null) }
+
     fun hideOrShowSignOutDialog() =
         _uiState.update { it.copy(showSignOutDialog = !it.showSignOutDialog) }
 
