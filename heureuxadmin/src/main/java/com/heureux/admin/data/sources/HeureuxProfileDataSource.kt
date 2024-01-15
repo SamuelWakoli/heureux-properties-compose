@@ -233,9 +233,16 @@ class HeureuxProfileDataSource : ProfileDataSource {
                     close(error)
                 } else {
                     var admins: List<UserProfileData?>? = emptyList()
-                    if (value?.documents.isNullOrEmpty()) {
+                    if (!value?.documents.isNullOrEmpty()) {
                         admins = value?.documents?.map { documentSnapshot: DocumentSnapshot? ->
-                            documentSnapshot?.toObject(UserProfileData::class.java)
+                            documentSnapshot?.data.let {
+                                UserProfileData(
+                                    displayName = it?.get("displayName").toString(),
+                                    photoURL = it?.get("photoURL").toString(),
+                                    userEmail = it?.get("userEmail").toString(),
+                                    phone = it?.get("phone").toString(),
+                                )
+                            }
                         }
                     }
                     trySend(admins)
