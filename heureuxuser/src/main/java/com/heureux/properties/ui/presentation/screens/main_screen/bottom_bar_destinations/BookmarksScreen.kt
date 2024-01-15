@@ -90,6 +90,7 @@ fun BookmarksScreen(
             ) {
                 items(bookmarksList) { property ->
                     PropertyListItem(
+                        property = property,
                         navController = navController,
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
                         isBookmarked = bookmarksList.contains(property) ?: false,

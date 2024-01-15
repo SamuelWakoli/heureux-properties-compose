@@ -1,6 +1,5 @@
 package com.heureux.properties.ui.presentation.screens.main_screen
 
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -21,7 +20,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,11 +29,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.R
 import com.heureux.properties.data.types.UserProfileData
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
@@ -175,25 +171,4 @@ fun MainScreenAppbar(
             }
         },
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview
-@Composable
-private fun MainScreenAppbarPreview() {
-    MaterialTheme {
-        val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-        MainScreenAppbar(
-            bottomNavController = rememberNavController(),
-            mainNavController = rememberNavController(),
-            scrollBehavior = scrollBehavior,
-            userData = UserProfileData(
-                userID = "test@gmail.com",
-                displayName = "Test",
-                photoURL = Uri.parse(""),
-                userEmail = "test@gmail.com",
-                phone = "1234567890",
-            ),
-        )
-    }
 }

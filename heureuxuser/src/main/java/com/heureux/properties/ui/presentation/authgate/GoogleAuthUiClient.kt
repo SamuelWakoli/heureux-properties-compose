@@ -58,9 +58,8 @@ class GoogleAuthUiClient(
             GoogleSignInResult(
                 data = user?.run {
                     UserProfileData(
-                        userID = uid,
                         displayName = displayName,
-                        photoURL = photoUrl,
+                        photoURL = photoUrl.toString(),
                         userEmail = email
                     )
                 },

@@ -143,6 +143,7 @@ fun FeedbackScreen(
                         isSending = true
                         viewModel.sendFeedback(
                             feedbackItem = FeedbackItem(
+                                id = LocalDateTime.now().toString(),
                                 message = feedbackText,
                                 time = LocalDateTime.now().toString(),
                                 senderEmail = userEmail ?: "anonymous",

@@ -266,8 +266,10 @@ fun SellWithUsScreen(
                 ElevatedButton(modifier = Modifier.padding(8.dp), onClick = {
                     viewModel.sendSellWithUsRequest(
                         sellWithUsRequest = SellWithUsRequest(
+                            id = LocalDateTime.now().toString(),
                             time = LocalDateTime.now().toString(),
-                            userId = userData.userEmail ?: Firebase.auth.currentUser?.email ?: "anonymous",
+                            userId = userData.userEmail ?: Firebase.auth.currentUser?.email
+                            ?: "anonymous",
                             propertyName = uiState.propertyName,
                             propertyDescription = uiState.propertyDescription,
                             propertyPrice = uiState.propertyPrice,

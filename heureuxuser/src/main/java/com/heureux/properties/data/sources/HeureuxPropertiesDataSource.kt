@@ -28,26 +28,33 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
     override fun getHomeProperties(
         onFailure: (exception: Exception) -> Unit,
     ): Flow<List<HeureuxProperty>> = callbackFlow {
-        // Get a reference to the "Properties" collection in Firestore.
-        val snapshotListener = firestore.collection(FirebaseDirectories.PropertiesCollection.name)
-            .addSnapshotListener { value, error ->
-                // If there was an error, call the onFailure callback and close the flow.
-                if (error != null) {
-                    onFailure(error)
-                    close(error)
-                } else {
-                    // Get the list of properties from the snapshot.
-                    val properties = value?.toObjects(HeureuxProperty::class.java) ?: emptyList()
-
-                    // Call the onSuccess callback and send the list of properties to the flow.
-                    trySend(properties)
+        val snapshotListener =
+            firestore.collection(FirebaseDirectories.PropertiesCollection.name)
+                .addSnapshotListener { value, error ->
+                    if (error != null) {
+                        onFailure(error)
+                        close(error)
+                    } else {
+                        val list = mutableListOf<HeureuxProperty>()
+                        value?.documents?.forEach { doc ->
+                            list.add(
+                                HeureuxProperty(
+                                    id = doc.id,
+                                    name = doc.get("name").toString(),
+                                    price = doc.get("price").toString(),
+                                    location = doc.get("location").toString(),
+                                    sellerId = doc.get("sellerId").toString(),
+                                    description = doc.get("description").toString(),
+                                    imageUrls = doc.get("imageUrls") as List<String>,
+                                    purchasedBy = doc.get("purchasedBy").toString()
+                                )
+                            )
+                        }
+                        trySend(list)
+                    }
                 }
-            }
 
-        // When the flow is closed, remove the snapshot listener.
-        awaitClose {
-            snapshotListener.remove()
-        }
+        awaitClose { snapshotListener.remove() }
     }
 
     /**

@@ -90,6 +90,7 @@ fun HomeScreen(
             ) {
                 items(items = propertiesList) { property: HeureuxProperty ->
                     PropertyListItem(
+                        property = property,
                         navController = navController,
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
                         isBookmarked = bookmarksList?.contains(property) ?: false,
