@@ -102,9 +102,13 @@ fun HomeScreen(
                 ) {
                     items(allProperties) { property ->
                         PropertyListItem(
+                            property = property,
                             navController = navController,
                             onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
-                            onClickDelete = { viewModel.updateDeleteDialogState() /*TODO*/ },
+                            onClickDelete = {
+                                viewModel.updateCurrentProperty(property)
+                                viewModel.updateDeleteDialogState()
+                            },
                         )
                     }
                     item {
@@ -117,7 +121,7 @@ fun HomeScreen(
         if (uiState.showDeleteDialog) {
             DeletePropertyDialog(onDismissRequest = { viewModel.updateDeleteDialogState() }) {
                 Toast.makeText(context, "Property deleting...", Toast.LENGTH_SHORT).show()
-                //TODO:
+                viewModel.onDeletePropertyClicked(property = uiState.currentProperty!!)
             }
         }
     }
