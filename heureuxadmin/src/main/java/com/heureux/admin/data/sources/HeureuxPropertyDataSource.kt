@@ -68,8 +68,19 @@ class HeureuxPropertyDataSource : PropertyDataSource {
                             close(error)
                         } else {
                             val list = mutableListOf<HeureuxProperty>()
-                            value?.documents?.forEach {
-                                list.add(it.toObject(HeureuxProperty::class.java)!!)
+                            value?.documents?.forEach { doc ->
+                                list.add(
+                                    HeureuxProperty(
+                                        id = doc.id,
+                                        name = doc.get("name").toString(),
+                                        price = doc.get("price").toString(),
+                                        location = doc.get("location").toString(),
+                                        sellerId = doc.get("sellerId").toString(),
+                                        description = doc.get("description").toString(),
+                                        imageUrls = doc.get("imageUrls") as List<String>,
+                                        purchasedBy = doc.get("purchasedBy").toString()
+                                    )
+                                )
                             }
                             trySend(list)
                         }
@@ -94,10 +105,10 @@ class HeureuxPropertyDataSource : PropertyDataSource {
     ) {
         firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(data.id)
             .set(data).addOnSuccessListener {
-            onSuccess()
-        }.addOnFailureListener {
-            onFailure(it)
-        }
+                onSuccess()
+            }.addOnFailureListener {
+                onFailure(it)
+            }
     }
 
     override suspend fun deleteProperty(
@@ -108,7 +119,7 @@ class HeureuxPropertyDataSource : PropertyDataSource {
                 // TODO: Delete images from storage
                 onSuccess()
             }.addOnFailureListener {
-            onFailure(it)
-        }
+                onFailure(it)
+            }
     }
 }
