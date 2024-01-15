@@ -9,14 +9,19 @@ interface PropertyDataSource {
     val firestore: FirebaseFirestore
     val storage: FirebaseStorage
 
-    fun getPropertyData(id: String) : Flow<HeureuxProperty>
-    fun getProperties() : Flow<List<HeureuxProperty>>
+    fun getPropertyData(
+        id: String,
+        onFailure: (exception: Exception) -> Unit
+    ): Flow<HeureuxProperty>
+
+    fun getProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>>
 
     suspend fun addProperty(
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
         data: HeureuxProperty
     )
+
     suspend fun updateProperty(
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
