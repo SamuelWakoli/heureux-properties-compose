@@ -14,7 +14,7 @@ interface PropertyDataSource {
         onFailure: (exception: Exception) -> Unit
     ): Flow<HeureuxProperty>
 
-    fun getProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>>
+    fun getAllProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>>
 
     suspend fun addProperty(
         onSuccess: () -> Unit,

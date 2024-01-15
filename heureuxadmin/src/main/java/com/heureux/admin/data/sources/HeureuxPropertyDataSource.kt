@@ -18,8 +18,7 @@ class HeureuxPropertyDataSource : PropertyDataSource {
         get() = Firebase.storage
 
     override fun getPropertyData(
-        id: String,
-        onFailure: (exception: Exception) -> Unit
+        id: String, onFailure: (exception: Exception) -> Unit
     ): Flow<HeureuxProperty> = callbackFlow {
         val snapshotListener =
             firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(id)
@@ -36,30 +35,40 @@ class HeureuxPropertyDataSource : PropertyDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
-    override fun getProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>> {
-        TODO("Not yet implemented")
-    }
+    override fun getAllProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>> =
+        callbackFlow {
+            val snapshotListener =
+                firestore.collection(FirebaseDirectories.PropertiesCollection.name)
+                    .addSnapshotListener { value, error ->
+                        if (error != null) {
+                            onFailure(error)
+                            close(error)
+                        } else {
+                            val list = mutableListOf<HeureuxProperty>()
+                            value?.documents?.forEach {
+                                list.add(it.toObject(HeureuxProperty::class.java)!!)
+                            }
+                            trySend(list)
+                        }
+                    }
+
+            awaitClose { snapshotListener.remove() }
+        }
 
     override suspend fun addProperty(
-        onSuccess: () -> Unit,
-        onFailure: (exception: Exception) -> Unit,
-        data: HeureuxProperty
+        onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
         TODO("Not yet implemented")
     }
 
     override suspend fun updateProperty(
-        onSuccess: () -> Unit,
-        onFailure: (exception: Exception) -> Unit,
-        data: HeureuxProperty
+        onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
         TODO("Not yet implemented")
     }
 
     override suspend fun deleteProperty(
-        onSuccess: () -> Unit,
-        onFailure: (exception: Exception) -> Unit,
-        id: String
+        onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, id: String
     ) {
         TODO("Not yet implemented")
     }
