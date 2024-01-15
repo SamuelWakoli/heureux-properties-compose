@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
     id("com.google.gms.google-services")
+
+    // kotlin serialization
+    kotlin("plugin.serialization") version "1.7.20"
 }
 
 android {
@@ -74,6 +77,9 @@ dependencies {
 
     // Datastore
     implementation(libs.androidx.datastore.preferences)
+
+    // Kotlin Serialization
+    implementation (libs.kotlinx.serialization.json)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
