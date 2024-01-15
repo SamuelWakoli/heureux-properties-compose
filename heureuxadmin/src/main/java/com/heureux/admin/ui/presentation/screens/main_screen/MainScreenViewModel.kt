@@ -42,5 +42,4 @@ class MainScreenViewModel(
             initialValue = null
         )
     }
-
 }

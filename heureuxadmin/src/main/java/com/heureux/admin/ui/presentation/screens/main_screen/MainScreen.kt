@@ -3,13 +3,11 @@ package com.heureux.admin.ui.presentation.screens.main_screen
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
@@ -19,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.AppViewModelProvider
 import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreen
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.inquiries_screen.InquiriesScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
@@ -29,11 +28,11 @@ import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinat
 fun MainScreen(
     navController: NavController,
     viewModel: MainScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel
 ) {
     val bottomNavController: NavHostController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val userData = viewModel.userProfileData.collectAsState().value
-
 
     val moreScreenViewModel = viewModel<MoreScreenViewModel>(factory = AppViewModelProvider.Factory)
     Scaffold(topBar = {
@@ -58,7 +57,7 @@ fun MainScreen(
             composable(Screens.HomeScreen.route) {
                 HomeScreen(
                     navController = navController,
-                    viewModel = viewModel,
+                    viewModel = homeScreenViewModel,
                     scrollBehavior = scrollBehavior
                 )
             }
@@ -84,16 +83,5 @@ fun MainScreen(
                 )
             }
         }
-    }
-}
-
-@Preview
-@Composable
-private fun MainScreenPreview() {
-    MaterialTheme {
-        MainScreen(
-            navController = rememberNavController(),
-            viewModel = viewModel(factory = AppViewModelProvider.Factory)
-        )
     }
 }

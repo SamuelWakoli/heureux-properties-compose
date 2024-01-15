@@ -23,6 +23,7 @@ import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsRequestScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
 import com.heureux.admin.ui.presentation.screens.payment_history_screen.PaymentHistoryScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreen
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
@@ -44,6 +45,9 @@ fun NavGraph(
 
     val addPropertyScreenViewModel =
         viewModel<AddPropertyScreenViewModel>(factory = AppViewModelProvider.Factory)
+
+    val homeScreenViewModel = viewModel<HomeScreenViewModel>(factory = AppViewModelProvider.Factory)
+
 
     NavHost(
         navController = navController,
@@ -73,6 +77,7 @@ fun NavGraph(
             MainScreen(
                 navController = navController,
                 viewModel = mainScreenViewModel,
+                homeScreenViewModel = homeScreenViewModel,
             )
         }
         composable(Screens.ProfileScreen.route) {
