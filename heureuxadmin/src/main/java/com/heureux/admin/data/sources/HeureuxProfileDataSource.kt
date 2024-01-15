@@ -2,16 +2,17 @@ package com.heureux.admin.data.sources
 
 
 import android.net.Uri
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
-import com.heureux.admin.data.FireStoreUserFields
 import com.heureux.admin.data.FirebaseDirectories
 import com.heureux.admin.data.types.UserProfileData
 import kotlinx.coroutines.CoroutineScope
@@ -30,6 +31,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
+    private val TAG = "HeureuxProfileDataSource"
 
     override suspend fun uploadImageGetUrl(
         uri: Uri,
@@ -219,5 +221,26 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
     override suspend fun signOut() {
         auth.signOut()
+    }
+
+    override fun getAdminsList(
+        onFailure: (exception: Exception) -> Unit,
+    ): Flow<List<UserProfileData?>?> = callbackFlow {
+        val snapshotListener = firestore.collection(FirebaseDirectories.AdminsCollection.name)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    Log.e(TAG, "getAdminsList: ", error)
+                    close(error)
+                } else {
+                    var admins: List<UserProfileData?>? = emptyList()
+                    if (value?.documents.isNullOrEmpty()) {
+                        admins = value?.documents?.map { documentSnapshot: DocumentSnapshot? ->
+                            documentSnapshot?.toObject(UserProfileData::class.java)
+                        }
+                    }
+                    trySend(admins)
+                }
+            }
+        awaitClose { snapshotListener.remove() }
     }
 }

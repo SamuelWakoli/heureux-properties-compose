@@ -56,4 +56,7 @@ interface ProfileRepository {
 
     suspend fun signOut()
 
+    fun getAdminsList(
+        onFailure: (exception: Exception) -> Unit
+    ): Flow<List<UserProfileData?>?>
 }

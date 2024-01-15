@@ -16,7 +16,7 @@ interface ProfileDataSource {
 
     suspend fun uploadImageGetUrl(
         uri: Uri,
-        directory:String,
+        directory: String,
         onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit
     )
@@ -62,4 +62,8 @@ interface ProfileDataSource {
     )
 
     suspend fun signOut()
+
+    fun getAdminsList(
+        onFailure: (exception: Exception) -> Unit
+    ): Flow<List<UserProfileData?>?>
 }

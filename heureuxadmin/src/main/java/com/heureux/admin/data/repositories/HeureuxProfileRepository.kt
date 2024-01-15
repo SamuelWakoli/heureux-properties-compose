@@ -101,4 +101,8 @@ class HeureuxProfileRepository(val dataSource: ProfileDataSource) : ProfileRepos
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> =
         dataSource.getCurrentUser()
 
+    override fun getAdminsList(
+        onFailure: (exception: Exception) -> Unit
+    ): Flow<List<UserProfileData?>?> =
+        dataSource.getAdminsList(onFailure = onFailure)
 }
