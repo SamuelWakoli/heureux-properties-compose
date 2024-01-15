@@ -58,18 +58,34 @@ class HeureuxPropertyDataSource : PropertyDataSource {
     override suspend fun addProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
-        TODO("Not yet implemented")
+        firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(data.id)
+            .set(data).addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                onFailure(it)
+            }
     }
 
     override suspend fun updateProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
-        TODO("Not yet implemented")
+        firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(data.id)
+            .set(data).addOnSuccessListener {
+            onSuccess()
+        }.addOnFailureListener {
+            onFailure(it)
+        }
     }
 
     override suspend fun deleteProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, id: String
     ) {
-        TODO("Not yet implemented")
+        firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(id).delete()
+            .addOnSuccessListener {
+                // TODO: Delete images from storage
+                onSuccess()
+            }.addOnFailureListener {
+            onFailure(it)
+        }
     }
 }
