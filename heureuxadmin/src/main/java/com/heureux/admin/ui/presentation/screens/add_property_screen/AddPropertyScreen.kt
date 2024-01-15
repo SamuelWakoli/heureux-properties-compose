@@ -1,5 +1,6 @@
 package com.heureux.admin.ui.presentation.screens.add_property_screen
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,13 +42,17 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.heureux.admin.data.types.HeureuxProperty
 import com.heureux.admin.ui.presentation.navigation.Screens
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
+import java.time.LocalDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddPropertyScreen(
     navController: NavController,
     viewModel: AddPropertyScreenViewModel,
+    homeScreenViewModel: HomeScreenViewModel,
 ) {
 
 
@@ -56,9 +61,18 @@ fun AddPropertyScreen(
     val uiState = viewModel.uiState.collectAsState().value
     val context = LocalContext.current
 
+    val currentProperty = homeScreenViewModel.uiState.collectAsState().value.currentProperty
+
+
     LaunchedEffect(userData) {
         if (userData != null) {
             viewModel.loadUserPhoneNumber()
+        }
+    }
+
+    LaunchedEffect(currentProperty) {
+        if (currentProperty != null) {
+            viewModel.loadCurrentProperty(currentProperty)
         }
     }
 
@@ -82,7 +96,7 @@ fun AddPropertyScreen(
                         imageVector = Icons.Outlined.Business, contentDescription = null
                     )
                     Spacer(modifier = Modifier.padding(8.dp))
-                    Text(text = "Add Property")
+                    Text(text = if (currentProperty == null) "Add Property" else "Update Property")
                 }
             },
             colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
@@ -244,7 +258,45 @@ fun AddPropertyScreen(
 
                 ElevatedButton(modifier = Modifier.padding(8.dp), onClick = {
 
-                    //TODO
+                    if (currentProperty == null) {
+                        homeScreenViewModel.addProperty(
+                            property = HeureuxProperty(
+                                id = LocalDateTime.now().toString(),
+                                name = uiState.propertyName,
+                                location = uiState.propertyLocation,
+                                description = uiState.propertyDescription,
+                                price = uiState.propertyPrice,
+                                imageUrls = uiState.propertyImages,
+                            ),
+                            onSuccess = {
+                                Toast.makeText(
+                                    context,
+                                    "Property added successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                navController.navigateUp()
+                            },
+                            onError = { exception ->
+                                Toast.makeText(
+                                    context,
+                                    "Failed to add property. Error: ${exception.message} ",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                        )
+                    } else {
+                        homeScreenViewModel.updateCurrentProperty(
+                            property = HeureuxProperty(
+                                id = currentProperty.id,
+                                name = uiState.propertyName,
+                                location = uiState.propertyLocation,
+                                description = uiState.propertyDescription,
+                                price = uiState.propertyPrice,
+                                imageUrls = uiState.propertyImages,
+                                sellerId = currentProperty.sellerId
+                            )
+                        )
+                    }
 
                 }) {
                     Row(
@@ -253,7 +305,7 @@ fun AddPropertyScreen(
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Save",
+                            text = if (currentProperty == null) "Save" else "Update",
                             style = MaterialTheme.typography.titleMedium,
                             modifier = Modifier.weight(1f),
                             textAlign = TextAlign.Center
@@ -261,7 +313,7 @@ fun AddPropertyScreen(
                         Icon(
                             imageVector = Icons.Default.DoneAll, contentDescription = null
                         )
-                        if (uiState.uploadingRequest) {
+                        if (uiState.uploadingProperty) {
                             CircularProgressIndicator(
                                 modifier = Modifier.size(24.dp),
                                 color = MaterialTheme.colorScheme.onPrimaryContainer,

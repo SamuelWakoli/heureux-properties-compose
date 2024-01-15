@@ -65,7 +65,7 @@ fun AddPropertyImagesScreen(navController: NavHostController, viewModel: AddProp
                 profileImageUri = uri
 
                 Toast.makeText(context, "Image uploading, please wait...", Toast.LENGTH_LONG).show()
-                viewModel.uploadProfileImage(
+                viewModel.uploadPropertyImage(
                     uri = uri,
                     onSuccess = { photoURL ->
                         viewModel.updatePhotoURLAndCount(photoURL)

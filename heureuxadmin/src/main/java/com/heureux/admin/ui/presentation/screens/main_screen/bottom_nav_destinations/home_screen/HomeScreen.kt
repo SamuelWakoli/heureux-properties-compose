@@ -47,7 +47,8 @@ fun HomeScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO: Reset current property to null*/
+            FloatingActionButton(onClick = {
+                viewModel.updateCurrentProperty(null)
                 navController.navigate(Screens.AddPropertyScreen.route) {
                     launchSingleTop = true
                 }

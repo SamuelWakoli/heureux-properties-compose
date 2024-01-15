@@ -7,6 +7,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.heureux.admin.data.FirebaseDirectories
 import com.heureux.admin.data.repositories.ProfileRepository
+import com.heureux.admin.data.types.HeureuxProperty
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,42 +35,28 @@ class AddPropertyScreenViewModel(
             initialValue = null
         )
 
-//    fun sendSellWithUsRequest(
-//        sellWithUsRequest: SellWithUsRequest,
-//        onSuccessListener: () -> Unit,
-//        onFailure: (exception: Exception) -> Unit,
-//    ) {
-//        if (uiState.value.propertyName.isEmpty()) {
-//            _uiState.value = _uiState.value.copy(propertyNameError = true)
-//        } else if (uiState.value.propertyDescription.isEmpty()) {
-//            _uiState.value = _uiState.value.copy(propertyDescriptionError = true)
-//        } else if (uiState.value.propertyPrice.isEmpty()) {
-//            _uiState.value = _uiState.value.copy(propertyPriceError = true)
-//        } else if (uiState.value.userPhoneNumber.isEmpty()) {
-//            _uiState.value = _uiState.value.copy(userPhoneNumberError = true)
-//        } else if (uiState.value.propertiesImagesCount == 0) {
-//            _uiState.value = _uiState.value.copy(propertyImagesError = true)
-//        } else {
-//
-//            viewModelScope.launch {
-//                propertiesRepository.sendSellWithUsRequest(
-//                    sellWithUsRequest = sellWithUsRequest,
-//                    onSuccessListener = onSuccessListener,
-//                    onFailure = onFailure
-//                )
-//            }
-//        }
-//    }
-
     fun loadUserPhoneNumber() {
         _uiState.value = _uiState.value.copy(userPhoneNumber = userProfileData.value?.phone ?: "")
+    }
+
+    fun loadCurrentProperty(property: HeureuxProperty) {
+        _uiState.value = _uiState.value.copy(
+            propertyName = property.name,
+            propertyDescription = property.description,
+            propertyPrice = property.price,
+            propertyLocation = property.location,
+            propertiesImagesCount = property.imageUrls.size,
+            propertyImages = property.imageUrls as MutableList,
+        )
     }
 
     fun onPropertyNameChanged(name: String) {
         _uiState.value = _uiState.value.copy(propertyName = name, propertyNameError = false)
     }
+
     fun onPropertyLocationChanged(location: String) {
-        _uiState.value = _uiState.value.copy(propertyLocation = location, propertyLocationError = false)
+        _uiState.value =
+            _uiState.value.copy(propertyLocation = location, propertyLocationError = false)
     }
 
 
@@ -97,7 +84,7 @@ class AddPropertyScreenViewModel(
         }
     }
 
-    fun uploadProfileImage(
+    fun uploadPropertyImage(
         uri: Uri,
         onSuccess: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,

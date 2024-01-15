@@ -14,5 +14,5 @@ data class AddPropertyUiState(
     val propertyImagesError: Boolean= false,
     val userPhoneNumber: String = "",
     val userPhoneNumberError: Boolean = false,
-    val uploadingRequest: Boolean = false,
+    val uploadingProperty: Boolean = false,
 )

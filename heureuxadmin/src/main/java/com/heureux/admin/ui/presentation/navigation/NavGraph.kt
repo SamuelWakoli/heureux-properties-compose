@@ -108,6 +108,7 @@ fun NavGraph(
             AddPropertyScreen(
                 navController = navController,
                 viewModel = addPropertyScreenViewModel,
+                homeScreenViewModel = homeScreenViewModel,
             )
         }
         composable(Screens.AddPropertyImagesScreen.route) {
