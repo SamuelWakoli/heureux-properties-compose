@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -28,17 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PropertyDetailsScreen(
     navController: NavController,
-    viewModel: MainScreenViewModel,
+    viewModel: HomeScreenViewModel,
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val uiState = viewModel.mainScreenUiState.collectAsState().value
+    val uiState = viewModel.uiState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -72,75 +73,63 @@ fun PropertyDetailsScreen(
             )
         }
     ) { paddingValues ->
-//        if (userListings == null) {
-//            Column(
-//                Modifier
-//                    .padding(paddingValues)
-//                    .fillMaxSize(),
-//                horizontalAlignment = Alignment.CenterHorizontally,
-//                verticalArrangement = Arrangement.Center,
-//            ) {
-//                CircularProgressIndicator(
-//                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-//                    trackColor = MaterialTheme.colorScheme.primaryContainer,
-//                    strokeWidth = 2.dp
-//                )
-//            }
-//        } else
+
+        Column(
+            Modifier
+                .padding(paddingValues)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+
 
             Column(
                 Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize(),
+                    .fillMaxWidth()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection),
+                verticalArrangement = Arrangement.SpaceBetween,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
 
-
                 Column(
                     Modifier
-                        .fillMaxWidth()
-                        .nestedScroll(scrollBehavior.nestedScrollConnection),
-                    verticalArrangement = Arrangement.SpaceBetween,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                        .weight(1f)
+                        .verticalScroll(rememberScrollState())
                 ) {
-
-                    Column(
-                        Modifier
-                            .weight(1f)
-                            .verticalScroll(rememberScrollState())
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 4.dp)
                     ) {
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 4.dp)
-                        ) {
-                            items(6) {
+                        if (uiState.currentProperty != null) {
+                            items(uiState.currentProperty.imageUrls) { url ->
                                 DetailsImageListItem(
+                                    imageUrl = url,
                                 )
                             }
                         }
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Column(
-                            Modifier.padding(horizontal = 8.dp)
-                        ) {
-                            Text(
-                                text = "Price: Ksh. ${uiState.currentProperty?.price}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            Text(
-                                text = uiState.currentProperty?.name ?: "",
-                                style = MaterialTheme.typography.titleLarge,
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
-                            Text(
-                                text = uiState.currentProperty?.description ?: "",
-                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            )
-                        }
-                        Spacer(modifier = Modifier.padding(8.dp))
                     }
+                    Spacer(modifier = Modifier.padding(8.dp))
+                    Column(
+                        Modifier.padding(horizontal = 8.dp)
+                    ) {
+                        Text(
+                            text = "Price: Ksh. ${uiState.currentProperty?.price}",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                        Text(
+                            text = uiState.currentProperty?.name ?: "",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                        Text(
+                            text = uiState.currentProperty?.description ?: "",
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    }
+                    Spacer(modifier = Modifier.padding(8.dp))
                 }
             }
+        }
     }
 }

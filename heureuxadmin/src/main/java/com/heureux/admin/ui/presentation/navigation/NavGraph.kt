@@ -101,7 +101,7 @@ fun NavGraph(
         composable(Screens.PropertyDetailsScreen.route) {
             PropertyDetailsScreen(
                 navController = navController,
-                viewModel = mainScreenViewModel,
+                viewModel = homeScreenViewModel,
             )
         }
         composable(Screens.AddPropertyScreen.route) {
