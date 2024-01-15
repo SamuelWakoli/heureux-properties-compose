@@ -16,10 +16,4 @@ sealed class FirebaseDirectories (val name: String) {
 
 sealed class FireStoreUserFields (val field: String) {
     data object PhotoUrl:FireStoreUserFields ("photoUrl")
-    data object Name:FireStoreUserFields("name")
-    data object Phone:FireStoreUserFields("phone")
-    data object BookmarksCollection:FireStoreUserFields("bookmarks")
-    data object PropertiesOwned:FireStoreUserFields("propertiesOwned")
-    data object Listings: FireStoreUserFields("listings")
-    data object NotificationsCollection: FireStoreUserFields("notifications")
 }

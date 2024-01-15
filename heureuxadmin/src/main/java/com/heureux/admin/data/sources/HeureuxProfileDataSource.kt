@@ -59,9 +59,6 @@ class HeureuxProfileDataSource : ProfileDataSource {
         val snapshotListener = auth.addAuthStateListener {
             trySend(it.currentUser)
         }
-        awaitClose {
-
-        }
     }
 
     override suspend fun createUserFirestoreData(
@@ -69,16 +66,11 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        val data = hashMapOf(
-            FireStoreUserFields.PhotoUrl.field to user.photoURL,
-            FireStoreUserFields.Name.field to user.displayName,
-            FireStoreUserFields.Phone.field to null,
-        )
 
         try {
             firestore.collection(FirebaseDirectories.AdminsCollection.name)
                 .document(user.userEmail!!)
-                .set(data).await()
+                .set(user).await()
             onSuccess()
         } catch (exception: Exception) {
             onFailure(exception)
@@ -104,9 +96,8 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
                 try {
                     createUserFirestoreData(user = UserProfileData(
-                        userID = email,
                         displayName = name,
-                        photoURL = user.photoUrl,
+                        photoURL = user.photoUrl.toString(),
                         userEmail = email,
                         phone = user.phoneNumber,
                     ),
@@ -154,9 +145,8 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
                             createUserFirestoreData(
                                 user = UserProfileData(
-                                    userID = user.uid,
                                     displayName = user.displayName,
-                                    photoURL = user.photoUrl,
+                                    photoURL = user.photoUrl.toString(),
                                     userEmail = user.email,
                                     phone = user.phoneNumber,
                                 ),
@@ -165,16 +155,18 @@ class HeureuxProfileDataSource : ProfileDataSource {
                             )
                         }
                     } else {
-                        trySend(
+                        val userProfileData = value?.data.let {
                             UserProfileData(
-                                userID = value?.id!!,
-                                displayName = value.getString(FireStoreUserFields.Name.field),
-                                photoURL = Uri.parse(
-                                    value.getString(FireStoreUserFields.PhotoUrl.field) ?: ""
-                                ),
-                                userEmail = value.id,
-                                phone = value.getString(FireStoreUserFields.Phone.field),
+                                displayName = it?.get("displayName").toString(),
+                                photoURL = it?.get("photoURL").toString(),
+                                userEmail = it?.get("userEmail").toString(),
+                                phone = it?.get("phone").toString(),
                             )
+                        }
+
+                        trySend(
+                            userProfileData
+                            // FIXME: value?.toObject(UserProfileData::class.java)
                         ).isSuccess // Offer the latest DocumentSnapshot
                     }
                     onSuccess()
@@ -202,21 +194,16 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        val userdata = hashMapOf<String, Any>(
-            FireStoreUserFields.PhotoUrl.field to userProfileDate.photoURL.toString(),
-            FireStoreUserFields.Name.field to userProfileDate.displayName.toString(),
-            FireStoreUserFields.Phone.field to userProfileDate.phone.toString(),
-        )
 
         try {
             firestore.collection(FirebaseDirectories.AdminsCollection.name)
                 .document(userProfileDate.userEmail!!)
-                .update(userdata).await()
+                .set(userProfileDate).await()
 
             auth.currentUser?.updateProfile(
                 UserProfileChangeRequest.Builder()
                     .setDisplayName(userProfileDate.displayName)
-                    .setPhotoUri(userProfileDate.photoURL)
+                    .setPhotoUri(Uri.parse(userProfileDate.photoURL))
                     .build()
             )?.await()
 

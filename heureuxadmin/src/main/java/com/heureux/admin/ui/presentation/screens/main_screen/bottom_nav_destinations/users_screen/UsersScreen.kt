@@ -69,7 +69,6 @@ fun UsersScreen(
 @Composable
 fun HeureuxUserListItem(
     userData: UserProfileData? = UserProfileData(
-        userID = "user@gmail.com",
         displayName = "username",
         photoURL = null,
         userEmail = "user@gmail.com",
@@ -118,7 +117,6 @@ fun HeureuxUserListItem(
                 else Icon(imageVector = Icons.Outlined.MoreVert, contentDescription = "Options")
             }
 
-            if (showOptions) {
                 DropdownMenu(expanded = showOptions, onDismissRequest = { showOptions = false }) {
                     DropdownMenuItem(
                         leadingIcon = {
@@ -161,7 +159,7 @@ fun HeureuxUserListItem(
                             }
                         })
                 }
-            }
+
         },
         colors = ListItemDefaults.colors(
             leadingIconColor = MaterialTheme.colorScheme.primary,

@@ -24,7 +24,6 @@ import com.heureux.admin.ui.presentation.composables.images.CoilImage
 @Composable
 fun AdminListItem(
     userData: UserProfileData? = UserProfileData(
-        userID = "admin@gmail.com",
         displayName = "Admin Name",
         photoURL = null,
         userEmail = "admin@gmail.com",

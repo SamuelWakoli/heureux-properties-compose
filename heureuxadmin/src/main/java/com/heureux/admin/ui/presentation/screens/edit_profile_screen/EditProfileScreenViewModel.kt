@@ -127,7 +127,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
                     userProfileData = userProfileData.value!!.copy(
                         displayName = uiState.value.userName,
                         phone = uiState.value.phoneNumber,
-                        photoURL = Uri.parse(uiState.value.newPhotoURL),
+                        photoURL = uiState.value.newPhotoURL,
                     ),
                     onSuccess = {
                         onSuccess()
