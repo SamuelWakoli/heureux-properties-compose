@@ -73,8 +73,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
         try {
             firestore.collection(FirebaseDirectories.UsersCollection.name)
-                .document(user.userEmail!!)
-                .set(data).await()
+                .document(user.userEmail!!).set(data).await()
             onSuccess()
         } catch (exception: Exception) {
             onFailure(exception)
@@ -93,20 +92,16 @@ class HeureuxProfileDataSource : ProfileDataSource {
             val user = authResultTask.user!!
             coroutineScope.launch {
                 user.updateProfile(
-                    UserProfileChangeRequest.Builder()
-                        .setDisplayName(name)
-                        .build()
+                    UserProfileChangeRequest.Builder().setDisplayName(name).build()
                 ).await()
 
                 try {
                     createUserFirestoreData(user = UserProfileData(
-                        userID = email,
                         displayName = name,
-                        photoURL = user.photoUrl,
+                        photoURL = user.photoUrl.toString(),
                         userEmail = email,
                         phone = user.phoneNumber,
-                    ),
-                        onSuccess = {}, onFailure = {})
+                    ), onSuccess = {}, onFailure = {})
                     onSuccessListener()
                 } catch (exception: Exception) {
                     onErrorListener(exception)
@@ -137,8 +132,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
     ): Flow<UserProfileData?> = callbackFlow {
 
         val snapshotListener = firestore.collection(FirebaseDirectories.UsersCollection.name)
-            .document(auth.currentUser?.email!!)
-            .addSnapshotListener { value, error ->
+            .document(auth.currentUser?.email!!).addSnapshotListener { value, error ->
 
                 if (error != null) {
                     onFailure(error)
@@ -148,27 +142,20 @@ class HeureuxProfileDataSource : ProfileDataSource {
                         coroutineScope.launch {
                             val user = auth.currentUser!!
 
-                            createUserFirestoreData(
-                                user = UserProfileData(
-                                    userID = user.uid,
-                                    displayName = user.displayName,
-                                    photoURL = user.photoUrl,
-                                    userEmail = user.email,
-                                    phone = user.phoneNumber,
-                                ),
-                                onSuccess = {},
-                                onFailure = {}
-                            )
+                            createUserFirestoreData(user = UserProfileData(
+                                displayName = user.displayName,
+                                photoURL = user.photoUrl.toString(),
+                                userEmail = user.email,
+                                phone = user.phoneNumber,
+                            ), onSuccess = {}, onFailure = {})
                         }
                     } else {
                         trySend(
                             UserProfileData(
-                                userID = value?.id!!,
+                                userEmail = value!!.id,
                                 displayName = value.getString(FireStoreUserFields.Name.field),
-                                photoURL = Uri.parse(
-                                    value.getString(FireStoreUserFields.PhotoUrl.field) ?: ""
-                                ),
-                                userEmail = value.id,
+                                photoURL = value.getString(FireStoreUserFields.PhotoUrl.field)
+                                    ?: "",
                                 phone = value.getString(FireStoreUserFields.Phone.field),
                             )
                         ).isSuccess // Offer the latest DocumentSnapshot
@@ -206,14 +193,11 @@ class HeureuxProfileDataSource : ProfileDataSource {
 
         try {
             firestore.collection(FirebaseDirectories.UsersCollection.name)
-                .document(userProfileDate.userEmail!!)
-                .update(userdata).await()
+                .document(userProfileDate.userEmail!!).update(userdata).await()
 
             auth.currentUser?.updateProfile(
-                UserProfileChangeRequest.Builder()
-                    .setDisplayName(userProfileDate.displayName)
-                    .setPhotoUri(userProfileDate.photoURL)
-                    .build()
+                UserProfileChangeRequest.Builder().setDisplayName(userProfileDate.displayName)
+                    .setPhotoUri(Uri.parse(userProfileDate.photoURL)).build()
             )?.await()
 
             // Reload the user profile to ensure that changes are reflected immediately
@@ -236,11 +220,11 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onErrorListener: (exception: Exception) -> Unit,
     ) {
         try {
-            firestore.collection(FirebaseDirectories.UsersCollection.name)
-                .document(email).delete().await()
+            firestore.collection(FirebaseDirectories.UsersCollection.name).document(email).delete()
+                .await()
 
-            storageReference.child(FirebaseDirectories.UsersStorageReference.name)
-                .child(email).delete().await()
+            storageReference.child(FirebaseDirectories.UsersStorageReference.name).child(email)
+                .delete().await()
             auth.currentUser?.delete()?.await()
 
             onSuccessListener()
