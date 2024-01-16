@@ -21,8 +21,24 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
                         onError(error)
                         close(error)
                     } else {
-                        val payments = value?.toObjects(PaymentItem::class.java)
-                        trySend(payments ?: listOf())
+                        val payments: MutableList<PaymentItem>? = null
+                        value?.documents?.forEach { document ->
+                            payments?.add(
+                                PaymentItem(
+                                    paymentId = document.id,
+                                    propertyId = document.get("propertyId").toString(),
+                                    userId = document.get("userId").toString(),
+                                    amount = document.get("amount").toString(),
+                                    agreedPrice = document.get("agreedPrice").toString(),
+                                    totalAmountPaid = document.get("totalAmountPaid").toString(),
+                                    owingAmount = document.get("owingAmount").toString(),
+                                    paymentMethod = document.get("paymentMethod").toString(),
+                                    time = document.get("time").toString(),
+                                    approvedBy = document.get("approvedBy").toString(),
+                                )
+                            )
+
+                        }
                     }
                 }
 
@@ -34,14 +50,25 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
     ): Flow<PaymentItem> = callbackFlow {
         val snapshotListener =
             firestore.collection(FirebaseDirectories.PaymentsCollection.name).document(id)
-                .addSnapshotListener { value, error ->
+                .addSnapshotListener { document, error ->
                     if (error != null) {
                         onError(error)
                         close(error)
                     } else {
-                        if (value?.data != null) {
-                            val payment = value.toObject(PaymentItem::class.java)
-                            trySend(payment!!)
+                        if (document?.data != null) {
+                            val payment = PaymentItem(
+                                paymentId = document.id,
+                                propertyId = document.get("propertyId").toString(),
+                                userId = document.get("userId").toString(),
+                                amount = document.get("amount").toString(),
+                                agreedPrice = document.get("agreedPrice").toString(),
+                                totalAmountPaid = document.get("totalAmountPaid").toString(),
+                                owingAmount = document.get("owingAmount").toString(),
+                                paymentMethod = document.get("paymentMethod").toString(),
+                                time = document.get("time").toString(),
+                                approvedBy = document.get("approvedBy").toString(),
+                            )
+                            trySend(payment)
                         }
                     }
                 }
