@@ -22,9 +22,21 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
                             onError(error)
                             close(error)
                         } else {
-                            value?.let {
-                                val feedbacks = it.toObjects(FeedbackItem::class.java)
-                                trySend(feedbacks)
+                            if (value != null) {
+                                val feedbacks: MutableList<FeedbackItem>? = null
+                                value.documents.forEach { document ->
+                                    feedbacks?.add(
+                                        FeedbackItem(
+                                            id = document.id,
+                                            message = document.data?.get("message").toString(),
+                                            time = document.data?.get("time").toString(),
+                                            senderEmail = document.data?.get("senderEmail")
+                                                .toString(),
+                                            isRead = document.data?.get("isRead") as Boolean
+                                        )
+                                    )
+                                }
+                                feedbacks?.let { trySend(it) }
                             }
                         }
                     }
