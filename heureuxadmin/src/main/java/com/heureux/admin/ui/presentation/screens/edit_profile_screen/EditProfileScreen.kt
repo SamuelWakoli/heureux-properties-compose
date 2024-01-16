@@ -65,7 +65,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.admin.ui.AppViewModelProvider
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
-import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -182,7 +181,7 @@ fun EditProfileScreen(
                                 )
 
 
-                                if (uiState.newPhotoURL.isNotEmpty()) {
+                                if (uiState.newPhotoURL?.isNotEmpty() == true) {
                                     Spacer(modifier = Modifier.size(8.dp))
                                     Icon(
                                         imageVector = Icons.Default.ArrowForward,

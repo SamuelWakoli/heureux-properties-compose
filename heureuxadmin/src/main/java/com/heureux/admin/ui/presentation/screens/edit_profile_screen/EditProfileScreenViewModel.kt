@@ -23,7 +23,7 @@ data class EditProfileScreenUiState(
     val phoneNumber: String = "",
     val phoneNumberError: Boolean = false,
     val photoURL: String = "",
-    val newPhotoURL: String = "",
+    val newPhotoURL: String? = null,
     val showBottomSheet: Boolean = false,
     val isSaving: Boolean = false,
 )
@@ -79,7 +79,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
     ) = viewModelScope.launch {
         profileRepository.uploadImageGetUrl(
             uri = uri,
-            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/profile image.png",
+            directory = "${FirebaseDirectories.UsersStorageReference.name}/${userProfileData.value?.userEmail ?: Firebase.auth.currentUser?.email!!}/admin data/profile image.png",
             onSuccessListener = onSuccess,
             onFailure = onFailure,
         )
@@ -127,7 +127,7 @@ class EditProfileScreenViewModel(val profileRepository: ProfileRepository) : Vie
                     userProfileData = userProfileData.value!!.copy(
                         displayName = uiState.value.userName,
                         phone = uiState.value.phoneNumber,
-                        photoURL = uiState.value.newPhotoURL,
+                        photoURL = if (uiState.value.newPhotoURL != null) uiState.value.newPhotoURL else uiState.value.photoURL,
                     ),
                     onSuccess = {
                         onSuccess()

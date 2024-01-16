@@ -181,7 +181,7 @@ fun EditProfileScreen(
                                 )
 
 
-                                if (uiState.newPhotoURL.isNotEmpty()) {
+                                if (uiState.newPhotoURL?.isNotEmpty() == true) {
                                     Spacer(modifier = Modifier.size(8.dp))
                                     Icon(
                                         imageVector = Icons.Default.ArrowForward,

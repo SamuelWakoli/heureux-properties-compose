@@ -124,6 +124,7 @@ fun NavGraph(
         composable(Screens.UpdatePaymentScreen.route) {
             UpdatePaymentScreen(
                 navController = navController,
+                viewModel = usersScreenViewModel,
             )
         }
         composable(Screens.ArchivedPropertyInquiryScreen.route) {
