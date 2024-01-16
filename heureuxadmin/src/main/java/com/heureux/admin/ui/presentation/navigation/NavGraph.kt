@@ -16,6 +16,7 @@ import com.heureux.admin.ui.presentation.screens.add_property_screen.AddProperty
 import com.heureux.admin.ui.presentation.screens.administration_screen.AdministrationScreen
 import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreen
 import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreenViewModel
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.InquiriesViewModel
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_property_inquiry.ArchivedPropertyInquiryScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_sell_with_us.ArchivedSellWithUsReqScreen
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.property_inquiry.PropertyInquiryScreen
@@ -51,6 +52,8 @@ fun NavGraph(
 
     val usersScreenViewModel =
         viewModel<UsersScreenViewModel>(factory = AppViewModelProvider.Factory)
+
+    val inquiriesViewModel = viewModel<InquiriesViewModel>(factory = AppViewModelProvider.Factory)
 
     NavHost(
         navController = navController,
@@ -130,6 +133,7 @@ fun NavGraph(
         composable(Screens.ArchivedPropertyInquiryScreen.route) {
             ArchivedPropertyInquiryScreen(
                 navController = navController,
+                viewModel = inquiriesViewModel,
             )
         }
         composable(Screens.ArchivedSellWithUsReqScreen.route) {
@@ -140,6 +144,7 @@ fun NavGraph(
         composable(Screens.PropertyInquiryScreen.route) {
             PropertyInquiryScreen(
                 navController = navController,
+                viewModel = inquiriesViewModel,
             )
         }
         composable(Screens.SellWithUsRequestsScreen.route) {
