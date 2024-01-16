@@ -28,19 +28,22 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.InquiriesViewModel
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun SellWithUsImagesScreen(navController: NavController) {
+fun SellWithUsImagesScreen(navController: NavController, viewModel: InquiriesViewModel) {
 
-    val pagerState = rememberPagerState(pageCount = { 4 /*TODO: Change this later*/ })
+    val images = viewModel.sellWithUsInquiryUiState.collectAsState().value.currentImagesList
+    val pagerState = rememberPagerState(pageCount = { images.size})
     val coroutineScope = rememberCoroutineScope()
 
     Scaffold(
@@ -76,8 +79,9 @@ fun SellWithUsImagesScreen(navController: NavController) {
                 .fillMaxSize()
         ) {
             Box(modifier = Modifier.fillMaxSize()) {
-                HorizontalPager(state = pagerState) {
+                HorizontalPager(state = pagerState) { index ->
                     CoilImage(
+                        imageUrl = images[index],
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(8.dp)
@@ -97,7 +101,6 @@ fun SellWithUsImagesScreen(navController: NavController) {
                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(pagerState.currentPage - 1)
                                 }
-                                /*TODO*/
                             },
                             colors = CardDefaults.cardColors(
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -117,7 +120,6 @@ fun SellWithUsImagesScreen(navController: NavController) {
                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
                                 }
-                                /*TODO*/
                             },
                             colors = CardDefaults.cardColors(
                                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,

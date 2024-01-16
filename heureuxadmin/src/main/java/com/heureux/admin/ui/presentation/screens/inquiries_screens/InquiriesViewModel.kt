@@ -10,9 +10,15 @@ import com.heureux.admin.data.types.HeureuxUser
 import com.heureux.admin.data.types.InquiryItem
 import com.heureux.admin.data.types.PaymentItem
 import com.heureux.admin.data.types.SellWithUsRequest
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+
+data class SellWithUsInquiryUiState(
+    val currentImagesList: List<String> = emptyList(),
+)
 
 class InquiriesViewModel(
     private val usersRepository: UsersRepository,
@@ -20,6 +26,9 @@ class InquiriesViewModel(
     private val paymentsRepository: PaymentsRepository,
     private val propertiesRepository: PropertyRepository,
 ) : ViewModel() {
+
+    private var _sellWithUsInquiryUiState = MutableStateFlow(SellWithUsInquiryUiState())
+    val sellWithUsInquiryUiState = _sellWithUsInquiryUiState.asStateFlow()
 
     companion object {
         const val TAG = "InquiriesViewModel"
@@ -58,6 +67,11 @@ class InquiriesViewModel(
         )
     }
 
+    fun updateCurrentImagesList(imagesList: List<String>) {
+        _sellWithUsInquiryUiState.value = _sellWithUsInquiryUiState.value.copy(
+            currentImagesList = imagesList
+        )
+    }
 
     fun getUserData(id: String, onFailure: (Exception) -> Unit): HeureuxUser? {
         var user: HeureuxUser? = null
