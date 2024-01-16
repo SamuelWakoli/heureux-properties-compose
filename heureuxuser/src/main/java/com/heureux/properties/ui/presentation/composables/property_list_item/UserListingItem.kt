@@ -20,15 +20,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
+import com.heureux.properties.data.types.HeureuxProperty
 import com.heureux.properties.ui.presentation.composables.images.CoilImage
 import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
 fun UserListingItem(
+    property: HeureuxProperty,
     navController: NavController,
     onClickDelete: () -> Unit = {},
 ) {
@@ -40,26 +40,37 @@ fun UserListingItem(
             .widthIn(min = 400.dp, max = 600.dp)
     ) {
         Column {
-            CoilImage(
-                modifier = Modifier.heightIn(
-                    min = 160.dp, max = 220.dp
+            if (property.imageUrls.isNotEmpty()) {
+                CoilImage(
+                    imageUrl = property.imageUrls.first(),
+                    modifier = Modifier.heightIn(
+                        min = 160.dp, max = 220.dp
+                    )
                 )
-            )
+            } else {
+                Text(
+                    text = "No image added",
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(16.dp),
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
             Column(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             ) {
                 Text(
-                    text = "Price: Ksh. 2,000,000",
+                    text = "Price: Ksh. ${property.price}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = "Property Name",
+                    text = property.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
                 Text(
-                    text = "Property Description Property Description Property Description Property Description Property Description Property Description Property Description Property Description ",
+                    text = property.description,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -94,12 +105,4 @@ fun UserListingItem(
 
 
     }
-}
-
-@Preview
-@Composable
-private fun UserListingItemPreview() {
-    UserListingItem(
-        navController = rememberNavController()
-    )
 }

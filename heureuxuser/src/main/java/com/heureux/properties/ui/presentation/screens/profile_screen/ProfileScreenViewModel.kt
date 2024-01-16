@@ -31,7 +31,7 @@ class ProfileScreenViewModel(
         Firebase.auth.currentUser
     }
 
-    companion object{
+    companion object {
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
@@ -41,10 +41,7 @@ class ProfileScreenViewModel(
     val uiState: StateFlow<ProfileScreenUiState> = _uiState.asStateFlow()
 
     val userProfileData by lazy {
-        profileRepository.getUserProfileData(
-            onSuccess = {},
-            onFailure = {}
-        ).stateIn(
+        profileRepository.getUserProfileData(onSuccess = {}, onFailure = {}).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
@@ -71,36 +68,32 @@ class ProfileScreenViewModel(
 
     fun deleteProfileAndData(onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit) {
         viewModelScope.launch {
-            profileRepository.deleteUserAndData(
-                email = currentUser?.email!!,
-                onSuccessListener = {
-                    onSuccess()
-                },
-                onErrorListener = { exception: Exception ->
-                    onFailure(exception)
-                }
-            )
+            profileRepository.deleteUserAndData(email = currentUser?.email!!, onSuccessListener = {
+                onSuccess()
+            }, onErrorListener = { exception: Exception ->
+                onFailure(exception)
+            })
         }
     }
 
-    val userPurchasedProperties by lazy {
-        propertiesRepository.getMyProperties(
-            email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
-        ) { }.stateIn(
+    val allProperties by lazy {
+        propertiesRepository.getHomeProperties { }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
         )
     }
 
-    val userSoldProperties by lazy {
-        propertiesRepository.getUserSoldProperties(
-            email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
-        ) { }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-            initialValue = null
-        )
+    val userPurchasedProperties = allProperties.value?.filter {
+        it.sellerId == (userProfileData.value?.userEmail
+            ?: currentUser?.email) || it.sellerId == (userProfileData.value?.displayName
+            ?: currentUser?.displayName)
+    }
+
+    val userSoldProperties = allProperties.value?.filter {
+        it.purchasedBy == (userProfileData.value?.userEmail
+            ?: currentUser?.email) || it.purchasedBy == (userProfileData.value?.displayName
+            ?: currentUser?.displayName)
     }
 
     val paymentHistory by lazy {

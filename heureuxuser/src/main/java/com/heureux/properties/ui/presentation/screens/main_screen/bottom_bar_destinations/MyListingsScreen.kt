@@ -43,8 +43,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.UserListingItem
-import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.navigation.Screens
+import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,22 +56,21 @@ fun MyListingsScreen(
 
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    val userListings = viewModel.userListings.collectAsState().value
+    val allProperties = viewModel.propertiesList.collectAsState().value
+    val userListings = viewModel.userListings
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(onClick = {
-                navController.navigate(Screens.AddPropertyScreen.route) {
-                    launchSingleTop = true
-                }
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "Add property listing",
-                )
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(onClick = {
+            navController.navigate(Screens.AddPropertyScreen.route) {
+                launchSingleTop = true
             }
+        }) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = "Add property listing",
+            )
         }
-    ) { paddingValues ->
+    }) { paddingValues ->
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -81,20 +80,21 @@ fun MyListingsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
 
-            if (userListings == null) {
+            if (allProperties == null) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(48.dp),
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     trackColor = MaterialTheme.colorScheme.primaryContainer,
                     strokeWidth = 2.dp
                 )
-            } else if (userListings.isEmpty()) {
+            } else if (userListings?.isEmpty() == true || userListings == null) {
                 Column(
                     modifier = Modifier
                         .verticalScroll(rememberScrollState())
                         .fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center                ) {
+                    verticalArrangement = Arrangement.Center
+                ) {
                     Icon(
                         imageVector = Icons.Outlined.ListAlt,
                         contentDescription = null,
@@ -114,8 +114,9 @@ fun MyListingsScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(userListings) {
+                    items(userListings) { property ->
                         UserListingItem(
+                            property = property,
                             navController = navController,
                             onClickDelete = { showDeleteDialog = true },
                         )
@@ -128,39 +129,37 @@ fun MyListingsScreen(
         }
 
         if (showDeleteDialog) {
-            Dialog(
-                onDismissRequest = { showDeleteDialog = false },
-                content = {
-                    Card {
-                        Column(
-                            Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Text(
-                                text = "Property Title",
-                                color = MaterialTheme.colorScheme.primary,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Text(text = "Are you sure you want to delete this listing?")
+            Dialog(onDismissRequest = { showDeleteDialog = false }, content = {
+                Card {
+                    Column(
+                        Modifier.padding(16.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = "Property Title",
+                            color = MaterialTheme.colorScheme.primary,
+                            style = MaterialTheme.typography.titleLarge
+                        )
+                        Text(text = "Are you sure you want to delete this listing?")
 
+                        Spacer(modifier = Modifier.size(16.dp))
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            TextButton(onClick = { showDeleteDialog = false }) {
+                                Text(text = "Cancel")
+                            }
                             Spacer(modifier = Modifier.size(16.dp))
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.End,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                TextButton(onClick = { showDeleteDialog = false }) {
-                                    Text(text = "Cancel")
-                                }
-                                Spacer(modifier = Modifier.size(16.dp))
-                                TextButton(onClick = { showDeleteDialog = false }) {
-                                    Text(text = "Delete")
-                                }
+                            TextButton(onClick = { showDeleteDialog = false }) {
+                                Text(text = "Delete")
                             }
                         }
                     }
-                })
+                }
+            })
         }
     }
 }

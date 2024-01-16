@@ -50,7 +50,7 @@ fun PropertyDetailsScreen(
     val uiState = viewModel.mainScreenUiState.collectAsState().value
 
     //used to check if it's necessary to have the inquiry button
-    val userListings = viewModel.userListings.collectAsState().value
+    val userListings = viewModel.userListings
 
     Scaffold(
         topBar = {

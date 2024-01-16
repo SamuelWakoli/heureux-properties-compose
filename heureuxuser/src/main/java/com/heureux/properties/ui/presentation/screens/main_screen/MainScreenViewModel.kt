@@ -73,13 +73,9 @@ class MainScreenViewModel(
             initialValue = null
         )
 
-    val userListings = propertiesRepository.getMyListings(
-        email = userProfileData.value?.userEmail ?: currentUser?.email ?: ""
-    ) {}.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = null
-    )
+    val userListings = propertiesList.value?.filter {
+        it.sellerId == (userProfileData.value?.userEmail ?: currentUser?.email)
+    }
 
     fun updateCurrentProperty(property: HeureuxProperty?) {
         _mainScreenUiState.update { it.copy(currentProperty = property) }
