@@ -139,6 +139,7 @@ fun NavGraph(
         composable(Screens.ArchivedSellWithUsReqScreen.route) {
             ArchivedSellWithUsReqScreen(
                 navController = navController,
+                viewModel = inquiriesViewModel,
             )
         }
         composable(Screens.PropertyInquiryScreen.route) {
@@ -150,11 +151,13 @@ fun NavGraph(
         composable(Screens.SellWithUsRequestsScreen.route) {
             SellWithUsRequestScreen(
                 navController = navController,
+                viewModel = inquiriesViewModel,
             )
         }
         composable(Screens.SellWithUsImagesScreen.route) {
             SellWithUsImagesScreen(
                 navController = navController,
+                viewModel = inquiriesViewModel,
             )
         }
         composable(Screens.PaymentHistoryScreen.route) {
