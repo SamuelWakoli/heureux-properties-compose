@@ -6,6 +6,7 @@ import com.heureux.admin.data.repositories.PaymentsRepository
 import com.heureux.admin.data.repositories.PropertyRepository
 import com.heureux.admin.data.repositories.UserPreferencesRepository
 import com.heureux.admin.data.repositories.UsersRepository
+import com.heureux.admin.data.types.FeedbackItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -56,6 +57,12 @@ class MoreScreenViewModel(
         initialValue = null
     )
 
+    val feedbacks = usersRepository.getFeedback { }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
+        initialValue = null
+    )
+
     fun hideOrShowThemeDialog() {
         _uiState.update {
             it.copy(showThemeDialog = !it.showThemeDialog)
@@ -77,6 +84,26 @@ class MoreScreenViewModel(
     fun updateDynamicTheme(boolean: Boolean) {
         viewModelScope.launch {
             userPreferencesRepository.saveDynamicColor(boolean)
+        }
+    }
+
+    fun updateFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            usersRepository.updateFeedback(feedbackItem, onSuccess, onFailure)
+        }
+    }
+
+    fun deleteFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            usersRepository.deleteFeedback(feedbackItem, onSuccess, onFailure)
         }
     }
 }
