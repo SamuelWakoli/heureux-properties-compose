@@ -28,7 +28,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,9 +46,7 @@ fun PaymentHistoryScreen(
             CenterAlignedTopAppBar(
                 navigationIcon = {
                     IconButton(onClick = {
-                        navController.navigate(Screens.PaymentHistoryScreen.route) {
-                            launchSingleTop = true
-                        }
+                        navController.navigateUp()
                     }) {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
