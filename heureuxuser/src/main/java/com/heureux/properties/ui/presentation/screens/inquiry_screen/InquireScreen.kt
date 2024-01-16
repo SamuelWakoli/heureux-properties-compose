@@ -110,8 +110,7 @@ fun InquiryScreen(
                     trackColor = MaterialTheme.colorScheme.primaryContainer,
                     strokeWidth = 2.dp
                 )
-            }
-            else {
+            } else {
 
                 var offerAmount by rememberSaveable {
                     mutableStateOf("")
@@ -180,10 +179,10 @@ fun InquiryScreen(
                             isError = offerAmountError,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
-                                imeAction = ImeAction.Done,
+                                imeAction = ImeAction.Next,
                             ),
                             keyboardActions = KeyboardActions(
-                                onDone = {
+                                onNext = {
                                     if (offerAmount.isEmpty()) offerAmountError = true
                                 }
                             ),
@@ -203,7 +202,10 @@ fun InquiryScreen(
                         ) { value ->
                             paymentMethod = value
                         }
-                        RadioButtonListItem(label = "Mortgage", currentValue = paymentMethod) { value ->
+                        RadioButtonListItem(
+                            label = "Mortgage",
+                            currentValue = paymentMethod
+                        ) { value ->
                             paymentMethod = value
                         }
                         RadioButtonListItem(
@@ -271,8 +273,13 @@ fun InquiryScreen(
                                         phoneNumber = phoneNumber,
                                     ),
                                     onSuccess = {
-                                        Toast.makeText(context, "Inquiry Submitted", Toast.LENGTH_SHORT)
+                                        Toast.makeText(
+                                            context,
+                                            "Inquiry Submitted",
+                                            Toast.LENGTH_SHORT
+                                        )
                                             .show()
+                                        navController.navigateUp()
                                     },
                                     onFailure = { exception: Exception ->
                                         errorMessage = "An error occurred: ${exception.message}"

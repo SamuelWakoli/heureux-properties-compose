@@ -25,25 +25,26 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
                         onError(error)
                         close(error)
                     } else {
-                        val inquiries: MutableList<InquiryItem>? = null
-
-                        value?.documents?.forEach { doc ->
-                            inquiries?.add(
-                                InquiryItem(
-                                    id = doc.id,
-                                    time = doc.get("time").toString(),
-                                    propertyId = doc.get("propertyId").toString(),
-                                    senderId = doc.get("senderId").toString(),
-                                    offerAmount = doc.get("offerAmount").toString(),
-                                    preferredPaymentMethod = doc.get("preferredPaymentMethod")
-                                        .toString(),
-                                    phoneNumber = doc.get("phoneNumber").toString(),
-                                    archived = doc.get("archived") as Boolean
+                        if (value != null) {
+                            val inquiries: MutableList<InquiryItem> = mutableListOf()
+                            value.documents.forEach { doc ->
+                                inquiries.add(
+                                    InquiryItem(
+                                        id = doc.id,
+                                        time = doc.get("time").toString(),
+                                        propertyId = doc.get("propertyId").toString(),
+                                        senderId = doc.get("senderId").toString(),
+                                        offerAmount = doc.get("offerAmount").toString(),
+                                        preferredPaymentMethod = doc.get("preferredPaymentMethod")
+                                            .toString(),
+                                        phoneNumber = doc.get("phoneNumber").toString(),
+                                        archived = doc.get("archived") as Boolean
+                                    )
                                 )
-                            )
+                            }
+                            trySend(inquiries)
                         }
 
-                        inquiries?.let { trySend(it) }
                     }
                 }
 
@@ -62,25 +63,26 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
                             onError(error)
                             close(error)
                         } else {
-                            val requests: MutableList<SellWithUsRequest>? = null
-                            value?.documents?.forEach { doc ->
-                                requests?.add(
-                                    SellWithUsRequest(
-                                        id = doc.id,
-                                        time = doc.get("time").toString(),
-                                        userId = doc.get("userId").toString(),
-                                        propertyName = doc.get("propertyName").toString(),
-                                        propertyDescription = doc.get("propertyDescription")
-                                            .toString(),
-                                        propertyPrice = doc.get("propertyPrice").toString(),
-                                        propertyImages = doc.get("propertyImages") as List<String>,
-                                        contactNumber = doc.get("contactNumber").toString(),
-                                        archived = doc.get("archived") as Boolean
+                            if (value != null) {
+                                val requests: MutableList<SellWithUsRequest> = mutableListOf()
+                                value.documents.forEach { doc ->
+                                    requests.add(
+                                        SellWithUsRequest(
+                                            id = doc.id,
+                                            time = doc.get("time").toString(),
+                                            userId = doc.get("userId").toString(),
+                                            propertyName = doc.get("propertyName").toString(),
+                                            propertyDescription = doc.get("propertyDescription")
+                                                .toString(),
+                                            propertyPrice = doc.get("propertyPrice").toString(),
+                                            propertyImages = doc.get("propertyImages") as List<String>,
+                                            contactNumber = doc.get("contactNumber").toString(),
+                                            archived = doc.get("archived") as Boolean
+                                        )
                                     )
-                                )
+                                }
+                                trySend(requests)
                             }
-
-                            requests?.let { trySend(it) }
                         }
                     }
 
