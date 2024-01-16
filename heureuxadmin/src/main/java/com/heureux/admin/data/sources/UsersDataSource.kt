@@ -11,9 +11,21 @@ interface UsersDataSource {
     val storage: FirebaseStorage
     fun getAllUsers(
         onFailure: (exception: Exception) -> Unit
-    ) : Flow<List<HeureuxUser>>
+    ): Flow<List<HeureuxUser>>
 
     fun getFeedback(
         onFailure: (exception: Exception) -> Unit
-    ) : Flow<List<FeedbackItem>>
+    ): Flow<List<FeedbackItem>>
+
+    suspend fun updateFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    )
+
+    suspend fun deleteFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    )
 }

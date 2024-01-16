@@ -71,4 +71,31 @@ class HeureuxUsersDataSource : UsersDataSource {
 
             awaitClose { snapshotListener.remove() }
         }
+
+
+    override suspend fun updateFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        firestore.collection(FirebaseDirectories.FeedbacksCollection.name).document(feedbackItem.id)
+            .set(feedbackItem).addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                onFailure(it)
+            }
+    }
+
+    override suspend fun deleteFeedback(
+        feedbackItem: FeedbackItem,
+        onSuccess: () -> Unit,
+        onFailure: (exception: Exception) -> Unit
+    ) {
+        firestore.collection(FirebaseDirectories.FeedbacksCollection.name).document(feedbackItem.id)
+            .delete().addOnSuccessListener {
+                onSuccess()
+            }.addOnFailureListener {
+                onFailure(it)
+            }
+    }
 }
