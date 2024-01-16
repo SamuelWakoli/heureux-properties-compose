@@ -12,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -19,9 +20,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.heureux.admin.data.types.PaymentItem
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreenViewModel
+import java.time.LocalDateTime
 
 @Composable
 fun UpdatePaymentListItem(
+    viewModel: UsersScreenViewModel,
+    paymentItem: PaymentItem,
     onClickAddPayment: (amount: String) -> Unit,
     onClickUndoPayment: () -> Unit,
 ) {
@@ -29,10 +35,21 @@ fun UpdatePaymentListItem(
     var showAddPaymentDialog by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
+    val property = viewModel.getProperty(paymentItem.propertyId) {}.collectAsState().value
+
     ListItem(
-        headlineContent = { Text(text = "Property Name") },
+        overlineContent = {
+            val time = LocalDateTime.parse(paymentItem.time)
+            Text(text = "Date: ${time.dayOfMonth}/${time.monthValue}/${time.year}    Time: ${time.hour}:${time.minute}")
+        },
+        headlineContent = { Text(text = property?.name.toString()) },
         supportingContent = {
-            Text(text = "Agreed amount: Ksh 2,000,000")
+            Text(
+                text = "Agreed amount: Ksh. ${paymentItem.agreedPrice}\n" +
+                        "Total paid: Ksh. ${paymentItem.totalAmountPaid}\n" +
+                        "Owing: Ksh. ${paymentItem.owingAmount}\n\n" +
+                        "Approved by: ${paymentItem.approvedBy.uppercase()}"
+            )
         },
         trailingContent = {
             IconButton(onClick = { showOptions = true }) {
@@ -49,7 +66,7 @@ fun UpdatePaymentListItem(
                     text = { Text(text = "Add payment") },
                     onClick = { showAddPaymentDialog = true })
                 DropdownMenuItem(
-                    text = { Text(text = "Undo last payment") },
+                    text = { Text(text = "Undo payment") },
                     onClick = { onClickUndoPayment() })
             }
         },
