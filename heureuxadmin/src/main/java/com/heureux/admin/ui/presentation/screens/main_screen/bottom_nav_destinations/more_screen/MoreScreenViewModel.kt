@@ -2,10 +2,15 @@ package com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destina
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.heureux.admin.data.repositories.PaymentsRepository
+import com.heureux.admin.data.repositories.PropertyRepository
 import com.heureux.admin.data.repositories.UserPreferencesRepository
+import com.heureux.admin.data.repositories.UsersRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -16,7 +21,15 @@ data class MoreScreenUiState(
 
 class MoreScreenViewModel(
     val userPreferencesRepository: UserPreferencesRepository,
+    val usersRepository: UsersRepository,
+    val paymentsRepository: PaymentsRepository,
+    val propertiesRepository: PropertyRepository,
 ) : ViewModel() {
+
+    companion object {
+        const val TAG = "MoreScreenViewModel"
+        const val TIMEOUT_DURATION = 5_000L
+    }
 
     private var _uiState: MutableStateFlow<MoreScreenUiState> =
         MutableStateFlow(MoreScreenUiState())
@@ -25,6 +38,23 @@ class MoreScreenViewModel(
     val currentThemeData = userPreferencesRepository.getThemeData
     val currentDynamicColorState = userPreferencesRepository.getDynamicColor
 
+    val allPayments = paymentsRepository.getAllPayments { }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
+        initialValue = null
+    )
+
+    val allUsers = usersRepository.getAllUsers { }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
+        initialValue = null
+    )
+
+    val allProperties = propertiesRepository.getAllProperties { }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
+        initialValue = null
+    )
 
     fun hideOrShowThemeDialog() {
         _uiState.update {

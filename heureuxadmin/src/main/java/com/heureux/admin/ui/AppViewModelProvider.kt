@@ -38,7 +38,12 @@ object AppViewModelProvider {
             )
         }
         initializer {
-            MoreScreenViewModel(userPreferencesRepository = heureuxAdminApp().userPreferencesRepository)
+            MoreScreenViewModel(
+                userPreferencesRepository = heureuxAdminApp().userPreferencesRepository,
+                usersRepository = heureuxAdminApp().container.usersRepository,
+                paymentsRepository = heureuxAdminApp().container.paymentsRepository,
+                propertiesRepository = heureuxAdminApp().container.propertyRepository
+            )
         }
         initializer {
             AddPropertyScreenViewModel(profileRepository = heureuxAdminApp().container.profileRepository)
