@@ -173,6 +173,7 @@ fun NavGraph(
         composable(Screens.UserFeedbackScreen.route) {
             UserFeedbackScreen(
                 navController = navController,
+                viewModel = moreScreenViewModel,
             )
         }
     }

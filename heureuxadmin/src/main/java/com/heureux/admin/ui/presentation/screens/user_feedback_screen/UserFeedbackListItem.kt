@@ -27,7 +27,9 @@ import com.heureux.admin.data.types.FeedbackItem
 
 @Composable
 fun UserFeedbackListItem(
-    feedback: FeedbackItem
+    feedback: FeedbackItem,
+    onMarkAsRead: () -> Unit,
+    onDelete: () -> Unit
 ) {
 
     var showOptions: Boolean by remember { mutableStateOf(false) }
@@ -47,19 +49,27 @@ fun UserFeedbackListItem(
                 )
             }
             DropdownMenu(expanded = showOptions, onDismissRequest = { showOptions = false }) {
-                DropdownMenuItem(trailingIcon = {
-                    Icon(imageVector = Icons.Outlined.DoneAll, contentDescription = null)
-                }, text = { Text(text = "Mark as read") }, colors = MenuDefaults.itemColors(
-                    leadingIconColor = MaterialTheme.colorScheme.primary,
-                    textColor = MaterialTheme.colorScheme.primary,
-                ), onClick = { showOptions = false /*TODO*/ })
-                Divider(modifier = Modifier.padding(4.dp))
+                if (!feedback.isRead) {
+                    DropdownMenuItem(trailingIcon = {
+                        Icon(imageVector = Icons.Outlined.DoneAll, contentDescription = null)
+                    }, text = { Text(text = "Mark as read") }, colors = MenuDefaults.itemColors(
+                        leadingIconColor = MaterialTheme.colorScheme.primary,
+                        textColor = MaterialTheme.colorScheme.primary,
+                    ), onClick = {
+                        showOptions = false
+                        onMarkAsRead.invoke()
+                    })
+                    Divider(modifier = Modifier.padding(4.dp))
+                }
                 DropdownMenuItem(leadingIcon = {
                     Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
                 }, text = { Text(text = "Delete") }, colors = MenuDefaults.itemColors(
                     leadingIconColor = MaterialTheme.colorScheme.error,
                     textColor = MaterialTheme.colorScheme.error,
-                ), onClick = { showOptions = false /*TODO*/ })
+                ), onClick = {
+                    showOptions = false
+                    onDelete.invoke()
+                })
             }
         },
     )
