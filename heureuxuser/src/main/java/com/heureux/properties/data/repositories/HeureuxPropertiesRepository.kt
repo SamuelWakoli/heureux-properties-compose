@@ -16,19 +16,6 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
     override fun getHomeProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>> =
         dataSource.getHomeProperties(onFailure = onFailure)
 
-    override fun getMyProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = dataSource.getMyProperties(
-        email = email, onFailure = onFailure
-    )
-
-    override fun getUserSoldProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = dataSource.getUserSoldProperties(
-        email = email, onFailure = onFailure
-    )
 
     override fun getPaymentHistory(
         email: String,
@@ -41,13 +28,6 @@ class HeureuxPropertiesRepository(private val dataSource: PropertiesDataSource) 
         email: String,
         onFailure: (exception: Exception) -> Unit,
     ): Flow<List<HeureuxProperty>> = dataSource.getBookmarks(
-        email = email, onFailure = onFailure
-    )
-
-    override fun getMyListings(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = dataSource.getMyListings(
         email = email, onFailure = onFailure
     )
 

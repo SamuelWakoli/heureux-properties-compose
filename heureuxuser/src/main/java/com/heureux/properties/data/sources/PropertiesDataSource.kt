@@ -20,18 +20,6 @@ interface PropertiesDataSource {
     ): Flow<List<HeureuxProperty>>
 
 
-    fun getMyProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>>
-
-
-    fun getUserSoldProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>>
-
-
     fun getPaymentHistory(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -44,10 +32,6 @@ interface PropertiesDataSource {
     ): Flow<List<HeureuxProperty>>
 
 
-    fun getMyListings(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>>
 
     fun getNotifications(
         email: String,

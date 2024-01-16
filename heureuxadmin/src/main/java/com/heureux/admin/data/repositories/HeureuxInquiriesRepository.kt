@@ -10,14 +10,8 @@ class HeureuxInquiriesRepository(private val dataSource: InquiriesDataSource) :
     override fun getPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>> =
         dataSource.getPropertyInquiries(onError)
 
-    override fun getArchivedPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>> =
-        dataSource.getArchivedPropertyInquiries(onError)
-
     override fun getSellWithUsInquiries(onError: (Exception) -> Unit): Flow<List<SellWithUsRequest>> =
         dataSource.getSellWithUsInquiries(onError)
-
-    override fun getArchivedSellWithUsInquiries(onError: (Exception) -> Unit): Flow<List<SellWithUsRequest>> =
-        dataSource.getArchivedSellWithUsInquiries(onError)
 
     override suspend fun updateArchivePropertyInquiry(
         data: InquiryItem,

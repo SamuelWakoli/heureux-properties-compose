@@ -57,73 +57,6 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
-    /**
-     * Gets the list of properties purchased by the user.
-     *
-     * @param email The user's email address.
-     * @param onFailure A callback that is called when an error occurs while retrieving the list of properties.
-     *
-     * @return A flow that emits the list of properties purchased by the user.
-     */
-    override fun getMyProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = callbackFlow {
-
-        val snapshotListener =
-            firestore.collection(FirebaseDirectories.PurchasedPropertiesCollection.name)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        onFailure(error)
-                        close(error)
-                    } else {
-                        // Get the list of properties from the snapshot.
-                        val properties =
-                            value?.toObjects(HeureuxProperty::class.java) ?: emptyList()
-
-                        // Filter the list of properties by the user's email address.
-                        val myProperties = properties.filter { it.purchasedBy == email }
-
-                        // Call the onSuccess callback and send the list of properties to the flow.
-                        trySend(myProperties)
-                    }
-                }
-
-        awaitClose {
-            snapshotListener.remove()
-        }
-    }
-
-    override fun getUserSoldProperties(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = callbackFlow {
-        val snapshotListener =
-            firestore.collection(FirebaseDirectories.SoldPropertiesCollection.name)
-                .addSnapshotListener { value, error ->
-
-                    if (error != null) {
-                        close(error)
-                        onFailure(error)
-                    } else {
-                        // Get the list of properties from the snapshot.
-                        val properties =
-                            value?.toObjects(HeureuxProperty::class.java) ?: emptyList()
-
-                        // Filter the list of properties by the user's email address.
-                        val soldProperties = properties.filter { it.sellerId == email }
-
-                        // Call the onSuccess callback and send the list of properties to the flow.
-                        trySend(soldProperties)
-                    }
-
-                }
-
-        awaitClose {
-            snapshotListener.remove()
-        }
-    }
-
     override fun getPaymentHistory(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -134,8 +67,26 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                     close(error)
                     onFailure(error)
                 } else {
-                    val payments = value?.toObjects(PaymentItem::class.java) ?: emptyList()
+                    val payments: MutableList<PaymentItem> = mutableListOf()
 
+                    value.let { snapshot ->
+                        snapshot?.documents?.forEach { document ->
+                            payments.add(
+                                PaymentItem(
+                                    paymentId = document.id,
+                                    propertyId = document.get("propertyId").toString(),
+                                    userId = document.get("userId").toString(),
+                                    amount = document.get("amount").toString(),
+                                    agreedPrice = document.get("agreedPrice").toString(),
+                                    totalAmountPaid = document.get("totalAmountPaid").toString(),
+                                    owingAmount = document.get("owingAmount").toString(),
+                                    paymentMethod = document.get("paymentMethod").toString(),
+                                    time = document.get("time").toString(),
+                                    approvedBy = document.get("approvedBy").toString(),
+                                )
+                            )
+                        }
+                    }
                     val myPayments = payments.filter { it.userId == email }
 
                     trySend(myPayments)
@@ -158,30 +109,26 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                         close(error)
                         onFailure(error)
                     } else {
-                        val bookmarks = value?.toObjects(HeureuxProperty::class.java) ?: emptyList()
+                        val bookmarks: MutableList<HeureuxProperty> = mutableListOf()
+                        value.let { snapshot ->
+                            snapshot?.documents?.forEach { document ->
+                                bookmarks.add(
+                                    HeureuxProperty(
+                                        id = document.id,
+                                        name = document.get("name").toString(),
+                                        price = document.get("price").toString(),
+                                        location = document.get("location").toString(),
+                                        sellerId = document.get("sellerId").toString(),
+                                        description = document.get("description").toString(),
+                                        imageUrls = document.get("imageUrls") as List<String>,
+                                        purchasedBy = document.get("purchasedBy").toString()
+                                    )
+                                )
+                            }
+                        }
                         trySend(bookmarks)
                     }
                 }
-        awaitClose { snapshotListener.remove() }
-    }
-
-    override fun getMyListings(
-        email: String,
-        onFailure: (exception: Exception) -> Unit,
-    ): Flow<List<HeureuxProperty>> = callbackFlow {
-        val snapshotListener = firestore.collection(FirebaseDirectories.PropertiesCollection.name)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    close(error)
-                    onFailure(error)
-                } else {
-                    val myListings =
-                        value?.toObjects(HeureuxProperty::class.java)?.filter { it.sellerId == email }
-                            ?: emptyList()
-                    trySend(myListings)
-                }
-            }
-
         awaitClose { snapshotListener.remove() }
     }
 
@@ -198,8 +145,20 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                         close(error)
                         onFailure(error)
                     } else {
-                        val notifications =
-                            value?.toObjects(NotificationItem::class.java) ?: emptyList()
+                        val notifications: MutableList<NotificationItem> = mutableListOf()
+
+                        value.let { snapshot ->
+                            snapshot?.documents?.forEach { document ->
+                                notifications.add(
+                                    NotificationItem(
+                                        time = document.get("time").toString(),
+                                        title = document.get("title").toString(),
+                                        description = document.get("description").toString(),
+                                        isRead = document.get("isRead") as Boolean
+                                    )
+                                )
+                            }
+                        }
 
                         trySend(notifications)
                     }
@@ -218,10 +177,27 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
                     close(error)
                     onFailure(error)
                 } else {
-                    val inquires =
-                        value?.toObjects(InquiryItem::class.java)?.filter { it.senderId == email }
-                            ?: emptyList()
-                    trySend(inquires)
+                    val inquires: MutableList<InquiryItem> = mutableListOf()
+                    value.let { snapshot ->
+                        snapshot?.documents?.forEach { document ->
+                            inquires.add(
+                                InquiryItem(
+                                    id = document.id,
+                                    time = document.get("time").toString(),
+                                    propertyId = document.get("propertyId").toString(),
+                                    senderId = document.get("senderId").toString(),
+                                    offerAmount = document.get("offerAmount").toString(),
+                                    preferredPaymentMethod = document.get("preferredPaymentMethod")
+                                        .toString(),
+                                    phoneNumber = document.get("phoneNumber").toString(),
+                                    archived = document.get("archived") as Boolean,
+                                )
+                            )
+                        }
+
+                    }
+
+                    trySend(inquires.filter { it.senderId == email })
                 }
             }
 
@@ -231,21 +207,28 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
     override fun getPropertyItem(
         propertyId: String,
     ): Flow<HeureuxProperty> = callbackFlow {
-        val snapshotListener = firestore.collection(FirebaseDirectories.PropertiesCollection.name)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    close(error)
-                } else {
-                    val allProperties = value?.toObjects(HeureuxProperty::class.java).orEmpty()
-
-                    val property = allProperties.find { it.id == propertyId }
-
-                    if (property != null) {
-                        trySend(property)
+        val snapshotListener =
+            firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(propertyId)
+                .addSnapshotListener { document, error ->
+                    if (error != null) {
+                        close(error)
+                    } else {
+                        if (!document?.data.isNullOrEmpty()) {
+                            trySend(
+                                HeureuxProperty(
+                                    id = document!!.id,
+                                    name = document.get("name").toString(),
+                                    price = document.get("price").toString(),
+                                    location = document.get("location").toString(),
+                                    sellerId = document.get("sellerId").toString(),
+                                    description = document.get("description").toString(),
+                                    imageUrls = document.get("imageUrls") as List<String>,
+                                    purchasedBy = document.get("purchasedBy").toString()
+                                )
+                            )
+                        }
                     }
-
                 }
-            }
 
         awaitClose { snapshotListener.remove() }
     }
