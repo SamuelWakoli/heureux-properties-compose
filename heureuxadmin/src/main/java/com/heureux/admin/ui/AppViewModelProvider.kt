@@ -49,7 +49,8 @@ object AppViewModelProvider {
         initializer {
             UsersScreenViewModel(
                 usersRepository = heureuxAdminApp().container.usersRepository,
-                paymentsRepository = heureuxAdminApp().container.paymentsRepository
+                paymentsRepository = heureuxAdminApp().container.paymentsRepository,
+                propertyRepository = heureuxAdminApp().container.propertyRepository,
             )
         }
     }
