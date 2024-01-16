@@ -90,7 +90,7 @@ fun ArchivedPropertyInquiryScreen(
                         modifier = Modifier.size(128.dp)
                     )
                     Spacer(modifier = Modifier.size(16.dp))
-                    Text(text = "No Property Inquiries")
+                    Text(text = "No archived Property Inquiries")
                 }
             } else {
                 LazyColumn(

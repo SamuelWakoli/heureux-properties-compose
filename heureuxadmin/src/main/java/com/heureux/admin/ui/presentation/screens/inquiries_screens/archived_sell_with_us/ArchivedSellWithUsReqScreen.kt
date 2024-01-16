@@ -1,5 +1,6 @@
 package com.heureux.admin.ui.presentation.screens.inquiries_screens.archived_sell_with_us
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -7,10 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.Archive
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,16 +22,23 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.InquiriesViewModel
 import com.heureux.admin.ui.presentation.screens.inquiries_screens.sell_with_us.SellWithUsListItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArchivedSellWithUsReqScreen(navController: NavHostController) {
+fun ArchivedSellWithUsReqScreen(
+    navController: NavHostController,
+    viewModel: InquiriesViewModel
+) {
 
+    val archivedSellWithUsRequests =
+        viewModel.allSellWithUsInquiries.collectAsState().value?.filter { it.archived }
 
     Scaffold(
         topBar = {
@@ -61,12 +71,40 @@ fun ArchivedSellWithUsReqScreen(navController: NavHostController) {
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                items(20) {
-                    SellWithUsListItem(navController = navController)
+            if (archivedSellWithUsRequests == null) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else if (archivedSellWithUsRequests.isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Archive, contentDescription = null,
+                        tint = MaterialTheme.colorScheme.primary,
+                        modifier = Modifier.size(128.dp)
+                    )
+                    Spacer(modifier = Modifier.size(16.dp))
+                    Text(text = "No archived sells inquiries")
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    items(archivedSellWithUsRequests) { item ->
+                        SellWithUsListItem(
+                            sellWithUsRequest = item,
+                            navController = navController,
+                            viewModel = viewModel
+                        )
+                    }
                 }
             }
         }
