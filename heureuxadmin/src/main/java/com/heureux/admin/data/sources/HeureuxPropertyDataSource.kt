@@ -45,13 +45,24 @@ class HeureuxPropertyDataSource : PropertyDataSource {
     ): Flow<HeureuxProperty> = callbackFlow {
         val snapshotListener =
             firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(id)
-                .addSnapshotListener { value, error ->
+                .addSnapshotListener { document, error ->
                     if (error != null) {
                         onFailure(error)
                         close(error)
                     }
-                    if (value != null) {
-                        value.toObject(HeureuxProperty::class.java)?.let { trySend(it) }
+                    if (document != null) {
+                        trySend(
+                            HeureuxProperty(
+                                id = document.id,
+                                name = document.get("name").toString(),
+                                price = document.get("price").toString(),
+                                location = document.get("location").toString(),
+                                sellerId = document.get("sellerId").toString(),
+                                description = document.get("description").toString(),
+                                imageUrls = document.get("imageUrls") as List<String>,
+                                purchasedBy = document.get("purchasedBy").toString()
+                            )
+                        )
                     }
                 }
 

@@ -166,10 +166,7 @@ class HeureuxProfileDataSource : ProfileDataSource {
                             )
                         }
 
-                        trySend(
-                            userProfileData
-                            // FIXME: value?.toObject(UserProfileData::class.java)
-                        ).isSuccess // Offer the latest DocumentSnapshot
+                        trySend(userProfileData) // Offer the latest DocumentSnapshot
                     }
                     onSuccess()
                 }
