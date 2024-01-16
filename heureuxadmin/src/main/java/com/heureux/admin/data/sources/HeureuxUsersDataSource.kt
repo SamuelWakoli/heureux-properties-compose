@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.heureux.admin.data.FirebaseDirectories
+import com.heureux.admin.data.types.FeedbackItem
 import com.heureux.admin.data.types.HeureuxUser
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -42,4 +43,32 @@ class HeureuxUsersDataSource : UsersDataSource {
 
         awaitClose { snapshotListener.remove() }
     }
+
+    override fun getFeedback(onFailure: (exception: Exception) -> Unit): Flow<List<FeedbackItem>> =
+        callbackFlow {
+            val snapshotListener =
+                firestore.collection(FirebaseDirectories.FeedbacksCollection.name)
+                    .addSnapshotListener { value, error ->
+                        if (error != null) {
+                            close(error)
+                            onFailure(error)
+                        } else {
+                            val feedbacks = mutableListOf<FeedbackItem>()
+                            for (document in value!!.documents) {
+                                val feedback = FeedbackItem(
+                                    id = document.id,
+                                    message = document.get("message").toString(),
+                                    time = document.get("time").toString(),
+                                    senderEmail = document.get("senderEmail").toString(),
+                                    isRead = document.getBoolean("isRead") as Boolean
+                                )
+                                feedbacks.add(feedback)
+                            }
+                            trySend(feedbacks)
+                        }
+
+                    }
+
+            awaitClose { snapshotListener.remove() }
+        }
 }
