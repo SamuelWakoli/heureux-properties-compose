@@ -9,6 +9,7 @@ import com.heureux.admin.HeureuxAdminApp
 import com.heureux.admin.ui.presentation.authgate.AuthViewModel
 import com.heureux.admin.ui.presentation.screens.add_property_screen.AddPropertyScreenViewModel
 import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfileScreenViewModel
+import com.heureux.admin.ui.presentation.screens.inquiries_screens.InquiriesViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
@@ -51,6 +52,14 @@ object AppViewModelProvider {
                 usersRepository = heureuxAdminApp().container.usersRepository,
                 paymentsRepository = heureuxAdminApp().container.paymentsRepository,
                 propertyRepository = heureuxAdminApp().container.propertyRepository,
+            )
+        }
+        initializer {
+            InquiriesViewModel(
+                usersRepository = heureuxAdminApp().container.usersRepository,
+                inquiriesRepository = heureuxAdminApp().container.inquiriesRepository,
+                paymentsRepository = heureuxAdminApp().container.paymentsRepository,
+                propertiesRepository = heureuxAdminApp().container.propertyRepository
             )
         }
     }
