@@ -12,6 +12,7 @@ import com.heureux.admin.ui.presentation.screens.edit_profile_screen.EditProfile
 import com.heureux.admin.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.home_screen.HomeScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 
 object AppViewModelProvider {
@@ -44,6 +45,12 @@ object AppViewModelProvider {
 
         initializer {
             HomeScreenViewModel(propertyRepository = heureuxAdminApp().container.propertyRepository)
+        }
+        initializer {
+            UsersScreenViewModel(
+                usersRepository = heureuxAdminApp().container.usersRepository,
+                paymentsRepository = heureuxAdminApp().container.paymentsRepository
+            )
         }
     }
 }

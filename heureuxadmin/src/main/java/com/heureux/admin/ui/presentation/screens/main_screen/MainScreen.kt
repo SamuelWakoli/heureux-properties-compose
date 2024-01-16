@@ -22,13 +22,15 @@ import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinat
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreen
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.more_screen.MoreScreenViewModel
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreen
+import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     navController: NavController,
     viewModel: MainScreenViewModel,
-    homeScreenViewModel: HomeScreenViewModel
+    homeScreenViewModel: HomeScreenViewModel,
+    usersScreenViewModel: UsersScreenViewModel
 ) {
     val bottomNavController: NavHostController = rememberNavController()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
@@ -64,7 +66,7 @@ fun MainScreen(
             composable(Screens.UsersScreen.route) {
                 UsersScreen(
                     navController = navController,
-                    viewModel = viewModel,
+                    viewModel = usersScreenViewModel,
                     scrollBehavior = scrollBehavior
                 )
             }
