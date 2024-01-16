@@ -9,10 +9,8 @@ interface InquiriesDataSource {
     val firestore: FirebaseFirestore
 
     fun getPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>>
-    fun getArchivedPropertyInquiries(onError: (Exception) -> Unit): Flow<List<InquiryItem>>
 
     fun getSellWithUsInquiries(onError: (Exception) -> Unit): Flow<List<SellWithUsRequest>>
-    fun getArchivedSellWithUsInquiries(onError: (Exception) -> Unit): Flow<List<SellWithUsRequest>>
 
     suspend fun updateArchivePropertyInquiry(
         data: InquiryItem,

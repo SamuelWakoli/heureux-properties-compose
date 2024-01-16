@@ -25,35 +25,31 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
                         onError(error)
                         close(error)
                     } else {
-                        val inquiries = value?.toObjects(InquiryItem::class.java)
-                        if (inquiries != null) {
-                            trySend(inquiries)
+                        val inquiries: MutableList<InquiryItem>? = null
+
+                        value?.documents?.forEach { doc ->
+                            inquiries?.add(
+                                InquiryItem(
+                                    id = doc.id,
+                                    time = doc.get("time").toString(),
+                                    propertyId = doc.get("propertyId").toString(),
+                                    senderId = doc.get("senderId").toString(),
+                                    offerAmount = doc.get("offerAmount").toString(),
+                                    preferredPaymentMethod = doc.get("preferredPaymentMethod")
+                                        .toString(),
+                                    phoneNumber = doc.get("phoneNumber").toString(),
+                                    archived = doc.get("archived") as Boolean
+                                )
+                            )
                         }
+
+                        inquiries?.let { trySend(it) }
                     }
                 }
 
             awaitClose { snapshotListener.remove() }
         }
 
-    override fun getArchivedPropertyInquiries(
-        onError: (Exception) -> Unit,
-    ): Flow<List<InquiryItem>> =
-        callbackFlow {
-            val snapshotListener = firestore.collection(FirebaseDirectories.InquiresCollection.name)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        onError(error)
-                        close(error)
-                    } else {
-                        val inquiries = value?.toObjects(InquiryItem::class.java)
-                        if (inquiries != null) {
-                            trySend(inquiries.filter { it.archived })
-                        }
-                    }
-                }
-
-            awaitClose { snapshotListener.remove() }
-        }
 
     override fun getSellWithUsInquiries(
         onError: (Exception) -> Unit,
@@ -66,32 +62,27 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
                             onError(error)
                             close(error)
                         } else {
-                            val requests = value?.toObjects(SellWithUsRequest::class.java)
-                            if (requests != null) {
-                                trySend(requests)
+                            val requests: MutableList<SellWithUsRequest>? = null
+                            value?.documents?.forEach { doc ->
+                                requests?.add(
+                                    SellWithUsRequest(
+                                        id = doc.id,
+                                        time = doc.get("time").toString(),
+                                        userId = doc.get("userId").toString(),
+                                        propertyName = doc.get("propertyName").toString(),
+                                        propertyDescription = doc.get("propertyDescription")
+                                            .toString(),
+                                        propertyPrice = doc.get("propertyPrice").toString(),
+                                        propertyImages = doc.get("propertyImages") as List<String>,
+                                        contactNumber = doc.get("contactNumber").toString(),
+                                        archived = doc.get("archived") as Boolean
+                                    )
+                                )
                             }
+
+                            requests?.let { trySend(it) }
                         }
                     }
-
-            awaitClose { snapshotListener.remove() }
-        }
-
-    override fun getArchivedSellWithUsInquiries(
-        onError: (Exception) -> Unit,
-    ): Flow<List<SellWithUsRequest>> =
-        callbackFlow {
-            val snapshotListener = firestore.collection(FirebaseDirectories.InquiresCollection.name)
-                .addSnapshotListener { value, error ->
-                    if (error != null) {
-                        onError(error)
-                        close(error)
-                    } else {
-                        val requests = value?.toObjects(SellWithUsRequest::class.java)
-                        if (requests != null) {
-                            trySend(requests.filter { it.archived })
-                        }
-                    }
-                }
 
             awaitClose { snapshotListener.remove() }
         }
