@@ -17,13 +17,14 @@ import com.heureux.properties.ui.presentation.screens.feedback_screen.FeedbackSc
 import com.heureux.properties.ui.presentation.screens.filter_results_screen.FilterResultsScreen
 import com.heureux.properties.ui.presentation.screens.filter_screen.FilterScreen
 import com.heureux.properties.ui.presentation.screens.inquires_screen.MyInquiresScreen
+import com.heureux.properties.ui.presentation.screens.inquiry_screen.InquiryScreen
 import com.heureux.properties.ui.presentation.screens.main_screen.MainScreen
 import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 import com.heureux.properties.ui.presentation.screens.my_properties_screen.MyPropertiesScreen
 import com.heureux.properties.ui.presentation.screens.notifications_screen.NotificationsScreen
 import com.heureux.properties.ui.presentation.screens.payment_history_screen.PaymentHistoryScreen
 import com.heureux.properties.ui.presentation.screens.profile_screen.ProfileScreen
-import com.heureux.properties.ui.presentation.screens.inquiry_screen.InquiryScreen
+import com.heureux.properties.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 import com.heureux.properties.ui.presentation.screens.property_details_screen.PropertyDetailsScreen
 import com.heureux.properties.ui.presentation.screens.sell_with_us_screen.AddPropertyImagesScreen
 import com.heureux.properties.ui.presentation.screens.sell_with_us_screen.SellWithUsScreen
@@ -39,6 +40,8 @@ fun NavGraph(
     onSignInWithGoogle: () -> Unit,
 ) {
 
+    val profileScreenViewModel =
+        viewModel<ProfileScreenViewModel>(factory = AppViewModelProvider.Factory)
     val sellWithUsViewModel = viewModel<SellWithUsViewModel>(factory = AppViewModelProvider.Factory)
 
     NavHost(
@@ -72,7 +75,7 @@ fun NavGraph(
         composable(route = Screens.ProfileScreen.route) {
             ProfileScreen(
                 navController = navController,
-                profileScreenViewModel = viewModel(factory = AppViewModelProvider.Factory),
+                profileScreenViewModel = profileScreenViewModel,
             )
         }
         composable(route = Screens.EditProfileScreen.route) {
@@ -102,19 +105,19 @@ fun NavGraph(
         composable(route = Screens.MyPropertiesScreen.route) {
             MyPropertiesScreen(
                 navController = navController,
-                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+                viewModel = profileScreenViewModel,
             )
         }
         composable(route = Screens.PaymentHistoryScreen.route) {
             PaymentHistoryScreen(
                 navController = navController,
-                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+                viewModel = profileScreenViewModel,
             )
         }
         composable(route = Screens.SoldPropertiesScreen.route) {
             SoldPropertiesScreen(
                 navController = navController,
-                viewModel = viewModel(factory = AppViewModelProvider.Factory)
+                viewModel = profileScreenViewModel,
             )
         }
         composable(route = Screens.AddPropertyScreen.route) {

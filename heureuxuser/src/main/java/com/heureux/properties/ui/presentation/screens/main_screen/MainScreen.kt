@@ -17,11 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
+import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.screens.main_screen.bottom_bar_destinations.BookmarksScreen
 import com.heureux.properties.ui.presentation.screens.main_screen.bottom_bar_destinations.HomeScreen
 import com.heureux.properties.ui.presentation.screens.main_screen.bottom_bar_destinations.MoreScreen
 import com.heureux.properties.ui.presentation.screens.main_screen.bottom_bar_destinations.MyListingsScreen
-import com.heureux.properties.ui.presentation.navigation.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,19 +57,19 @@ fun MainScreen(
             composable(route = Screens.HomeScreen.route) {
                 HomeScreen(
                     navController = navController, scrollBehavior = scrollBehavior,
-                    viewModel = viewModel(factory = AppViewModelProvider.Factory),
+                    viewModel = viewModel,
                 )
             }
             composable(route = Screens.BookmarksScreen.route) {
                 BookmarksScreen(
                     navController = navController, scrollBehavior = scrollBehavior,
-                    viewModel = viewModel(factory = AppViewModelProvider.Factory)
+                    viewModel = viewModel,
                 )
             }
             composable(route = Screens.MyListingsScreen.route) {
                 MyListingsScreen(
                     navController = navController, scrollBehavior = scrollBehavior,
-                    viewModel = viewModel(factory = AppViewModelProvider.Factory)
+                    viewModel = viewModel
                 )
             }
             composable(route = Screens.MoreScreen.route) {
