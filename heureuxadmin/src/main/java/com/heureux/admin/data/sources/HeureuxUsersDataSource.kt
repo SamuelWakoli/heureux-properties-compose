@@ -28,8 +28,13 @@ class HeureuxUsersDataSource : UsersDataSource {
                 } else {
                     val users = mutableListOf<HeureuxUser>()
                     for (document in snapshot!!.documents) {
-                        val user = document.toObject(HeureuxUser::class.java)
-                        user?.let { users.add(it) }
+                        val user = HeureuxUser(
+                            photoUrl = document.getString("photoUrl"),
+                            name = document.getString("name"),
+                            email = document.id,
+                            phone = document.getString("phone"),
+                        )
+                        user.let { users.add(it) }
                     }
                     trySend(users)
                 }
