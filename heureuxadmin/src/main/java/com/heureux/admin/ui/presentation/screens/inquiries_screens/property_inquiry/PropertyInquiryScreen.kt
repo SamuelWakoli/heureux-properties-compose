@@ -37,7 +37,8 @@ fun PropertyInquiryScreen(
 ) {
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val allInquiries = viewModel.allPropertyInquiries.collectAsState().value
+    val allInquiries =
+        viewModel.allPropertyInquiries.collectAsState().value?.filter { !it.archived }
 
     Scaffold(
         topBar = {

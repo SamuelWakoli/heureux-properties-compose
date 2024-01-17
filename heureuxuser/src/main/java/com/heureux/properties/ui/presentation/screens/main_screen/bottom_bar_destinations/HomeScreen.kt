@@ -44,7 +44,7 @@ fun HomeScreen(
 ) {
 
     val propertiesList = viewModel.propertiesList.collectAsState().value?.filter {
-        it.purchasedBy == null
+        it.purchasedBy.toString() == "null"
     }
     val bookmarksList = viewModel.getFilteredBookmarks()
     val context = LocalContext.current

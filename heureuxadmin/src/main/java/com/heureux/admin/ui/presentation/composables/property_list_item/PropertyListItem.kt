@@ -37,7 +37,7 @@ fun PropertyListItem(
     onClickDelete: () -> Unit,
 ) {
 
-    val isSold = property.purchasedBy != null
+    val isSold = property.purchasedBy.toString() != "null"
 
     Card(
         modifier = Modifier

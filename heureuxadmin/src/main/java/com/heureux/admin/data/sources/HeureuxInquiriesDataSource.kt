@@ -96,7 +96,7 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         onError: (Exception) -> Unit
     ) {
         firestore.collection(FirebaseDirectories.InquiresCollection.name).document(data.id)
-            .set(data).addOnSuccessListener {
+            .set(data.copy(archived = !data.archived)).addOnSuccessListener {
                 onSuccess()
             }.addOnFailureListener { exception ->
                 onError(exception)
@@ -122,7 +122,7 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         onError: (Exception) -> Unit
     ) {
         firestore.collection(FirebaseDirectories.SellWithUsCollection.name).document(data.id)
-            .set(data)
+            .set(data.copy(archived = !data.archived))
             .addOnSuccessListener {
                 onSuccess()
             }.addOnFailureListener { exception ->

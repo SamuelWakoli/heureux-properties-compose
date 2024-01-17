@@ -36,7 +36,8 @@ fun SellWithUsRequestScreen(
     viewModel: InquiriesViewModel,
 ) {
 
-    val allSellWithUsInquiries = viewModel.allSellWithUsInquiries.collectAsState().value
+    val allSellWithUsInquiries =
+        viewModel.allSellWithUsInquiries.collectAsState().value?.filter { !it.archived }
 
     Scaffold(
         topBar = {
