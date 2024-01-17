@@ -47,6 +47,7 @@ fun BookmarksScreen(
     val context = LocalContext.current
 
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -89,7 +90,11 @@ fun BookmarksScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 items(bookmarksList) { property ->
+                    val propertyInMainCollection = propertiesList?.find {
+                        it.id == property.id
+                    }
                     PropertyListItem(
+                        isSold = (propertyInMainCollection?.purchasedBy != "null"),
                         property = property,
                         navController = navController,
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },

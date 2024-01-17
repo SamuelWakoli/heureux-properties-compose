@@ -64,30 +64,6 @@ class MainScreenViewModel(
             initialValue = null
         )
 
-
-    fun getFilteredBookmarks(): MutableList<HeureuxProperty> {
-        val currentBookmarks = bookmarksList.value
-        val soldBookingsList = mutableListOf<HeureuxProperty>()
-        var finalBookmarksList = mutableListOf<HeureuxProperty>()
-
-        if (currentBookmarks != null) {
-
-            propertiesList.value?.forEach { property ->
-                val currentBookmark = currentBookmarks.find { it.id == property.id }
-                if (currentBookmark?.id == property.id && property.purchasedBy != null) {
-                    soldBookingsList.add(property)
-                }
-            }
-        }
-
-        if (soldBookingsList.isNotEmpty()) {
-            finalBookmarksList =
-                currentBookmarks?.filter { !soldBookingsList.contains(it) } as MutableList<HeureuxProperty>
-        }
-
-        return finalBookmarksList
-    }
-
     val bookmarksList =
         propertiesRepository.getBookmarks(
             email = userProfileData.value?.userEmail ?: currentUser?.email ?: "",

@@ -34,6 +34,7 @@ import com.heureux.properties.ui.presentation.navigation.Screens
 
 @Composable
 fun PropertyListItem(
+    isSold: Boolean,
     property: HeureuxProperty,
     navController: NavController,
     onUpdateCurrentProperty: () -> Unit,
@@ -41,7 +42,6 @@ fun PropertyListItem(
     onClickBookmark: () -> Unit,
 ) {
 
-    val isSold = property.purchasedBy.toString() != "null"
 
     Card(
         modifier = Modifier

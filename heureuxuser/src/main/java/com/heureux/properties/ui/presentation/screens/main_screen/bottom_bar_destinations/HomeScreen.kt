@@ -46,7 +46,7 @@ fun HomeScreen(
     val propertiesList = viewModel.propertiesList.collectAsState().value?.filter {
         it.purchasedBy.toString() == "null"
     }
-    val bookmarksList = viewModel.getFilteredBookmarks()
+    val unfilteredBookmarksList = viewModel.bookmarksList.collectAsState().value
     val context = LocalContext.current
 
 
@@ -93,10 +93,11 @@ fun HomeScreen(
             ) {
                 items(items = propertiesList) { property: HeureuxProperty ->
                     PropertyListItem(
+                        isSold = false,
                         property = property,
                         navController = navController,
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
-                        isBookmarked = bookmarksList.contains(property) ?: false,
+                        isBookmarked = unfilteredBookmarksList?.contains(property) ?: false,
                         onClickBookmark = {
                             viewModel.updateBookmark(property) { exception: Exception ->
                                 Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)
