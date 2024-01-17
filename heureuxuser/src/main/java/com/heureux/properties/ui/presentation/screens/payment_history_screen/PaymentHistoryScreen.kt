@@ -111,7 +111,7 @@ fun PaymentHistoryScreen(
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(paymentList) {paymentItem ->
+                items(paymentList.reversed()) {paymentItem ->
                     PaymentListItem(
                         property = allProperties?.find { it.id == paymentItem.propertyId },
                         paymentItem = paymentItem

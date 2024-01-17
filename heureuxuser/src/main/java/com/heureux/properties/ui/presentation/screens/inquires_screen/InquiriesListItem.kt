@@ -3,25 +3,22 @@ package com.heureux.properties.ui.presentation.screens.inquires_screen
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import com.heureux.properties.data.types.HeureuxProperty
+import com.heureux.properties.data.types.InquiryItem
+import java.time.LocalDateTime
 
 @Composable
-fun InquiriesListItem() {
-    ListItem(
-        overlineContent = {
-            Text(text = "12:30 pm     02/01/2024")
-        },
-        headlineContent = {
-            Text(text = "Property Title")
-        },
-        supportingContent = {
-            Text(text = "Ksh. 2,000,000")
-        }
-    )
-}
+fun InquiriesListItem(
+    inquiry: InquiryItem,
+    property: HeureuxProperty?
+) {
+    val dateTime = LocalDateTime.parse(inquiry.time)
 
-@Preview
-@Composable
-private fun MyInquiresListItemPreview() {
-    InquiriesListItem()
+    ListItem(overlineContent = {
+        Text(text = "Date: ${dateTime.dayOfMonth}/${dateTime.monthValue}/${dateTime.year}    Times: ${dateTime.hour}:${dateTime.minute}")
+    }, headlineContent = {
+        Text(text = property?.name ?: "")
+    }, supportingContent = {
+        Text(text = property?.price ?: "")
+    })
 }

@@ -125,7 +125,7 @@ fun UpdatePaymentScreen(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 } else {
-                    userPayments.forEach { paymentItem ->
+                    userPayments.reversed().forEach { paymentItem ->
                         if (allProperties != null) {
                             val property = allProperties.find { it.id == paymentItem.propertyId }
                             if (property != null) UpdatePaymentListItem(property = property,

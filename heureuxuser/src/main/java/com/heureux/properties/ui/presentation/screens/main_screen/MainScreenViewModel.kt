@@ -66,7 +66,7 @@ class MainScreenViewModel(
 
     val bookmarksList =
         propertiesRepository.getBookmarks(
-            email = userProfileData.value?.userEmail ?: currentUser?.email ?: "",
+            email = userProfileData.value?.userEmail ?: currentUser?.email!!,
         ) { }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
@@ -76,6 +76,14 @@ class MainScreenViewModel(
     val userListings = propertiesList.value?.filter {
         it.sellerId == (userProfileData.value?.userEmail ?: currentUser?.email)
     }
+
+    val userInquiries = propertiesRepository.getMyInquires(
+        email = userProfileData.value?.userEmail ?: currentUser?.email!!,
+    ){}.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+        initialValue = null
+    )
 
     fun updateCurrentProperty(property: HeureuxProperty?) {
         _mainScreenUiState.update { it.copy(currentProperty = property) }
