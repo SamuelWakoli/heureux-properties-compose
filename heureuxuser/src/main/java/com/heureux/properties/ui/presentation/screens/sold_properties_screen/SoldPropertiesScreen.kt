@@ -22,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -32,17 +33,18 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.SoldPropertyListItem
-import com.heureux.properties.ui.presentation.screens.profile_screen.ProfileScreenViewModel
+import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoldPropertiesScreen(
     navController: NavController,
-    viewModel: ProfileScreenViewModel,
+    viewModel: MainScreenViewModel,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val userSoldProperties = viewModel.userSoldProperties
+    val userSoldProperties = viewModel.propertiesList.collectAsState().value
+        ?.filter { it.sellerId == viewModel.userProfileData.collectAsState().value?.userEmail && it.purchasedBy.toString() != "null" }
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
@@ -111,9 +113,13 @@ fun SoldPropertiesScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(userSoldProperties) {
+                    items(userSoldProperties) {property ->
                         SoldPropertyListItem(
-                            navController = navController
+                            navController = navController,
+                            property = property,
+                            onClickDetails = {
+                                viewModel.updateCurrentProperty(property)
+                            }
                         )
                     }
                 }
