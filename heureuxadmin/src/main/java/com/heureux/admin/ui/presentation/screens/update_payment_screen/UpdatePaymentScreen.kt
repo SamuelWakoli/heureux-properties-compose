@@ -57,6 +57,9 @@ fun UpdatePaymentScreen(
     val currentAdminName = Firebase.auth.currentUser?.displayName
     val context = navController.context
 
+    val allProperties = viewModel.allProperties.collectAsState().value
+
+
     val snackbarHostState by remember { mutableStateOf(SnackbarHostState()) }
     val coroutineScope = rememberCoroutineScope()
 
@@ -123,43 +126,33 @@ fun UpdatePaymentScreen(
                     )
                 } else {
                     userPayments.forEach { paymentItem ->
-                        UpdatePaymentListItem(
-                            viewModel = viewModel,
-                            paymentItem = paymentItem,
-                            onClickAddPayment = { amount: String ->
-                                viewModel.addPayment(payment = paymentItem.copy(
-                                    paymentId = LocalDateTime.now().toString(),
-                                    amount = amount,
-                                    totalAmountPaid = (paymentItem.totalAmountPaid.toInt() + amount.toInt()).toString(),
-                                    time = LocalDateTime.now().toString(),
-                                    owingAmount = (paymentItem.owingAmount.toInt() - amount.toInt()).toString(),
-                                    approvedBy = currentAdminName.toString()
-                                ), onSuccess = {
-                                    Toast.makeText(
-                                        context,
-                                        "Payment added successfully",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }, onError = { exception: Exception ->
-                                    coroutineScope.launch {
-                                        snackbarHostState.showSnackbar(
-                                            message = exception.message.toString(),
-                                            withDismissAction = true,
-                                            duration = SnackbarDuration.Indefinite
-                                        )
-                                    }
-                                })
-                            }, onClickUndoPayment = {
-                                viewModel.unDoLastPayment(
-                                    payment = paymentItem,
-                                    onSuccess = {
+                        if (allProperties != null) {
+                            val property = allProperties.find { it.id == paymentItem.propertyId }
+                            if (property != null) UpdatePaymentListItem(property = property,
+                                paymentItem = paymentItem,
+                                onClickAddPayment = { amount: String ->
+                                    viewModel.addPayment(payment = paymentItem.copy(
+                                        paymentId = LocalDateTime.now().toString(),
+                                        amount = amount.replace(",", ""),
+                                        totalAmountPaid = (paymentItem.totalAmountPaid.replace(
+                                            ",", ""
+                                        ).toInt() + amount.replace(
+                                            ",", ""
+                                        ).toInt()).toString(),
+                                        time = LocalDateTime.now().toString(),
+                                        owingAmount = (paymentItem.owingAmount.replace(
+                                            ",", ""
+                                        ).toInt() - amount.replace(
+                                            ",", ""
+                                        ).toInt()).toString(),
+                                        approvedBy = currentAdminName.toString()
+                                    ), onSuccess = {
                                         Toast.makeText(
                                             context,
-                                            "Payment undone successfully",
+                                            "Payment added successfully",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                    },
-                                    onError = { exception: Exception ->
+                                    }, onError = { exception: Exception ->
                                         coroutineScope.launch {
                                             snackbarHostState.showSnackbar(
                                                 message = exception.message.toString(),
@@ -167,10 +160,31 @@ fun UpdatePaymentScreen(
                                                 duration = SnackbarDuration.Indefinite
                                             )
                                         }
-                                    },
-                                )
+                                    })
+                                },
+                                onClickUndoPayment = {
+                                    viewModel.unDoLastPayment(
+                                        payment = paymentItem,
+                                        onSuccess = {
+                                            Toast.makeText(
+                                                context,
+                                                "Payment undone successfully",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        },
+                                        onError = { exception: Exception ->
+                                            coroutineScope.launch {
+                                                snackbarHostState.showSnackbar(
+                                                    message = exception.message.toString(),
+                                                    withDismissAction = true,
+                                                    duration = SnackbarDuration.Indefinite
+                                                )
+                                            }
+                                        },
+                                    )
 
-                            })
+                                })
+                        }
                     }
                 }
             }

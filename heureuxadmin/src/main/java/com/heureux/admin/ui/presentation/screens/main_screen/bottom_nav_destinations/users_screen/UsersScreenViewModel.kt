@@ -5,12 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.heureux.admin.data.repositories.PaymentsRepository
 import com.heureux.admin.data.repositories.PropertyRepository
 import com.heureux.admin.data.repositories.UsersRepository
-import com.heureux.admin.data.types.HeureuxProperty
 import com.heureux.admin.data.types.HeureuxUser
 import com.heureux.admin.data.types.PaymentItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -49,6 +47,12 @@ class UsersScreenViewModel(
         initialValue = null
     )
 
+    val allProperties = propertyRepository.getAllProperties(onFailure = {}).stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
+        initialValue = null
+    )
+
     fun updateCurrentUser(user: HeureuxUser) {
         _uiState.value = _uiState.value.copy(currentUser = user)
     }
@@ -78,16 +82,5 @@ class UsersScreenViewModel(
                 onError = onError,
             )
         }
-    }
-
-    fun getProperty(id: String, onFailure: (Exception) -> Unit): StateFlow<HeureuxProperty?> {
-        return propertyRepository.getPropertyData(
-            id = id,
-            onFailure = onFailure
-        ).stateIn(
-             scope = viewModelScope,
-             started = SharingStarted.WhileSubscribed(TIMEOUT_DURATION),
-             initialValue = null
-         )
     }
 }
