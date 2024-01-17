@@ -105,7 +105,7 @@ fun NavGraph(
         composable(route = Screens.MyPropertiesScreen.route) {
             MyPropertiesScreen(
                 navController = navController,
-                viewModel = profileScreenViewModel,
+                viewModel = mainScreenViewModel,
             )
         }
         composable(route = Screens.PaymentHistoryScreen.route) {
@@ -117,7 +117,7 @@ fun NavGraph(
         composable(route = Screens.SoldPropertiesScreen.route) {
             SoldPropertiesScreen(
                 navController = navController,
-                viewModel = profileScreenViewModel,
+                viewModel = mainScreenViewModel,
             )
         }
         composable(route = Screens.AddPropertyScreen.route) {

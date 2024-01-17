@@ -30,7 +30,7 @@ import com.heureux.properties.ui.presentation.navigation.Screens
 fun UserListingItem(
     property: HeureuxProperty,
     navController: NavController,
-    onClickDelete: () -> Unit = {},
+    onClickDetails: () -> Unit = {},
 ) {
     Card(
         modifier = Modifier
@@ -81,7 +81,7 @@ fun UserListingItem(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     TextButton(onClick = {
-                        /*TODO*/
+                        onClickDetails()
                         navController.navigate(Screens.PropertyDetailsScreen.route) {
                             launchSingleTop = true
                         }
