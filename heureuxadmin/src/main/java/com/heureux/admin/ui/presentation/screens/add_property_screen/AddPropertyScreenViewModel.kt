@@ -54,9 +54,17 @@ class AddPropertyScreenViewModel(
         _uiState.value = _uiState.value.copy(propertyName = name, propertyNameError = false)
     }
 
+    fun showPropertyNameError() {
+        _uiState.value = _uiState.value.copy(propertyNameError = true)
+    }
+
     fun onPropertyLocationChanged(location: String) {
         _uiState.value =
             _uiState.value.copy(propertyLocation = location, propertyLocationError = false)
+    }
+
+    fun showPropertyLocationError() {
+        _uiState.value = _uiState.value.copy(propertyLocationError = true)
     }
 
 
@@ -65,12 +73,25 @@ class AddPropertyScreenViewModel(
             _uiState.value.copy(propertyDescription = description, propertyDescriptionError = false)
     }
 
+    fun showPropertyDescriptionError() {
+        _uiState.value = _uiState.value.copy(propertyDescriptionError = true)
+    }
+
+    fun onSellerIdChanged(id: String) {
+        _uiState.value =
+            _uiState.value.copy(sellerID = id, sellerIDError = false)
+    }
+
+    fun showSellerIdError() {
+        _uiState.value = _uiState.value.copy(sellerIDError = true)
+    }
+
     fun omPropertyPriceChanged(price: String) {
         _uiState.value = _uiState.value.copy(propertyPrice = price, propertyPriceError = false)
     }
 
-    fun onPhoneNumberChanged(phone: String) {
-        _uiState.value = _uiState.value.copy(userPhoneNumber = phone, userPhoneNumberError = false)
+    fun showPropertyPriceError() {
+        _uiState.value = _uiState.value.copy(propertyPriceError = true)
     }
 
     fun updatePhotoURLAndCount(photoURL: String) {

@@ -5,6 +5,8 @@ data class AddPropertyUiState(
     val propertyNameError: Boolean = false,
     val propertyDescription: String = "",
     val propertyDescriptionError: Boolean = false,
+    val sellerID: String = "Heureux Properties",
+    val sellerIDError: Boolean = false,
     val propertyPrice: String = "",
     val propertyPriceError: Boolean = false,
     val propertyLocation: String = "",

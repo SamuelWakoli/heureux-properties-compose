@@ -196,13 +196,35 @@ fun AddPropertyScreen(
                             supportingText = {
                                 if (uiState.propertyDescriptionError) Text(text = "Description cannot be empty")
                             },
-                            isError = false,
+                            isError = uiState.propertyDescriptionError,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Text,
                                 imeAction = ImeAction.Next,
                             ),
                             minLines = 3,
                             maxLines = 6,
+                            shape = MaterialTheme.shapes.medium,
+                        )
+                        Spacer(modifier = Modifier.padding(4.dp))
+                        Text(text = "If property belongs to another seller or user in the app, add the actual seller's/user's email as seller ID so as to let this property reflect on their listings. This ID will not be shown in public.  Don't change this if Heureux is the owner")
+                        OutlinedTextField(
+                            value = uiState.sellerID,
+                            onValueChange = { id ->
+                                viewModel.onSellerIdChanged(id)
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            label = {
+                                Text(text = "Seller ID")
+                            },
+                            supportingText = {
+                                if (uiState.sellerIDError) Text(text = "ID cannot be empty")
+                            },
+                            isError = uiState.sellerIDError,
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.Email,
+                                imeAction = ImeAction.Next,
+                            ),
+                            singleLine = true,
                             shape = MaterialTheme.shapes.medium,
                         )
                         Spacer(modifier = Modifier.padding(4.dp))
@@ -217,7 +239,7 @@ fun AddPropertyScreen(
                             supportingText = {
                                 if (uiState.propertyPriceError) Text(text = "Amount cannot be empty")
                             },
-                            isError = false,
+                            isError = uiState.propertyPriceError,
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Number,
                                 imeAction = ImeAction.Done,
@@ -258,60 +280,74 @@ fun AddPropertyScreen(
 
                 ElevatedButton(modifier = Modifier.padding(8.dp), onClick = {
 
-                    if (currentProperty == null) {
-                        homeScreenViewModel.addProperty(
-                            property = HeureuxProperty(
-                                id = LocalDateTime.now().toString(),
-                                name = uiState.propertyName,
-                                location = uiState.propertyLocation,
-                                description = uiState.propertyDescription,
-                                price = uiState.propertyPrice,
-                                imageUrls = uiState.propertyImages,
-                            ),
-                            onSuccess = {
-                                Toast.makeText(
-                                    context,
-                                    "Property added successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                navController.navigateUp()
-                            },
-                            onError = { exception ->
-                                Toast.makeText(
-                                    context,
-                                    "Failed to add property. Error: ${exception.message} ",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        )
+                    if (uiState.propertyName.isEmpty()) {
+                        viewModel.showPropertyNameError()
+                    } else if (uiState.propertyLocation.isEmpty()) {
+                        viewModel.showPropertyLocationError()
+                    } else if (uiState.propertyDescription.isEmpty()) {
+                        viewModel.showPropertyDescriptionError()
+                    } else if (uiState.sellerID.isEmpty()) {
+                        viewModel.showSellerIdError()
+                    } else if (uiState.propertyPrice.isEmpty()) {
+                        viewModel.showPropertyPriceError()
                     } else {
-                        homeScreenViewModel.editProperty(
-                            property = HeureuxProperty(
-                                id = currentProperty.id,
-                                name = uiState.propertyName,
-                                location = uiState.propertyLocation,
-                                description = uiState.propertyDescription,
-                                price = uiState.propertyPrice,
-                                imageUrls = uiState.propertyImages,
-                                sellerId = currentProperty.sellerId
-                            ),
-                            onSuccess = {
-                                Toast.makeText(
-                                    context,
-                                    "Property updated successfully",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                                navController.navigateUp()
-                            },
-                            onError = { exception ->
-                                Toast.makeText(
-                                    context,
-                                    "Failed to update property. Error: ${exception.message} ",
-                                    Toast.LENGTH_LONG
-                                ).show()
-                            }
-                        )
+                        if (currentProperty == null) {
+                            homeScreenViewModel.addProperty(
+                                property = HeureuxProperty(
+                                    id = LocalDateTime.now().toString(),
+                                    name = uiState.propertyName,
+                                    location = uiState.propertyLocation,
+                                    description = uiState.propertyDescription,
+                                    price = uiState.propertyPrice,
+                                    imageUrls = uiState.propertyImages,
+                                    sellerId = uiState.sellerID,
+                                ),
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        "Property added successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.navigateUp()
+                                },
+                                onError = { exception ->
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to add property. Error: ${exception.message} ",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            )
+                        } else {
+                            homeScreenViewModel.editProperty(
+                                property = HeureuxProperty(
+                                    id = currentProperty.id,
+                                    name = uiState.propertyName,
+                                    location = uiState.propertyLocation,
+                                    description = uiState.propertyDescription,
+                                    price = uiState.propertyPrice,
+                                    imageUrls = uiState.propertyImages,
+                                    sellerId = currentProperty.sellerId
+                                ),
+                                onSuccess = {
+                                    Toast.makeText(
+                                        context,
+                                        "Property updated successfully",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    navController.navigateUp()
+                                },
+                                onError = { exception ->
+                                    Toast.makeText(
+                                        context,
+                                        "Failed to update property. Error: ${exception.message} ",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            )
+                        }
                     }
+
 
                 }) {
                     Row(
