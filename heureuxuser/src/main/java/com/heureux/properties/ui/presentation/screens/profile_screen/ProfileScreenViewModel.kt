@@ -84,11 +84,7 @@ class ProfileScreenViewModel(
         )
     }
 
-    val userPurchasedProperties = allProperties.value?.filter {
-        it.sellerId == (userProfileData.value?.userEmail
-            ?: currentUser?.email) || it.sellerId == (userProfileData.value?.displayName
-            ?: currentUser?.displayName)
-    }
+
 
     val userSoldProperties = allProperties.value?.filter {
         it.purchasedBy == (userProfileData.value?.userEmail

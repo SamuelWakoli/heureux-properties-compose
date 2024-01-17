@@ -22,27 +22,25 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.composables.property_list_item.SoldPropertyListItem
-import com.heureux.properties.ui.presentation.screens.profile_screen.ProfileScreenViewModel
+import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPropertiesScreen(
     navController: NavController,
-    viewModel: ProfileScreenViewModel,
+    viewModel: MainScreenViewModel
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val userPurchasedProperties = viewModel.userPurchasedProperties
+    val userPurchasedProperties = viewModel.propertiesList.collectAsState().value
+        ?.filter { it.purchasedBy == viewModel.userProfileData.collectAsState().value?.userEmail }
 
     Scaffold(
         topBar = {
@@ -113,22 +111,17 @@ fun MyPropertiesScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(userPurchasedProperties) {
+                    items(userPurchasedProperties) {property ->
                         SoldPropertyListItem(
+                            property = property,
                             navController = navController,
+                            onClickDetails = {
+                                viewModel.updateCurrentProperty(property)
+                            }
                         )
                     }
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun MyPropertiesScreenPreview() {
-    MyPropertiesScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel(factory = AppViewModelProvider.Factory),
-    )
 }

@@ -30,12 +30,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.navigation.Screens
 import com.heureux.properties.ui.presentation.screens.main_screen.MainScreenViewModel
 
@@ -50,7 +46,13 @@ fun PropertyDetailsScreen(
     val uiState = viewModel.mainScreenUiState.collectAsState().value
 
     //used to check if it's necessary to have the inquiry button
-    val userListings = viewModel.userListings
+    val userListings = viewModel.propertiesList.collectAsState().value?.filter {
+        it.sellerId == viewModel.userProfileData.collectAsState().value?.userEmail
+    }
+
+    val userPurchasedProperties =
+        viewModel.propertiesList.collectAsState().value?.filter { it.purchasedBy == viewModel.userProfileData.collectAsState().value?.userEmail }
+
 
     Scaffold(topBar = {
         CenterAlignedTopAppBar(scrollBehavior = scrollBehavior, navigationIcon = {
@@ -58,8 +60,7 @@ fun PropertyDetailsScreen(
                 navController.navigateUp()
             }) {
                 Icon(
-                    imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Navigate back"
+                    imageVector = Icons.Default.ArrowBack, contentDescription = "Navigate back"
                 )
             }
         }, title = {
@@ -141,25 +142,31 @@ fun PropertyDetailsScreen(
                     Spacer(modifier = Modifier.padding(8.dp))
                 }
 
-                if (userListings != null && !userListings.contains(uiState.currentProperty!!)) ElevatedButton(
-                    onClick = {
-                        navController.navigate(Screens.InquiryScreen.route) {
-                            launchSingleTop = true
-                        }
-                    }, modifier = Modifier
-                        .widthIn(max = 400.dp)
-                        .padding(vertical = 4.dp)
+
+
+                if ((userListings != null && !userListings.contains(uiState.currentProperty!!)) &&
+                    (userPurchasedProperties != null && !userPurchasedProperties.contains(uiState.currentProperty))
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center,
-                        modifier = Modifier.fillMaxWidth()
+                    ElevatedButton(
+                        onClick = {
+                            navController.navigate(Screens.InquiryScreen.route) {
+                                launchSingleTop = true
+                            }
+                        }, modifier = Modifier
+                            .widthIn(max = 400.dp)
+                            .padding(vertical = 4.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Cases, contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.padding(8.dp))
-                        Text(text = "Inquire", style = MaterialTheme.typography.titleMedium)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Cases, contentDescription = null
+                            )
+                            Spacer(modifier = Modifier.padding(8.dp))
+                            Text(text = "Inquire", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
                 }
             }
@@ -167,11 +174,8 @@ fun PropertyDetailsScreen(
     }
 }
 
-@Preview
-@Composable
-private fun PropertyDetailsScreenPreview() {
-    PropertyDetailsScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
-    )
-}
+
+
+
+
+

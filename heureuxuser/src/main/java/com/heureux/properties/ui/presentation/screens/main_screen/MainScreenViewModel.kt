@@ -73,9 +73,6 @@ class MainScreenViewModel(
             initialValue = null
         )
 
-    val userListings = propertiesList.value?.filter {
-        it.sellerId == (userProfileData.value?.userEmail ?: currentUser?.email)
-    }
 
     val userInquiries = propertiesRepository.getMyInquires(
         email = userProfileData.value?.userEmail ?: currentUser?.email!!,
