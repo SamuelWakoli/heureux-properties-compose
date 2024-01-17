@@ -38,6 +38,9 @@ fun PropertyListItem(
     isBookmarked: Boolean,
     onClickBookmark: () -> Unit,
 ) {
+
+    val isSold = property.purchasedBy != null
+
     Card(
         modifier = Modifier
             .padding(
@@ -73,6 +76,15 @@ fun PropertyListItem(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                 )
+
+                if (isSold) {
+                    Text(
+                        text = "Sold",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+
                 Text(
                     text = property.name,
                     style = MaterialTheme.typography.titleLarge,
