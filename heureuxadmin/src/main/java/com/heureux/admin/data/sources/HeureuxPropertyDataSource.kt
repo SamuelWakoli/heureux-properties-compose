@@ -78,22 +78,24 @@ class HeureuxPropertyDataSource : PropertyDataSource {
                             onFailure(error)
                             close(error)
                         } else {
-                            val list = mutableListOf<HeureuxProperty>()
-                            value?.documents?.forEach { doc ->
-                                list.add(
-                                    HeureuxProperty(
-                                        id = doc.id,
-                                        name = doc.get("name").toString(),
-                                        price = doc.get("price").toString(),
-                                        location = doc.get("location").toString(),
-                                        sellerId = doc.get("sellerId").toString(),
-                                        description = doc.get("description").toString(),
-                                        imageUrls = doc.get("imageUrls") as List<String>,
-                                        purchasedBy = doc.get("purchasedBy").toString()
+                            if (value != null) {
+                                val list = mutableListOf<HeureuxProperty>()
+                                value.documents.forEach { doc ->
+                                    list.add(
+                                        HeureuxProperty(
+                                            id = doc.id,
+                                            name = doc.get("name").toString(),
+                                            price = doc.get("price").toString(),
+                                            location = doc.get("location").toString(),
+                                            sellerId = doc.get("sellerId").toString(),
+                                            description = doc.get("description").toString(),
+                                            imageUrls = doc.get("imageUrls") as List<String>,
+                                            purchasedBy = doc.get("purchasedBy").toString()
+                                        )
                                     )
-                                )
+                                }
+                                trySend(list)
                             }
-                            trySend(list)
                         }
                     }
 

@@ -23,9 +23,9 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
                             close(error)
                         } else {
                             if (value != null) {
-                                val feedbacks: MutableList<FeedbackItem>? = null
+                                val feedbacks: MutableList<FeedbackItem> = mutableListOf()
                                 value.documents.forEach { document ->
-                                    feedbacks?.add(
+                                    feedbacks.add(
                                         FeedbackItem(
                                             id = document.id,
                                             message = document.data?.get("message").toString(),
@@ -36,7 +36,7 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
                                         )
                                     )
                                 }
-                                feedbacks?.let { trySend(it) }
+                                trySend(feedbacks)
                             }
                         }
                     }

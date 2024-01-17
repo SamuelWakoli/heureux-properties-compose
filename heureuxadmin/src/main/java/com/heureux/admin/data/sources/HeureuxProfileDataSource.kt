@@ -167,8 +167,8 @@ class HeureuxProfileDataSource : ProfileDataSource {
                         }
 
                         trySend(userProfileData) // Offer the latest DocumentSnapshot
+                        onSuccess()
                     }
-                    onSuccess()
                 }
             }
 

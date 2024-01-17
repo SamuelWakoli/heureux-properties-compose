@@ -53,20 +53,21 @@ class HeureuxUsersDataSource : UsersDataSource {
                             close(error)
                             onFailure(error)
                         } else {
-                            val feedbacks = mutableListOf<FeedbackItem>()
-                            for (document in value!!.documents) {
-                                val feedback = FeedbackItem(
-                                    id = document.id,
-                                    message = document.get("message").toString(),
-                                    time = document.get("time").toString(),
-                                    senderEmail = document.get("senderEmail").toString(),
-                                    isRead = document.getBoolean("isRead") as Boolean
-                                )
-                                feedbacks.add(feedback)
+                            if (value != null) {
+                                val feedbacks = mutableListOf<FeedbackItem>()
+                                for (document in value.documents) {
+                                    val feedback = FeedbackItem(
+                                        id = document.id,
+                                        message = document.get("message").toString(),
+                                        time = document.get("time").toString(),
+                                        senderEmail = document.get("senderEmail").toString(),
+                                        isRead = document.getBoolean("isRead") as Boolean
+                                    )
+                                    feedbacks.add(feedback)
+                                }
+                                trySend(feedbacks)
                             }
-                            trySend(feedbacks)
                         }
-
                     }
 
             awaitClose { snapshotListener.remove() }

@@ -21,23 +21,27 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
                         onError(error)
                         close(error)
                     } else {
-                        val payments: MutableList<PaymentItem>? = null
-                        value?.documents?.forEach { document ->
-                            payments?.add(
-                                PaymentItem(
-                                    paymentId = document.id,
-                                    propertyId = document.get("propertyId").toString(),
-                                    userId = document.get("userId").toString(),
-                                    amount = document.get("amount").toString(),
-                                    agreedPrice = document.get("agreedPrice").toString(),
-                                    totalAmountPaid = document.get("totalAmountPaid").toString(),
-                                    owingAmount = document.get("owingAmount").toString(),
-                                    paymentMethod = document.get("paymentMethod").toString(),
-                                    time = document.get("time").toString(),
-                                    approvedBy = document.get("approvedBy").toString(),
+                        if (value != null) {
+                            val payments: MutableList<PaymentItem> = mutableListOf()
+                            value.documents.forEach { document ->
+                                payments.add(
+                                    PaymentItem(
+                                        paymentId = document.id,
+                                        propertyId = document.get("propertyId").toString(),
+                                        userId = document.get("userId").toString(),
+                                        amount = document.get("amount").toString(),
+                                        agreedPrice = document.get("agreedPrice").toString(),
+                                        totalAmountPaid = document.get("totalAmountPaid")
+                                            .toString(),
+                                        owingAmount = document.get("owingAmount").toString(),
+                                        paymentMethod = document.get("paymentMethod").toString(),
+                                        time = document.get("time").toString(),
+                                        approvedBy = document.get("approvedBy").toString(),
+                                    )
                                 )
-                            )
+                            }
 
+                            trySend(payments)
                         }
                     }
                 }
