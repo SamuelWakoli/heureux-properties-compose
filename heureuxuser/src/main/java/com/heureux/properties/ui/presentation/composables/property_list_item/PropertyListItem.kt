@@ -13,7 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmarks
 import androidx.compose.material.icons.outlined.BookmarkAdd
 import androidx.compose.material.icons.outlined.Cases
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -101,58 +103,80 @@ fun PropertyListItem(
                         .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    IconButton(onClick = {
-                        onClickBookmark()
-                    }) {
-                        Icon(
-                            imageVector = if (isBookmarked) Icons.Filled.Bookmarks else Icons.Outlined.BookmarkAdd,
-                            contentDescription = if (isBookmarked) "Remove from bookmarks" else "Add to bookmarks",
-                            modifier = Modifier.size(26.dp),
-                        )
-                    }
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End,
-                        verticalAlignment = Alignment.CenterVertically,
-                    )
-                    {
-                        TextButton(onClick = {
-                            onUpdateCurrentProperty()
-                            navController.navigate(Screens.PropertyDetailsScreen.route) {
-                                launchSingleTop = true
-                            }
-                        }) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
 
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Info,
-                                    contentDescription = null
-                                )
+                    if (isSold) {
+                        TextButton(
+                            onClick = { onClickBookmark() },
+                            colors = ButtonDefaults.textButtonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            )
+                        ) {
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(imageVector = Icons.Outlined.Delete, contentDescription = null)
                                 Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Details")
+                                Text(text = "Remove Bookmark")
                             }
                         }
-                        Spacer(modifier = Modifier.size(16.dp))
-                        TextButton(onClick = {
-                            onUpdateCurrentProperty()
-                            navController.navigate(Screens.InquiryScreen.route) {
-                                launchSingleTop = true
-                            }
+                    } else {
+                        IconButton(onClick = {
+                            onClickBookmark()
                         }) {
-                            Row(
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically,
+                            Icon(
+                                imageVector = if (isBookmarked) Icons.Filled.Bookmarks else Icons.Outlined.BookmarkAdd,
+                                contentDescription = if (isBookmarked) "Remove from bookmarks" else "Add to bookmarks",
+                                modifier = Modifier.size(26.dp),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
+                    }
+                    if (!isSold) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.End,
+                            verticalAlignment = Alignment.CenterVertically,
+                        )
+                        {
+                            TextButton(onClick = {
+                                onUpdateCurrentProperty()
+                                navController.navigate(Screens.PropertyDetailsScreen.route) {
+                                    launchSingleTop = true
+                                }
+                            }) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically,
 
-                                ) {
-                                Icon(
-                                    imageVector = Icons.Outlined.Cases,
-                                    contentDescription = null
-                                )
-                                Spacer(modifier = Modifier.size(8.dp))
-                                Text(text = "Inquire")
+                                    ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Info,
+                                        contentDescription = null
+                                    )
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    Text(text = "Details")
+                                }
+                            }
+                            Spacer(modifier = Modifier.size(16.dp))
+                            TextButton(onClick = {
+                                onUpdateCurrentProperty()
+                                navController.navigate(Screens.InquiryScreen.route) {
+                                    launchSingleTop = true
+                                }
+                            }) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Center,
+                                    verticalAlignment = Alignment.CenterVertically,
+
+                                    ) {
+                                    Icon(
+                                        imageVector = Icons.Outlined.Cases,
+                                        contentDescription = null
+                                    )
+                                    Spacer(modifier = Modifier.size(8.dp))
+                                    Text(text = "Inquire")
+                                }
                             }
                         }
                     }
