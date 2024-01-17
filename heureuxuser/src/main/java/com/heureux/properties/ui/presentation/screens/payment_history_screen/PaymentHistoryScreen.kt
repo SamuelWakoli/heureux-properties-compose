@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.History
@@ -24,12 +25,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
-import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +37,7 @@ fun PaymentHistoryScreen(
 ) {
 
     val paymentList = viewModel.paymentHistory.collectAsState().value
+    val allProperties = viewModel.allProperties.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -113,19 +111,13 @@ fun PaymentHistoryScreen(
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                items(30) {
-                    PaymentListItem()
+                items(paymentList) {paymentItem ->
+                    PaymentListItem(
+                        property = allProperties?.find { it.id == paymentItem.propertyId },
+                        paymentItem = paymentItem
+                    )
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun PaymentHistoryScreenPreview() {
-    PaymentHistoryScreen(
-        navController = rememberNavController(),
-        viewModel = viewModel(factory = AppViewModelProvider.Factory)
-    )
 }

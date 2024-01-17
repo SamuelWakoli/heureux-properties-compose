@@ -5,33 +5,32 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.heureux.properties.data.types.HeureuxProperty
+import com.heureux.properties.data.types.PaymentItem
+import java.time.LocalDateTime
 
 @Composable
-fun PaymentListItem() {
+fun PaymentListItem(
+    property: HeureuxProperty?,
+    paymentItem: PaymentItem
+) {
     ListItem(
         modifier = Modifier.widthIn(min = 400.dp, max = 600.dp),
-        overlineContent = {
-            Text(text = "Paid to: Heureux Properties")
-        },
         headlineContent = {
-            Text(text = "Amount: Ksh. 200,000")
+            Text(text = "Amount: Ksh. ${paymentItem.amount}")
         },
         supportingContent = {
+            val propertyName = property?.name ?: ""
+            val dateTime = LocalDateTime.parse(paymentItem.time)
+
             Text(
-                text = "Property: Property Name\n" +
-                        "Agreed Price: Ksh. 1,200,000\n" +
-                        "Total Amount Paid: Ksh. 800,000\n" +
-                        "Owing: Ksh. 400,000\n" +
-                        "Date: 12/02/2024"
+                text = "$propertyName\n" +
+                        "Agreed Price: Ksh. ${paymentItem.agreedPrice}\n" +
+                        "Total Amount Paid: Ksh. ${paymentItem.totalAmountPaid}\n" +
+                        "Owing: Ksh. ${paymentItem.owingAmount}\n" +
+                        "Date: ${dateTime.dayOfMonth}/${dateTime.monthValue}/${dateTime.year} Time: ${dateTime.hour}:${dateTime.minute}"
             )
         }
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun PaymentListItemPreview() {
-    PaymentListItem()
 }
