@@ -43,9 +43,12 @@ fun HomeScreen(
     viewModel: MainScreenViewModel,
 ) {
 
-    val propertiesList = viewModel.propertiesList.collectAsState().value
-    val bookmarksList = viewModel.bookmarksList.collectAsState().value
+    val propertiesList = viewModel.propertiesList.collectAsState().value?.filter {
+        it.purchasedBy == null
+    }
+    val bookmarksList = viewModel.getFilteredBookmarks()
     val context = LocalContext.current
+
 
     Column(
         modifier = Modifier
@@ -93,7 +96,7 @@ fun HomeScreen(
                         property = property,
                         navController = navController,
                         onUpdateCurrentProperty = { viewModel.updateCurrentProperty(property) },
-                        isBookmarked = bookmarksList?.contains(property) ?: false,
+                        isBookmarked = bookmarksList.contains(property) ?: false,
                         onClickBookmark = {
                             viewModel.updateBookmark(property) { exception: Exception ->
                                 Toast.makeText(context, exception.message, Toast.LENGTH_SHORT)

@@ -6,7 +6,7 @@ import com.heureux.admin.data.repositories.InquiriesRepository
 import com.heureux.admin.data.repositories.PaymentsRepository
 import com.heureux.admin.data.repositories.PropertyRepository
 import com.heureux.admin.data.repositories.UsersRepository
-import com.heureux.admin.data.types.HeureuxUser
+import com.heureux.admin.data.types.HeureuxProperty
 import com.heureux.admin.data.types.InquiryItem
 import com.heureux.admin.data.types.PaymentItem
 import com.heureux.admin.data.types.SellWithUsRequest
@@ -73,34 +73,6 @@ class InquiriesViewModel(
         )
     }
 
-    fun getUserData(id: String, onFailure: (Exception) -> Unit): HeureuxUser? {
-        var user: HeureuxUser? = null
-        try {
-            allUsers.value?.forEach {
-                if (it.email == id) {
-                    user = it
-                }
-            }
-        } catch (e: Exception) {
-            onFailure(e)
-        }
-        return user
-    }
-
-    fun getPropertyData(id: String, onFailure: (Exception) -> Unit): String? {
-        var property: String? = null
-        try {
-            allProperties.value?.forEach {
-                if (it.id == id) {
-                    property = it.name
-                }
-            }
-        } catch (e: Exception) {
-            onFailure(e)
-        }
-        return property
-    }
-
     fun addPayment(
         payment: PaymentItem,
         onSuccess: () -> Unit,
@@ -111,6 +83,20 @@ class InquiriesViewModel(
                 payment,
                 onSuccess,
                 onFailure
+            )
+        }
+    }
+
+    fun updateProperty(
+        property: HeureuxProperty,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        viewModelScope.launch {
+            propertiesRepository.updateProperty(
+                onSuccess = onSuccess,
+                onFailure = onFailure,
+                data = property
             )
         }
     }
