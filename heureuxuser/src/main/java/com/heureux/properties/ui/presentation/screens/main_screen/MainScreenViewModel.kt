@@ -17,11 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
-data class MainScreenUiState(
-    val currentProperty: HeureuxProperty? = null,
-)
-
 class MainScreenViewModel(
     private val profileRepository: ProfileRepository,
     private val propertiesRepository: PropertiesRepository,
@@ -57,30 +52,34 @@ class MainScreenViewModel(
         )
     }
 
-    val propertiesList: StateFlow<List<HeureuxProperty>?> =
+    val propertiesList: StateFlow<List<HeureuxProperty>?> by lazy {
         propertiesRepository.getHomeProperties { }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
         )
+    }
 
-    val bookmarksList =
+
+    val bookmarksList by lazy {
         propertiesRepository.getBookmarks(
-            email = userProfileData.value?.userEmail ?: currentUser?.email!!,
+            email = userProfileData.value?.userEmail ?: currentUser?.email ?: "",
         ) { }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
+        )}
+
+
+    val userInquiries by lazy {
+        propertiesRepository.getMyInquires(
+            email = userProfileData.value?.userEmail ?: currentUser?.email ?: "",
+        ) {}.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
+            initialValue = null
         )
-
-
-    val userInquiries = propertiesRepository.getMyInquires(
-        email = userProfileData.value?.userEmail ?: currentUser?.email!!,
-    ){}.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
-        initialValue = null
-    )
+    }
 
     fun updateCurrentProperty(property: HeureuxProperty?) {
         _mainScreenUiState.update { it.copy(currentProperty = property) }
@@ -127,3 +126,8 @@ class MainScreenViewModel(
         }
     }
 }
+
+data class MainScreenUiState(
+    val currentProperty: HeureuxProperty? = null,
+)
+

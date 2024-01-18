@@ -29,12 +29,13 @@ class SellWithUsViewModel(
         private const val TIMEOUT_MILLIS = 5_000L
     }
 
-    val userProfileData =
+    val userProfileData by lazy {
         profileRepository.getUserProfileData(onSuccess = {}, onFailure = {}).stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(TIMEOUT_MILLIS),
             initialValue = null
         )
+    }
 
     fun sendSellWithUsRequest(
         sellWithUsRequest: SellWithUsRequest,
