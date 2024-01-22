@@ -9,10 +9,19 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
+/**
+ * A data source that provides user feedback data from a Firestore database.
+ */
 class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
 
+    /**
+     * Gets all feedback items from the Firestore database.
+     *
+     * @param onError A callback function that is invoked if an error occurs.
+     * @return A Flow that emits a list of FeedbackItem objects.
+     */
     override fun getAllFeedbacks(onError: (Exception) -> Unit): Flow<List<FeedbackItem>> =
         callbackFlow {
             val snapshotListener =
@@ -44,6 +53,13 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
             awaitClose { snapshotListener.remove() }
         }
 
+    /**
+     * Updates a feedback item in the Firestore database.
+     *
+     * @param feedbackItem The feedback item to update.
+     * @param onSuccess A callback function that is invoked if the update is successful.
+     * @param onError A callback function that is invoked if an error occurs.
+     */
     override suspend fun updateFeedback(
         feedbackItem: FeedbackItem, onSuccess: () -> Unit, onError: (Exception) -> Unit
     ) {
@@ -55,6 +71,13 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
             }
     }
 
+    /**
+     * Deletes a feedback item from the Firestore database.
+     *
+     * @param feedbackItem The feedback item to delete.
+     * @param onSuccess A callback function that is invoked if the deletion is successful.
+     * @param onError A callback function that is invoked if an error occurs.
+     */
     override suspend fun deleteFeedback(
         feedbackItem: FeedbackItem, onSuccess: () -> Unit, onError: (Exception) -> Unit
     ) {

@@ -8,11 +8,19 @@ import com.heureux.admin.data.types.PaymentItem
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-
+/**
+ * A data source for payments.
+ */
 class HeureuxPaymentDataSource : PaymentsDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
 
+    /**
+     * Gets all payments.
+     *
+     * @param onError A callback to be invoked if an error occurs.
+     * @return A flow of payments.
+     */
     override fun getAllPayments(onError: (exception: Exception) -> Unit): Flow<List<PaymentItem>> =
         callbackFlow {
             val snapshotListener = firestore.collection(FirebaseDirectories.PaymentsCollection.name)
@@ -49,6 +57,13 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
             awaitClose { snapshotListener.remove() }
         }
 
+    /**
+     * Gets a payment by its ID.
+     *
+     * @param id The ID of the payment.
+     * @param onError A callback to be invoked if an error occurs.
+     * @return A flow of the payment.
+     */
     override fun getPayment(
         id: String, onError: (exception: Exception) -> Unit
     ): Flow<PaymentItem> = callbackFlow {
@@ -80,6 +95,13 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Adds a payment.
+     *
+     * @param payment The payment to add.
+     * @param onSuccess A callback to be invoked if the payment is added successfully.
+     * @param onError A callback to be invoked if an error occurs.
+     */
     override suspend fun addPayment(
         payment: PaymentItem, onSuccess: () -> Unit, onError: (exception: Exception) -> Unit
     ) {
@@ -91,6 +113,13 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
             }
     }
 
+    /**
+     * Updates a payment.
+     *
+     * @param payment The payment to update.
+     * @param onSuccess A callback to be invoked if the payment is updated successfully.
+     * @param onError A callback to be invoked if an error occurs.
+     */
     override suspend fun updatePayment(
         payment: PaymentItem, onSuccess: () -> Unit, onError: (exception: Exception) -> Unit
     ) {
@@ -102,6 +131,13 @@ class HeureuxPaymentDataSource : PaymentsDataSource {
             }
     }
 
+    /**
+     * Deletes a payment with the given ID.
+     *
+     * @param id The ID of the payment to delete.
+     * @param onSuccess A callback to be invoked when the payment is successfully deleted.
+     * @param onError A callback to be invoked if an error occurs while deleting the payment.
+     */
     override suspend fun deletePayment(
         id: String, onSuccess: () -> Unit, onError: (exception: Exception) -> Unit
     ) {

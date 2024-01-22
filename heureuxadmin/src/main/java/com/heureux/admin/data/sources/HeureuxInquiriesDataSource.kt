@@ -16,6 +16,12 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         get() = Firebase.firestore
 
 
+    /**
+     * Gets a flow of property inquiries.
+     *
+     * @param onError A callback function to handle errors.
+     * @return A flow of [InquiryItem] objects.
+     */
     override fun getPropertyInquiries(
         onError: (Exception) -> Unit,
     ): Flow<List<InquiryItem>> =
@@ -53,6 +59,12 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         }
 
 
+    /**
+     * Retrieves a flow of SellWithUsRequest objects from Firestore.
+     *
+     * @param onError A callback function to handle errors.
+     * @return A flow of SellWithUsRequest objects.
+     */
     override fun getSellWithUsInquiries(
         onError: (Exception) -> Unit,
     ): Flow<List<SellWithUsRequest>> =
@@ -91,6 +103,13 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         }
 
 
+    /**
+     * Updates the archived property of an inquiry item.
+     *
+     * @param data The inquiry item to update.
+     * @param onSuccess The callback to invoke if the update is successful.
+     * @param onError The callback to invoke if the update fails.
+     */
     override suspend fun updateArchivePropertyInquiry(
         data: InquiryItem,
         onSuccess: () -> Unit,
@@ -104,6 +123,13 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
             }
     }
 
+    /**
+     * Deletes a property inquiry from the Firestore database.
+     *
+     * @param data The inquiry item to delete.
+     * @param onSuccess A callback function to be executed if the deletion is successful.
+     * @param onError A callback function to be executed if the deletion fails.
+     */
     override suspend fun deletePropertyInquiry(
         data: InquiryItem,
         onSuccess: () -> Unit,
@@ -131,6 +157,13 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
             }
     }
 
+    /**
+     * Deletes a Sell With Us inquiry from the database.
+     *
+     * @param data The Sell With Us inquiry data.
+     * @param onSuccess A callback to be invoked when the inquiry is successfully deleted.
+     * @param onError A callback to be invoked if an error occurs while deleting the inquiry.
+     */
     override suspend fun deleteSellWithUsInquiry(
         data: SellWithUsRequest,
         onSuccess: () -> Unit,

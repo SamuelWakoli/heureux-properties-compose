@@ -12,12 +12,21 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
+/**
+ * A data source for Heureux users and feedback.
+ */
 class HeureuxUsersDataSource : UsersDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
     override val storage: FirebaseStorage
         get() = Firebase.storage
 
+    /**
+     * Gets all Heureux users.
+     *
+     * @param onFailure A callback to be invoked if an error occurs.
+     * @return A Flow of lists of HeureuxUser objects.
+     */
     override fun getAllUsers(
         onFailure: (exception: Exception) -> Unit
     ): Flow<List<HeureuxUser>> = callbackFlow {
@@ -44,6 +53,12 @@ class HeureuxUsersDataSource : UsersDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Gets all feedback items.
+     *
+     * @param onFailure A callback to be invoked if an error occurs.
+     * @return A Flow of lists of FeedbackItem objects.
+     */
     override fun getFeedback(onFailure: (exception: Exception) -> Unit): Flow<List<FeedbackItem>> =
         callbackFlow {
             val snapshotListener =
@@ -74,6 +89,13 @@ class HeureuxUsersDataSource : UsersDataSource {
         }
 
 
+    /**
+     * Updates a feedback item.
+     *
+     * @param feedbackItem The feedback item to update.
+     * @param onSuccess A callback to be invoked if the update is successful.
+     * @param onFailure A callback to be invoked if an error occurs.
+     */
     override suspend fun updateFeedback(
         feedbackItem: FeedbackItem,
         onSuccess: () -> Unit,
@@ -87,6 +109,13 @@ class HeureuxUsersDataSource : UsersDataSource {
             }
     }
 
+    /**
+     * Deletes a feedback item.
+     *
+     * @param feedbackItem The feedback item to delete.
+     * @param onSuccess A callback to be invoked if the deletion is successful.
+     * @param onFailure A callback to be invoked if an error occurs.
+     */
     override suspend fun deleteFeedback(
         feedbackItem: FeedbackItem,
         onSuccess: () -> Unit,

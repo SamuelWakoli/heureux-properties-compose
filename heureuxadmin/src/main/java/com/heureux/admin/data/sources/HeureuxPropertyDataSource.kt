@@ -14,12 +14,23 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * A data source that provides access to HeureuxProperty data.
+ */
 class HeureuxPropertyDataSource : PropertyDataSource {
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
     override val storage: FirebaseStorage
         get() = Firebase.storage
 
+    /**
+     * Uploads an image to Firebase Storage and returns the download URL.
+     *
+     * @param uri The URI of the image to upload.
+     * @param directory The directory in Firebase Storage to upload the image to.
+     * @param onSuccessListener A callback function that will be invoked with the download URL of the uploaded image.
+     * @param onFailure A callback function that will be invoked if an error occurs while uploading the image.
+     */
     override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
@@ -42,6 +53,13 @@ class HeureuxPropertyDataSource : PropertyDataSource {
         }
     }
 
+    /**
+     * Gets the HeureuxProperty data for the given ID.
+     *
+     * @param id The ID of the HeureuxProperty to get.
+     * @param onFailure A callback function that will be invoked if an error occurs while getting the HeureuxProperty data.
+     * @return A Flow that emits the HeureuxProperty data.
+     */
     override fun getPropertyData(
         id: String, onFailure: (exception: Exception) -> Unit
     ): Flow<HeureuxProperty> = callbackFlow {
@@ -71,6 +89,12 @@ class HeureuxPropertyDataSource : PropertyDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Gets all properties from the Firestore collection.
+     *
+     * @param onFailure Callback to be invoked if an error occurs.
+     * @return A Flow that emits a list of HeureuxProperty objects.
+     */
     override fun getAllProperties(onFailure: (exception: Exception) -> Unit): Flow<List<HeureuxProperty>> =
         callbackFlow {
             val snapshotListener =
@@ -104,6 +128,13 @@ class HeureuxPropertyDataSource : PropertyDataSource {
             awaitClose { snapshotListener.remove() }
         }
 
+    /**
+     * Adds a new property to the Firestore collection.
+     *
+     * @param onSuccess Callback to be invoked if the operation is successful.
+     * @param onFailure Callback to be invoked if an error occurs.
+     * @param data The HeureuxProperty object to be added.
+     */
     override suspend fun addProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
@@ -115,6 +146,13 @@ class HeureuxPropertyDataSource : PropertyDataSource {
             }
     }
 
+    /**
+     * Updates an existing property in the Firestore collection.
+     *
+     * @param onSuccess Callback to be invoked if the operation is successful.
+     * @param onFailure Callback to be invoked if an error occurs.
+     * @param data The HeureuxProperty object to be updated.
+     */
     override suspend fun updateProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, data: HeureuxProperty
     ) {
@@ -126,6 +164,13 @@ class HeureuxPropertyDataSource : PropertyDataSource {
             }
     }
 
+    /**
+     * Deletes a property from the Firestore collection.
+     *
+     * @param onSuccess Callback to be invoked if the operation is successful.
+     * @param onFailure Callback to be invoked if an error occurs.
+     * @param id The ID of the property to be deleted.
+     */
     override suspend fun deleteProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, id: String
     ) {
