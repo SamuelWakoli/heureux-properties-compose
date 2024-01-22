@@ -12,6 +12,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import java.io.IOException
 
+/**
+ * A repository class that handles user preferences.
+ *
+ * @param dataStore The DataStore instance used to store the preferences.
+ */
 class UserPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
 ) {
@@ -21,6 +26,9 @@ class UserPreferencesRepository(
         val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
     }
 
+    /**
+     * A flow that emits the current theme data.
+     */
     val getThemeData: Flow<String> = dataStore.data.catch {
         if (it is IOException) {
             Log.e(TAG, "Error reading preferences.", it)
@@ -32,6 +40,9 @@ class UserPreferencesRepository(
         preferences[THEME] ?: "System"
     }
 
+    /**
+     * A flow that emits the current dynamic color setting.
+     */
     val getDynamicColor: Flow<Boolean> = dataStore.data.catch {
         if (it is IOException) {
             Log.e(TAG, "Error reading preferences.", it)
@@ -43,12 +54,22 @@ class UserPreferencesRepository(
         preferences[DYNAMIC_COLOR] ?: false
     }
 
+    /**
+     * Saves the theme data to the DataStore.
+     *
+     * @param themeData The theme data to save.
+     */
     suspend fun saveTheme(themeData: String) {
         dataStore.edit { preferences ->
             preferences[THEME] = themeData
         }
     }
 
+    /**
+     * Saves the dynamic color setting to the DataStore.
+     *
+     * @param boolean The dynamic color setting to save.
+     */
     suspend fun saveDynamicColor(boolean: Boolean) {
         dataStore.edit { preferences ->
             preferences[DYNAMIC_COLOR] = boolean
