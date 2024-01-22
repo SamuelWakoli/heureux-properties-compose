@@ -1,5 +1,17 @@
 package com.heureux.properties.data.types
 
+/**
+ * Represents a Heureux property listing.
+ *
+ * @property id The unique identifier of the property.
+ * @property name The name of the property.
+ * @property price The price of the property.
+ * @property location The location of the property.
+ * @property sellerId The ID of the seller who listed the property.
+ * @property description A description of the property.
+ * @property imageUrls A list of URLs to images of the property.
+ * @property purchasedBy The ID of the user who purchased the property, if any.
+ */
 data class HeureuxProperty(
     val id: String,
     val name: String,
