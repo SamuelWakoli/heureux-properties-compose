@@ -16,6 +16,9 @@ import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinat
 import com.heureux.admin.ui.presentation.screens.main_screen.bottom_nav_destinations.users_screen.UsersScreenViewModel
 import com.heureux.admin.ui.presentation.screens.profile_screen.ProfileScreenViewModel
 
+/**
+ * Provides view models for the Heureux Admin app.
+ */
 object AppViewModelProvider {
     val Factory: ViewModelProvider.Factory = viewModelFactory {
         initializer {
@@ -70,5 +73,8 @@ object AppViewModelProvider {
     }
 }
 
+/**
+ * Gets the Heureux Admin app instance from the creation extras.
+ */
 fun CreationExtras.heureuxAdminApp(): HeureuxAdminApp =
     (this[APPLICATION_KEY] as HeureuxAdminApp)

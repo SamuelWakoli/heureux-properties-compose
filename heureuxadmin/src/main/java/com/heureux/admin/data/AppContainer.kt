@@ -20,15 +20,32 @@ import com.heureux.admin.data.sources.HeureuxPropertyDataSource
 import com.heureux.admin.data.sources.HeureuxUserFeedbackDataSource
 import com.heureux.admin.data.sources.HeureuxUsersDataSource
 
+/**
+ * An interface that provides access to the repositories used by the application.
+ */
 interface AppContainer {
+    /** The repository for profile data. */
     val profileRepository: ProfileRepository
+
+    /** The repository for property data. */
     val propertyRepository: PropertyRepository
+
+    /** The repository for inquiries data. */
     val inquiriesRepository: InquiriesRepository
+
+    /** The repository for payments data. */
     val paymentsRepository: PaymentsRepository
+
+    /** The repository for user feedback data. */
     val userFeedbackRepository: UserFeedbackRepository
+
+    /** The repository for users data. */
     val usersRepository: UsersRepository
 }
 
+/**
+ * An implementation of the AppContainer interface for the Heureux application.
+ */
 class HeureuxAppContainer(context: Context) : AppContainer {
 
     override val profileRepository: ProfileRepository =
