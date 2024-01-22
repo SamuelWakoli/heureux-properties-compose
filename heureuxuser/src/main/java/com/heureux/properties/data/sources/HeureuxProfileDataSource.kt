@@ -19,6 +19,9 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+/**
+ * A data source for Heureux profiles.
+ */
 class HeureuxProfileDataSource : ProfileDataSource {
     override val auth: FirebaseAuth = FirebaseAuth.getInstance()
     override val firestore: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -27,6 +30,14 @@ class HeureuxProfileDataSource : ProfileDataSource {
     private val coroutineScope = CoroutineScope(Dispatchers.Default)
 
 
+    /**
+     * Uploads an image to Firebase Storage and returns the download URL.
+     *
+     * @param uri The URI of the image to upload.
+     * @param directory The directory in Firebase Storage to upload the image to.
+     * @param onSuccessListener A callback function that will be invoked with the download URL of the uploaded image.
+     * @param onFailure A callback function that will be invoked if the upload fails.
+     */
     override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
@@ -51,15 +62,25 @@ class HeureuxProfileDataSource : ProfileDataSource {
     }
 
 
+    /**
+     * Gets the current user.
+     *
+     * @return A Flow that emits the current user.
+     */
     override suspend fun getCurrentUser(): Flow<FirebaseUser?> = callbackFlow {
         val snapshotListener = auth.addAuthStateListener {
             trySend(it.currentUser)
         }
-        awaitClose {
-
-        }
+        awaitClose {}
     }
 
+    /**
+     * Creates a user in Firestore.
+     *
+     * @param user The user data.
+     * @param onSuccess The callback to be executed on success.
+     * @param onFailure The callback to be executed on failure.
+     */
     override suspend fun createUserFirestoreData(
         user: UserProfileData,
         onSuccess: () -> Unit,
@@ -80,6 +101,15 @@ class HeureuxProfileDataSource : ProfileDataSource {
         }
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param name The user's name.
+     * @param email The user's email.
+     * @param password The user's password.
+     * @param onSuccessListener The callback to be executed on success.
+     * @param onErrorListener The callback to be executed on failure.
+     */
     override suspend fun registerUser(
         name: String,
         email: String,
@@ -112,6 +142,14 @@ class HeureuxProfileDataSource : ProfileDataSource {
         }
     }
 
+    /**
+     * Signs in a user.
+     *
+     * @param email The user's email.
+     * @param password The user's password.
+     * @param onSuccessListener The callback to be executed on success.
+     * @param onErrorListener The callback to be executed on failure.
+     */
     override suspend fun signIn(
         email: String,
         password: String,
@@ -126,6 +164,13 @@ class HeureuxProfileDataSource : ProfileDataSource {
         }
     }
 
+    /**
+     * Gets the user profile data from Firestore.
+     *
+     * @param onSuccess A callback to be invoked when the data is successfully retrieved.
+     * @param onFailure A callback to be invoked if an error occurs.
+     * @return A Flow that emits the UserProfileData object.
+     */
     override fun getUserProfileData(
         onSuccess: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
@@ -167,6 +212,13 @@ class HeureuxProfileDataSource : ProfileDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Sends a password reset email to the specified email address.
+     *
+     * @param email The email address to send the password reset email to.
+     * @param onSuccess A callback to be invoked when the email is successfully sent.
+     * @param onFailure A callback to be invoked if an error occurs.
+     */
     override suspend fun sendPasswordResetEmail(
         email: String,
         onSuccess: () -> Unit,
@@ -180,6 +232,13 @@ class HeureuxProfileDataSource : ProfileDataSource {
         }
     }
 
+    /**
+     * Updates the user profile.
+     *
+     * @param userProfileDate The updated user profile data.
+     * @param onSuccess A callback to be invoked when the profile is successfully updated.
+     * @param onFailure A callback to be invoked if an error occurs.
+     */
     override suspend fun updateUserProfile(
         userProfileDate: UserProfileData,
         onSuccess: () -> Unit,
@@ -210,10 +269,20 @@ class HeureuxProfileDataSource : ProfileDataSource {
     }
 
 
+    /**
+     * Signs out the current user.
+     */
     override suspend fun signOut() {
         auth.signOut()
     }
 
+    /**
+     * Deletes the user and their data.
+     *
+     * @param email The email address of the user to delete.
+     * @param onSuccessListener A callback to be invoked when the user is successfully deleted.
+     * @param onErrorListener A callback to be invoked if an error occurs.
+     */
     override suspend fun deleteUserAndData(
         email: String,
         onSuccessListener: () -> Unit,

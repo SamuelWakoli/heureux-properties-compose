@@ -18,13 +18,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 
+/**
+ * A data source that provides access to Heureux properties.
+ */
 class HeureuxPropertiesDataSource : PropertiesDataSource {
 
+    /**
+     * The FirebaseFirestore instance used to access the database.
+     */
     override val firestore: FirebaseFirestore
         get() = Firebase.firestore
 
     /// READING DATA
 
+    /**
+     * Gets a list of Heureux properties from the database.
+     *
+     * @param onFailure A callback function that is called if an error occurs.
+     * @return A Flow that emits a list of HeureuxProperty objects.
+     */
     override fun getHomeProperties(
         onFailure: (exception: Exception) -> Unit,
     ): Flow<List<HeureuxProperty>> = callbackFlow {
@@ -57,6 +69,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Retrieves the payment history for a given email.
+     *
+     * @param email The email address of the user.
+     * @param onFailure A callback function that is invoked if an error occurs.
+     * @return A Flow that emits a list of PaymentItem objects.
+     */
     override fun getPaymentHistory(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -96,6 +115,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Retrieves the bookmarks for a given email.
+     *
+     * @param email The email address of the user.
+     * @param onFailure A callback function that is invoked if an error occurs.
+     * @return A Flow that emits a list of HeureuxProperty objects.
+     */
     override fun getBookmarks(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -132,6 +158,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Retrieves notifications for the given email.
+     *
+     * @param email The email address of the user.
+     * @param onFailure A callback function that is invoked if an error occurs.
+     * @return A Flow that emits a list of NotificationItem objects.
+     */
     override fun getNotifications(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -167,6 +200,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Retrieves inquiries for the given email.
+     *
+     * @param email The email address of the user.
+     * @param onFailure A callback function that is invoked if an error occurs.
+     * @return A Flow that emits a list of InquiryItem objects.
+     */
     override fun getMyInquires(
         email: String,
         onFailure: (exception: Exception) -> Unit,
@@ -204,6 +244,12 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         awaitClose { snapshotListener.remove() }
     }
 
+    /**
+     * Retrieves a HeureuxProperty object for the given propertyId.
+     *
+     * @param propertyId The ID of the property.
+     * @return A Flow that emits a HeureuxProperty object.
+     */
     override fun getPropertyItem(
         propertyId: String,
     ): Flow<HeureuxProperty> = callbackFlow {
@@ -236,6 +282,14 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
 
     /// WRITING DATA
 
+    /**
+     * Uploads an image to Firebase Storage and returns the download URL.
+     *
+     * @param uri The URI of the image to upload.
+     * @param directory The directory in Firebase Storage to upload the image to.
+     * @param onSuccessListener A callback function that will be invoked with the download URL of the uploaded image.
+     * @param onFailure A callback function that will be invoked if the upload fails.
+     */
     override suspend fun uploadImageGetUrl(
         uri: Uri,
         directory: String,
@@ -260,6 +314,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
     }
 
 
+    /**
+     * Submits an inquiry to Firebase Firestore.
+     *
+     * @param inquiryItem The inquiry item to submit.
+     * @param onSuccessListener A callback function that will be invoked when the inquiry is successfully submitted.
+     * @param onFailure A callback function that will be invoked if the submission fails.
+     */
     override suspend fun submitInquiry(
         inquiryItem: InquiryItem,
         onSuccessListener: () -> Unit,
@@ -276,6 +337,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
             }
     }
 
+    /**
+     * Sends feedback to Firebase Firestore.
+     *
+     * @param feedback The feedback item to send.
+     * @param onSuccessListener A callback function that will be invoked when the feedback is successfully sent.
+     * @param onFailure A callback function that will be invoked if the sending fails.
+     */
     override suspend fun sendFeedback(
         feedback: FeedbackItem,
         onSuccessListener: () -> Unit,
@@ -297,6 +365,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
             }
     }
 
+    /**
+     * Updates the bookmark property for the given user.
+     *
+     * @param email The email of the user.
+     * @param property The property to update.
+     * @param onFailure A callback function that is invoked if the operation fails.
+     */
     override suspend fun updateBookmarkProperty(
         email: String,
         property: HeureuxProperty,
@@ -324,6 +399,13 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         }
     }
 
+    /**
+     * Sends a sell with us request.
+     *
+     * @param sellWithUsRequest The sell with us request.
+     * @param onSuccessListener A callback function that is invoked if the operation succeeds.
+     * @param onFailure A callback function that is invoked if the operation fails.
+     */
     override suspend fun sendSellWithUsRequest(
         sellWithUsRequest: SellWithUsRequest,
         onSuccessListener: () -> Unit,
