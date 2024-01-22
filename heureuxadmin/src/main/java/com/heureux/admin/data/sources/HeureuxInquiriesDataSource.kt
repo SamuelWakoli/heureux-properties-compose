@@ -6,6 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.heureux.admin.data.FirebaseDirectories
 import com.heureux.admin.data.types.InquiryItem
 import com.heureux.admin.data.types.SellWithUsRequest
+import com.heureux.admin.utils.deleteImageFromUri
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -138,6 +139,9 @@ class HeureuxInquiriesDataSource : InquiriesDataSource {
         firestore.collection(FirebaseDirectories.SellWithUsCollection.name).document(data.id)
             .delete()
             .addOnSuccessListener {
+                data.propertyImages.forEach { image ->
+                    deleteImageFromUri(image)
+                }
                 onSuccess()
             }.addOnFailureListener { exception ->
                 onError(exception)

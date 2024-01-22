@@ -39,8 +39,6 @@ class HeureuxProfileDataSource : ProfileDataSource {
         onSuccessListener: (downloadUrl: String) -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        val storage = Firebase.storage
-        val storageReference = storage.reference.child(directory)
         val uploadTask = storageReference.putFile(uri)
 
         // Wait for the upload to complete, then get the download URL

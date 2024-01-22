@@ -8,9 +8,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.heureux.admin.data.FirebaseDirectories
 import com.heureux.admin.data.types.HeureuxProperty
+import com.heureux.admin.utils.deleteImageFromUri
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
 
 class HeureuxPropertyDataSource : PropertyDataSource {
     override val firestore: FirebaseFirestore
@@ -127,9 +129,14 @@ class HeureuxPropertyDataSource : PropertyDataSource {
     override suspend fun deleteProperty(
         onSuccess: () -> Unit, onFailure: (exception: Exception) -> Unit, id: String
     ) {
+        getPropertyData(id = id) {}.collectLatest { property ->
+            property.imageUrls.forEach { image ->
+                deleteImageFromUri(image)
+            }
+        }
+
         firestore.collection(FirebaseDirectories.PropertiesCollection.name).document(id).delete()
             .addOnSuccessListener {
-                // TODO: Delete images from storage
                 onSuccess()
             }.addOnFailureListener {
                 onFailure(it)
