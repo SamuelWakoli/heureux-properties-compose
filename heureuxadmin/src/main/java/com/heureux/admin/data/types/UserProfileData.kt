@@ -4,6 +4,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
+/**
+ * Represents user profile data.
+ *
+ * @property displayName The user's display name.
+ * @property photoURL The user's photo URL.
+ * @property userEmail The user's email address.
+ * @property phone The user's phone number.
+ */
 @Serializable
 data class UserProfileData(
     @SerialName("displayName") val displayName: String?,
