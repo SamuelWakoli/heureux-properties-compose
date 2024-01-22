@@ -90,7 +90,9 @@ fun MyPropertiesScreen(
                 )
             } else if (userPurchasedProperties.isEmpty()) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier.fillMaxSize().padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Business,

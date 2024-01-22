@@ -147,9 +147,10 @@ fun FeedbackScreen(
                                 message = feedbackText,
                                 time = LocalDateTime.now().toString(),
                                 senderEmail = userEmail ?: "anonymous",
+                                read = false,
                             ),
                             onSuccess = {
-                                Toast.makeText(context, "Feedback sent", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, "Feedback sent", Toast.LENGTH_LONG).show()
                                 navController.navigateUp()
                             },
                             onFailure = { exception: Exception ->

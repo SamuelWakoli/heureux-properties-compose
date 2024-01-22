@@ -49,7 +49,7 @@ fun UserFeedbackListItem(
                 )
             }
             DropdownMenu(expanded = showOptions, onDismissRequest = { showOptions = false }) {
-                if (!feedback.isRead) {
+                if (!feedback.read) {
                     DropdownMenuItem(trailingIcon = {
                         Icon(imageVector = Icons.Outlined.DoneAll, contentDescription = null)
                     }, text = { Text(text = "Mark as read") }, colors = MenuDefaults.itemColors(

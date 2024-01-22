@@ -76,7 +76,7 @@ class HeureuxUsersDataSource : UsersDataSource {
                                         message = document.get("message").toString(),
                                         time = document.get("time").toString(),
                                         senderEmail = document.get("senderEmail").toString(),
-                                        isRead = document.getBoolean("isRead") as Boolean
+                                        read = document.get("read") as Boolean
                                     )
                                     feedbacks.add(feedback)
                                 }

@@ -91,12 +91,14 @@ fun AdminListItem(
                 }
                 Spacer(modifier = Modifier.size(4.dp))
                 IconButton(onClick = {
-                    val uri = "https://wa.me/${formatPhoneNumber(userData.phone, context)}"
-                    val intent = Intent(Intent.ACTION_VIEW).apply {
-                        data = Uri.parse(uri)
+                    val phone = formatPhoneNumber(userData.phone, context)
+
+                    val whatsAppIntent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://api.whatsapp.com/send?phone=$phone")
                     }
+
                     try {
-                        context.startActivity(intent)
+                        context.startActivity(whatsAppIntent)
                     } catch (e: Exception) {
                         Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                     }

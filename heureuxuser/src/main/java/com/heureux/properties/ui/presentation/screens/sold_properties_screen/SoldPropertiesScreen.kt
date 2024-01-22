@@ -92,7 +92,11 @@ fun SoldPropertiesScreen(
                 )
             } else if (userSoldProperties.isEmpty()) {
                 Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Store,
@@ -113,7 +117,7 @@ fun SoldPropertiesScreen(
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    items(userSoldProperties) {property ->
+                    items(userSoldProperties) { property ->
                         SoldPropertyListItem(
                             navController = navController,
                             property = property,

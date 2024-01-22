@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AccountBox
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Call
@@ -45,11 +46,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavController
 import com.heureux.admin.data.types.HeureuxUser
 import com.heureux.admin.ui.presentation.composables.images.CoilImage
 import com.heureux.admin.ui.presentation.navigation.Screens
 import com.heureux.admin.utils.formatPhoneNumber
+import com.heureux.admin.utils.openImage
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,6 +135,7 @@ fun HeureuxUserListItem(
                     modifier = Modifier.size(64.dp),
                     imageUrl = user.photoUrl.toString(),
                     applyCircleShape = true,
+                    showOpenImageButton = false,
                     errorContent = {
                         Icon(
                             imageVector = Icons.Outlined.AccountCircle,
@@ -224,6 +228,22 @@ fun HeureuxUserListItem(
                                     .show()
                             }
                         })
+                    if (!user.photoUrl.isNullOrEmpty())
+                        DropdownMenuItem(
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Outlined.AccountBox,
+                                    contentDescription = null
+                                )
+                            },
+                            text = { Text(text = "View profile image") },
+                            onClick = {
+                                openImage(context, user.photoUrl.toUri()) { exception ->
+                                    Toast
+                                        .makeText(context, exception.message, Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            })
                     Divider(
                         modifier = Modifier.padding(4.dp)
                     )

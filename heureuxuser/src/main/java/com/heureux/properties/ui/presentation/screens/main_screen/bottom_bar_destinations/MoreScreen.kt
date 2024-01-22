@@ -1,7 +1,9 @@
 package com.heureux.properties.ui.presentation.screens.main_screen.bottom_bar_destinations
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +40,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -165,6 +168,22 @@ fun MoreScreen(
                 },
                 headlineContent = {
                     Text(text = "Privacy policy")
+                },
+                onClick = {
+                    val uri =
+                        "https://docs.google.com/document/d/e/2PACX-1vRVJsC_ctt6JIAXH-gjLkpLH3skZs6O7LFSyij1PhpZ-wqTvvtBaNYNVrJZyDWbVTExbzDzSzG5AbFR/pub".toUri()
+
+                    val intent = Intent(Intent.ACTION_VIEW, uri)
+
+                    try {
+                        context.startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(
+                            context,
+                            "No browser application found, please install one.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             )
             MoreScreenListItem(
@@ -188,10 +207,26 @@ fun MoreScreen(
                     Text(text = "Rate us")
                 },
                 onClick = {
-                    // intent used for testing purposes
-                    val intent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps"))
-                    context.startActivity(intent)
+                    val packageName = context.packageName
+                    val uri: Uri = Uri.parse("market://details?id=$packageName")
+                    val goToMarket = Intent(Intent.ACTION_VIEW, uri)
+                    // To count with Play market backstack, After pressing back button,
+                    // to taken back to our application, we need to add following flags to intent.
+                    goToMarket.addFlags(
+                        Intent.FLAG_ACTIVITY_NO_HISTORY or
+                                Intent.FLAG_ACTIVITY_NEW_DOCUMENT or
+                                Intent.FLAG_ACTIVITY_MULTIPLE_TASK
+                    )
+                    try {
+                        context.startActivity(goToMarket)
+                    } catch (e: ActivityNotFoundException) {
+                        context.startActivity(
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("http://play.google.com/store/apps/details?id=$packageName")
+                            )
+                        )
+                    }
                 }
             )
             Divider()

@@ -41,7 +41,7 @@ class HeureuxUserFeedbackDataSource : UserFeedbackDataSource {
                                             time = document.data?.get("time").toString(),
                                             senderEmail = document.data?.get("senderEmail")
                                                 .toString(),
-                                            isRead = document.data?.get("isRead") as Boolean
+                                            read = document.data?.get("isRead") as Boolean
                                         )
                                     )
                                 }

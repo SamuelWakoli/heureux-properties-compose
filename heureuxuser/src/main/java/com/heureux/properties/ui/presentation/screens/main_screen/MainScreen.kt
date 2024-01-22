@@ -2,7 +2,11 @@ package com.heureux.properties.ui.presentation.screens.main_screen
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
@@ -15,6 +19,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.heureux.properties.ui.AppViewModelProvider
 import com.heureux.properties.ui.presentation.navigation.Screens
@@ -46,7 +51,21 @@ fun MainScreen(
         MainScreenBottomBar(
             bottomNavController = bottomNavController,
         )
-    }) { paddingValues ->
+    },
+        floatingActionButton = {
+            if (bottomNavController.currentBackStackEntryAsState().value?.destination?.route == Screens.MyListingsScreen.route)
+                FloatingActionButton(onClick = {
+                    navController.navigate(Screens.AddPropertyScreen.route) {
+                        launchSingleTop = true
+                    }
+                }) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add property listing",
+                    )
+                }
+        }
+    ) { paddingValues ->
         NavHost(
             navController = bottomNavController,
             startDestination = Screens.HomeScreen.route,

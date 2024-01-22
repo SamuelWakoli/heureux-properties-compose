@@ -349,16 +349,8 @@ class HeureuxPropertiesDataSource : PropertiesDataSource {
         onSuccessListener: () -> Unit,
         onFailure: (exception: Exception) -> Unit,
     ) {
-        val data = hashMapOf(
-            "message" to feedback.message,
-            "time" to feedback.time,
-            "senderEmail" to feedback.senderEmail,
-        )
-
         firestore.collection(FirebaseDirectories.FeedbacksCollection.name).document(feedback.time)
-            .set(
-                data
-            ).addOnSuccessListener {
+            .set(feedback).addOnSuccessListener {
                 onSuccessListener()
             }.addOnFailureListener { exception ->
                 onFailure(exception)

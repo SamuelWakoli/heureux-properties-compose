@@ -160,7 +160,7 @@ fun AboutUsScreen(navController: NavController) {
                         Icon(imageVector = Icons.Outlined.Web, contentDescription = null)
                     },
                     onClick = {
-                        val emailIntent = Intent(Intent.ACTION_WEB_SEARCH).apply {
+                        val emailIntent = Intent(Intent.ACTION_VIEW).apply {
                             data = Uri.parse("https://www.heureuxproperties.co.ke")
                         }
                         try {

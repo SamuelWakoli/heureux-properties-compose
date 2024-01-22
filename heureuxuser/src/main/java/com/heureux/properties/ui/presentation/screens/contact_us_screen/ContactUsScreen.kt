@@ -114,13 +114,13 @@ fun ContactUsScreen(
                 )
                 ContactListItem(
                     title = "Call us",
-                    description = "+254797228948",
+                    description = "+254704606003",
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Phone, contentDescription = null)
                     },
                     onClick = {
                         val phoneIntent = Intent(Intent.ACTION_DIAL).apply {
-                            data = Uri.parse("tel:+254797228948")
+                            data = Uri.parse("tel:+254704606003")
                         }
                         try {
                             context.startActivity(phoneIntent)
@@ -133,13 +133,13 @@ fun ContactUsScreen(
                 )
                 ContactListItem(
                     title = "WhatsApp",
-                    description = "+254797228948",
+                    description = "+254704606003",
                     leadingIcon = {
                         Icon(imageVector = Icons.Outlined.Whatsapp, contentDescription = null)
                     },
                     onClick = {
                         val whatsAppIntent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("https://api.whatsapp.com/send?phone=+254797228948")
+                            data = Uri.parse("https://api.whatsapp.com/send?phone=+254704606003")
                         }
                         try {
                             context.startActivity(whatsAppIntent)

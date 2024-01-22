@@ -49,9 +49,9 @@ fun UserFeedbackScreen(
 
     val feedbacks = viewModel.feedbacks.collectAsState().value
 
-    val feedbacksRead = feedbacks?.filter { it.isRead } ?: emptyList()
+    val feedbacksRead = feedbacks?.filter { it.read } ?: emptyList()
 
-    val unreadFeedbacks = feedbacks?.filter { !it.isRead } ?: emptyList()
+    val unreadFeedbacks = feedbacks?.filter { !it.read } ?: emptyList()
 
     var showReadFeedbacks by remember { mutableStateOf(false) }
     val rotationState = remember { mutableFloatStateOf(0f) }
@@ -122,7 +122,7 @@ fun UserFeedbackScreen(
                         feedback = feedback,
                         onMarkAsRead = {
                             viewModel.updateFeedback(
-                                feedbackItem = feedback.copy(isRead = true),
+                                feedbackItem = feedback.copy(read = true),
                                 onSuccess = {},
                                 onFailure = {},
                             )

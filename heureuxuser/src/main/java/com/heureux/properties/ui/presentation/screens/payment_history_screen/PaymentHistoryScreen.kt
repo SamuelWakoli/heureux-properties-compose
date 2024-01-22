@@ -86,7 +86,7 @@ fun PaymentHistoryScreen(
         } else if (paymentList.isEmpty()) {
             Column(
                 modifier = Modifier
-                    .padding(paddingValues)
+                    .padding(paddingValues).padding(8.dp)
                     .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
