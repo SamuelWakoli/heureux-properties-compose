@@ -46,7 +46,6 @@ fun MainScreenAppbar(
     userData: UserProfileData?,
 ) {
     val bottomNavBackStackEntry = bottomNavController.currentBackStackEntryAsState()
-    val currentRoute = bottomNavBackStackEntry.value?.destination?.route
 
     var showDropdownMenu by rememberSaveable {
         mutableStateOf(false)
@@ -65,6 +64,7 @@ fun MainScreenAppbar(
                         modifier = Modifier.size(36.dp),
                         imageUrl = userData.photoURL.toString(),
                         applyCircleShape = true,
+                        showOpenImageButton = false,
                         errorContent = {
                             Icon(
                                 imageVector = Icons.Outlined.AccountCircle,

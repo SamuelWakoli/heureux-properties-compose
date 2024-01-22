@@ -171,6 +171,7 @@ fun EditProfileScreen(
                                     modifier = Modifier.size(64.dp),
                                     imageUrl = userData.photoURL.toString(),
                                     applyCircleShape = true,
+                                    showOpenImageButton = false,
                                     errorContent = {
                                         Icon(
                                             imageVector = Icons.Outlined.AccountCircle,
@@ -191,6 +192,7 @@ fun EditProfileScreen(
                                     CoilImage(
                                         modifier = Modifier.size(128.dp),
                                         imageUrl = uiState.newPhotoURL,
+                                        showOpenImageButton = false,
                                         applyCircleShape = true,
                                         errorContent = {
                                             Icon(

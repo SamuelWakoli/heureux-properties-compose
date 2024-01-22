@@ -136,6 +136,7 @@ fun ProfileScreen(
                                 modifier = Modifier.size(64.dp),
                                 imageUrl = userData.photoURL.toString(),
                                 applyCircleShape = true,
+                                showOpenImageButton = false,
                                 errorContent = {
                                     Icon(
                                         imageVector = Icons.Outlined.AccountCircle,
