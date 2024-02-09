@@ -63,40 +63,39 @@ val mainBottomBarItems: List<MainBottomBarItem> = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreenBottomBar(bottomNavController: NavHostController) {
-    BottomAppBar {
-        NavigationBar {
-            val backStackEntry = bottomNavController.currentBackStackEntryAsState()
+    NavigationBar {
+        val backStackEntry = bottomNavController.currentBackStackEntryAsState()
 
-            mainBottomBarItems.forEach { homeBottomBarItem: MainBottomBarItem ->
-                val currentRoute = backStackEntry.value?.destination?.route;
-                val selected = currentRoute == homeBottomBarItem.route
+        mainBottomBarItems.forEach { homeBottomBarItem: MainBottomBarItem ->
+            val currentRoute = backStackEntry.value?.destination?.route;
+            val selected = currentRoute == homeBottomBarItem.route
 
-                NavigationBarItem(
-                    selected = selected,
-                    onClick = {
-                        bottomNavController.navigate(homeBottomBarItem.route) {
-                            launchSingleTop = true
-                            popUpTo(route = Screens.HomeScreen.route) {
-                                inclusive = false
-                            }
+            NavigationBarItem(
+                selected = selected,
+                onClick = {
+                    bottomNavController.navigate(homeBottomBarItem.route) {
+                        launchSingleTop = true
+                        popUpTo(route = Screens.HomeScreen.route) {
+                            inclusive = false
                         }
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        indicatorColor = MaterialTheme.colorScheme.primaryContainer,
-                        unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                        unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    ),
-                    icon = {
-                        Icon(
-                            imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
-                            contentDescription = null
-                        )
-                    },
-                    label = { Text(text = homeBottomBarItem.label) },
-                )
-            }
+                    }
+                },
+                colors = NavigationBarItemDefaults.colors(
+                    indicatorColor = MaterialTheme.colorScheme.primaryContainer,
+                    unselectedIconColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    unselectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                ),
+                icon = {
+                    Icon(
+                        imageVector = if (selected) homeBottomBarItem.selectedIcon else homeBottomBarItem.unselectedIcon,
+                        contentDescription = null
+                    )
+                },
+                label = { Text(text = homeBottomBarItem.label) },
+            )
         }
     }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
