@@ -12,7 +12,7 @@ If you are a property owner, through the app, you can partner with Heureux Prope
 * Jetpack Compose
 * Coil Image Loader
 * Google Play Services Auth
-* Firebase Database
+* Firebase
 * Datastore Preferences
 * Kotlin Serialization
 
